@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Personal Assistant</title>
+<meta name="theme-color" content="#f8f5f0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&family=Crimson+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root {
+  --bg: #f8f5f0;
+  --bg2: #f0ebe3;
+  --surface: #ffffff;
+  --surface2: #faf8f5;
+  --border: #e4ddd3;
+  --border-light: #ede8e0;
+  --text: #2c2518;
+  --text2: #6b5e4f;
+  --text3: #a0947f;
+  --accent: #b8956a;
+  --accent2: #a07d55;
+  --accent-bg: rgba(184,149,106,0.1);
+  --accent-bg2: rgba(184,149,106,0.18);
+  --red: #c75c4a;
+  --red-bg: rgba(199,92,74,0.08);
+  --orange: #d49a3e;
+  --orange-bg: rgba(212,154,62,0.08);
+  --blue: #5a8db5;
+  --blue-bg: rgba(90,141,181,0.08);
+  --green: #5a9e6f;
+  --green-bg: rgba(90,158,111,0.08);
+  --purple: #8b7ab8;
+  --purple-bg: rgba(139,122,184,0.08);
+  --r: 14px;
+  --r-sm: 10px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { height:100%; }
+body {
+  font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text);
+  min-height:100%; padding-bottom: calc(78px + var(--safe-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle texture */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23b8956a' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none; z-index:0;
+}
+
+/* ========== BOTTOM NAV ========== */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0;
+  background: rgba(248,245,240,0.92);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display:flex; justify-content:space-around;
+  padding: 6px 0 calc(6px + var(--safe-bottom));
+  z-index:100;
+}
+.nav-btn {
+  display:flex; flex-direction:column; align-items:center;
+  padding:4px 18px; border:none; background:transparent;
+  color:var(--text3); font-family:inherit; font-size:10px;
+  font-weight:500; cursor:pointer; transition:0.2s;
+  position:relative;
+}
+.nav-btn .nav-icon {
+  width:52px; height:28px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; margin-bottom:2px; transition:0.25s;
+}
+.nav-btn.active { color:var(--accent2); font-weight:600; }
+.nav-btn.active .nav-icon { background:var(--accent-bg2); }
+.nav-btn .badge {
+  position:absolute; top:0; right:8px;
+  background:var(--red); color:white;
+  font-size:9px; font-weight:700;
+  min-width:16px; height:16px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ========== PAGE ========== */
+.page { position:relative; z-index:1; padding:0 16px; }
+
+.page-head { padding:20px 0 14px; }
+.page-head .greeting {
+  font-size:13px; color:var(--text3); font-weight:400;
+  margin-bottom:2px;
+}
+.page-head h1 {
+  font-family:'Crimson Pro', serif;
+  font-size:30px; font-weight:700;
+  color:var(--text); letter-spacing:-0.5px;
+}
+.page-head .sub {
+  font-size:12px; color:var(--text3);
+  font-family:'IBM Plex Mono', monospace;
+  margin-top:4px;
+}
+
+/* ========== PANELS ========== */
+.panel { display:none; animation:fadeUp 0.3s ease; }
+.panel.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+/* ========== STATS SCROLL ========== */
+.stats-scroll {
+  display:flex; gap:10px;
+  overflow-x:auto; padding:4px 0 18px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.stats-scroll::-webkit-scrollbar { display:none; }
+
+.stat-pill {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 18px;
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:28px;
+  flex-shrink:0; min-width:128px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.03);
+}
+.stat-pill .pill-icon {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px;
+}
+.stat-pill .pill-num {
+  font-family:'Crimson Pro', serif;
+  font-size:24px; font-weight:700;
+}
+.stat-pill .pill-label { font-size:10px; color:var(--text3); }
+
+.stat-pill.s1 .pill-icon { background:var(--accent-bg); }
+.stat-pill.s1 .pill-num { color:var(--accent); }
+.stat-pill.s2 .pill-icon { background:var(--orange-bg); }
+.stat-pill.s2 .pill-num { color:var(--orange); }
+.stat-pill.s3 .pill-icon { background:var(--green-bg); }
+.stat-pill.s3 .pill-num { color:var(--green); }
+.stat-pill.s4 .pill-icon { background:var(--red-bg); }
+.stat-pill.s4 .pill-num { color:var(--red); }
+
+/* ========== SECTION ========== */
+.section { margin-bottom:24px; }
+.section-head {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px; padding:0 2px;
+}
+.section-title {
+  font-family:'Crimson Pro', serif;
+  font-size:18px; font-weight:600;
+  display:flex; align-items:center; gap:8px;
+}
+.section-title .line { width:20px; height:2px; background:var(--accent); }
+.section-more {
+  font-size:12px; color:var(--accent); background:none;
+  border:none; cursor:pointer; font-family:inherit; font-weight:500;
+}
+
+/* ========== CARD LIST ========== */
+.card-list { display:flex; flex-direction:column; gap:8px; }
+
+.card-item {
+  display:flex; align-items:center; gap:12px;
+  padding:16px;
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:var(--r);
+  transition:0.15s;
+  cursor:pointer;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+}
+.card-item:active { background:var(--surface2); }
+
+/* Schedule accent bar */
+.sched-accent {
+  width:3px; border-radius:2px;
+  align-self:stretch; min-height:30px; flex-shrink:0;
+}
+.acc-work { background:var(--blue); }
+.acc-meeting { background:var(--orange); }
+.acc-personal { background:var(--green); }
+.acc-health { background:var(--red); }
+.acc-other { background:var(--purple); }
+
+.card-body { flex:1; min-width:0; }
+.card-title { font-size:14px; font-weight:500; margin-bottom:3px; }
+.card-meta { font-size:11px; color:var(--text3); display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+.sched-cat {
+  display:inline-block; padding:2px 8px;
+  border-radius:4px; font-size:10px; font-weight:600;
+}
+.cat-work { background:var(--blue-bg); color:var(--blue); }
+.cat-meeting { background:var(--orange-bg); color:var(--orange); }
+.cat-personal { background:var(--green-bg); color:var(--green); }
+.cat-health { background:var(--red-bg); color:var(--red); }
+.cat-other { background:var(--purple-bg); color:var(--purple); }
+
+.time-block { text-align:right; flex-shrink:0; }
+.time-block .time-main {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:14px; font-weight:500; color:var(--accent);
+}
+.time-block .time-end {
+  font-size:10px; color:var(--text3);
+  font-family:'IBM Plex Mono', monospace;
+}
+
+.chevron { color:var(--text3); font-size:16px; flex-shrink:0; }
+
+/* ========== TODO ========== */
+.todo-check {
+  width:22px; height:22px; border-radius:50%;
+  border:2px solid var(--border); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; color:transparent; cursor:pointer;
+  transition:0.2s;
+}
+.todo-check:hover { border-color:var(--accent); }
+.card-item.done .todo-check {
+  background:var(--green); border-color:var(--green); color:white;
+}
+.card-item.done .card-title { text-decoration:line-through; color:var(--text3); }
+.card-item.done { opacity:0.4; }
+
+.pri-tag {
+  padding:2px 8px; border-radius:4px;
+  font-size:10px; font-weight:600;
+}
+.pri-ui { background:var(--red-bg); color:var(--red); }
+.pri-i { background:var(--orange-bg); color:var(--orange); }
+.pri-u { background:var(--blue-bg); color:var(--blue); }
+.pri-n { background:var(--purple-bg); color:var(--purple); }
+.overdue { color:var(--red) !important; font-weight:600; }
+
+/* ========== FILTERS ========== */
+.filter-scroll {
+  display:flex; gap:6px;
+  overflow-x:auto; padding:2px 0 14px;
+  scrollbar-width:none;
+}
+.filter-scroll::-webkit-scrollbar { display:none; }
+
+.chip {
+  padding:7px 16px; border-radius:20px;
+  background:var(--surface); color:var(--text3);
+  border:1px solid var(--border-light);
+  font-family:inherit; font-size:12px; font-weight:500;
+  cursor:pointer; white-space:nowrap; flex-shrink:0;
+  transition:0.2s;
+  box-shadow:0 1px 2px rgba(0,0,0,0.02);
+}
+.chip.on {
+  background:var(--text); color:var(--bg);
+  border-color:var(--text);
+}
+
+/* ========== QUICK ADD ========== */
+.quick-add { display:flex; gap:8px; margin-bottom:14px; }
+.quick-add input {
+  flex:1; padding:13px 16px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r); color:var(--text);
+  font-family:inherit; font-size:14px;
+  outline:none; transition:0.2s;
+}
+.quick-add input:focus { border-color:var(--accent); }
+.quick-add input::placeholder { color:var(--text3); }
+.quick-add .add-btn {
+  width:48px; border-radius:var(--r);
+  background:var(--text); color:var(--bg); border:none;
+  font-size:22px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ========== DATE NAV ========== */
+.date-nav {
+  display:flex; align-items:center; gap:8px; margin-bottom:16px;
+}
+.dn-btn {
+  width:36px; height:36px; border-radius:var(--r-sm);
+  background:var(--surface); border:1px solid var(--border);
+  color:var(--text2); cursor:pointer; font-size:15px;
+  display:flex; align-items:center; justify-content:center;
+}
+.dn-current {
+  flex:1;
+  font-family:'Crimson Pro', serif;
+  font-size:17px; font-weight:600;
+}
+.dn-today {
+  padding:6px 14px; border-radius:20px;
+  background:var(--accent-bg); color:var(--accent);
+  font-size:12px; font-weight:500; border:none;
+  cursor:pointer; font-family:inherit;
+}
+
+/* ========== NOTES ========== */
+.note-scroll {
+  display:flex; gap:10px;
+  overflow-x:auto; padding:4px 0 12px;
+  scrollbar-width:none;
+}
+.note-scroll::-webkit-scrollbar { display:none; }
+
+.notes-grid {
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;
+}
+
+.note-card {
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:var(--r); padding:18px;
+  cursor:pointer; transition:0.2s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+  min-width:180px; flex-shrink:0;
+}
+.note-card:active { background:var(--surface2); }
+.note-card h4 {
+  font-family:'Crimson Pro', serif;
+  font-size:15px; font-weight:600; margin-bottom:6px;
+}
+.note-card p {
+  font-size:11px; color:var(--text2); line-height:1.7;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.note-tags { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+.note-tag {
+  font-size:9px; padding:2px 7px; border-radius:4px;
+  border:1px solid var(--border); color:var(--text3);
+}
+
+/* ========== FAB ========== */
+.fab {
+  position:fixed;
+  bottom: calc(88px + var(--safe-bottom));
+  right:18px;
+  width:52px; height:52px; border-radius:50%;
+  background:var(--text); color:var(--bg); border:none;
+  font-size:26px; cursor:pointer;
+  box-shadow:0 4px 16px rgba(44,37,24,0.25);
+  display:flex; align-items:center; justify-content:center;
+  z-index:50; transition:0.2s;
+}
+.fab:active { transform:scale(0.9); }
+
+/* ========== MODAL ========== */
+.modal-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(44,37,24,0.4);
+  backdrop-filter:blur(4px);
+  z-index:200; align-items:flex-end; justify-content:center;
+}
+.modal-overlay.active { display:flex; }
+
+.modal {
+  background:var(--bg);
+  border-radius:20px 20px 0 0;
+  width:100%; max-width:500px;
+  max-height:88vh; overflow-y:auto;
+  animation:slideSheet 0.3s ease;
+  padding-bottom: var(--safe-bottom);
+}
+@keyframes slideSheet { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+.modal-handle {
+  width:36px; height:4px; border-radius:2px;
+  background:var(--border); margin:10px auto 0;
+}
+.modal-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px 10px;
+}
+.modal-header h3 {
+  font-family:'Crimson Pro', serif;
+  font-size:20px; font-weight:600;
+}
+.modal-close {
+  width:32px; height:32px; border:none;
+  background:var(--bg2); color:var(--text2);
+  border-radius:50%; cursor:pointer; font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-body { padding:10px 20px 20px; }
+.modal-footer {
+  padding:12px 20px 16px;
+  border-top:1px solid var(--border);
+  display:flex; gap:8px;
+}
+
+/* ========== FORM ========== */
+.form-group { margin-bottom:14px; }
+.form-label {
+  display:block; font-size:11px; font-weight:600;
+  color:var(--text3); margin-bottom:5px;
+  text-transform:uppercase; letter-spacing:0.5px;
+}
+.form-input, .form-select, .form-textarea {
+  width:100%; padding:12px 14px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-sm); color:var(--text);
+  font-family:inherit; font-size:14px;
+  outline:none; transition:0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color:var(--accent);
+}
+.form-textarea { resize:vertical; min-height:80px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* Buttons */
+.btn {
+  padding:12px 20px; border:none; border-radius:var(--r-sm);
+  font-family:inherit; font-size:14px; font-weight:600;
+  cursor:pointer; transition:0.2s; flex:1; text-align:center;
+}
+.btn-primary { background:var(--text); color:var(--bg); }
+.btn-primary:active { opacity:0.8; }
+.btn-secondary { background:var(--bg2); color:var(--text2); }
+
+/* ========== TOAST ========== */
+.toast-container {
+  position:fixed; top:20px; left:16px; right:16px;
+  z-index:300; display:flex; flex-direction:column; gap:8px;
+}
+.toast {
+  padding:14px 18px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  font-size:13px; font-weight:500;
+  box-shadow:0 8px 24px rgba(0,0,0,0.1);
+  animation:toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+  display:flex; align-items:center; gap:8px;
+}
+.toast.success { border-left:3px solid var(--green); }
+.toast.error { border-left:3px solid var(--red); }
+.toast.info { border-left:3px solid var(--accent); }
+@keyframes toastIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateY(-10px)} }
+
+/* ========== SETTINGS ========== */
+.settings-card {
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:var(--r);
+  padding:18px;
+  margin-bottom:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+}
+.settings-card h4 {
+  font-family:'Crimson Pro', serif;
+  font-size:16px; font-weight:600; margin-bottom:4px;
+}
+.settings-card p {
+  font-size:11px; color:var(--text3); margin-bottom:14px; line-height:1.5;
+}
+.settings-btn {
+  padding:10px 18px; border-radius:var(--r-sm);
+  font-family:inherit; font-size:12px; font-weight:600;
+  cursor:pointer; transition:0.2s; border:1px solid var(--border);
+  background:var(--surface); color:var(--text2);
+}
+.settings-btn:active { background:var(--bg2); }
+.settings-btn.danger { color:var(--red); border-color:rgba(199,92,74,0.3); }
+
+.status-dot {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; padding:3px 10px; border-radius:12px;
+}
+.status-on { background:var(--green-bg); color:var(--green); }
+.status-off { background:var(--red-bg); color:var(--red); }
+
+/* ========== EMPTY ========== */
+.empty {
+  text-align:center; padding:40px 20px; color:var(--text3);
+}
+.empty .icon { font-size:36px; margin-bottom:8px; opacity:0.3; }
+.empty .msg { font-size:13px; }
+
+/* ========== CALENDAR ========== */
+.cal-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+}
+.cal-header .cal-title {
+  font-family:'Crimson Pro', serif;
+  font-size:18px; font-weight:600;
+}
+.cal-header .cal-nav { display:flex; gap:6px; align-items:center; }
+.cal-nav-btn {
+  width:32px; height:32px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border-light);
+  color:var(--text2); cursor:pointer; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+}
+.cal-today-btn {
+  padding:5px 12px; border-radius:16px;
+  background:var(--accent-bg); color:var(--accent);
+  font-size:11px; font-weight:600; border:none;
+  cursor:pointer; font-family:inherit;
+}
+
+.cal-grid {
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:var(--r);
+  padding:12px 8px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
+  margin-bottom:16px;
+}
+.cal-weekdays {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  text-align:center; margin-bottom:6px;
+}
+.cal-weekdays span {
+  font-size:10px; font-weight:600; color:var(--text3);
+  padding:4px 0; text-transform:uppercase;
+}
+.cal-days {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  gap:2px; text-align:center;
+}
+.cal-day {
+  position:relative;
+  width:100%; aspect-ratio:1;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  border-radius:10px; cursor:pointer;
+  font-size:13px; font-weight:500;
+  transition:0.15s; border:none; background:transparent;
+  color:var(--text); font-family:inherit;
+}
+.cal-day:active { background:var(--bg2); }
+.cal-day.other-month { color:var(--text3); opacity:0.4; }
+.cal-day.today {
+  background:var(--accent-bg2);
+  color:var(--accent); font-weight:700;
+}
+.cal-day.selected {
+  background:var(--text); color:var(--bg); font-weight:700;
+}
+.cal-day.has-event::after {
+  content:''; position:absolute; bottom:4px;
+  width:4px; height:4px; border-radius:50%;
+  background:var(--accent);
+}
+.cal-day.today.has-event::after { background:var(--accent2); }
+.cal-day.selected.has-event::after { background:var(--bg); }
+
+/* ========== FAVORITES (常用行程) ========== */
+.fav-section { margin-bottom:18px; }
+.fav-section .section-head { margin-bottom:8px; }
+.fav-scroll {
+  display:flex; gap:8px;
+  overflow-x:auto; padding:2px 0 8px;
+  scrollbar-width:none;
+}
+.fav-scroll::-webkit-scrollbar { display:none; }
+
+.fav-chip {
+  display:flex; align-items:center; gap:6px;
+  padding:10px 14px;
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:12px;
+  cursor:pointer; white-space:nowrap; flex-shrink:0;
+  transition:0.15s; font-family:inherit; font-size:12px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.02);
+  color:var(--text);
+}
+.fav-chip:active { background:var(--bg2); }
+.fav-chip .fav-icon { font-size:14px; }
+.fav-chip .fav-time {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px; color:var(--text3);
+}
+.fav-chip-add {
+  border-style:dashed; border-color:var(--text3);
+  color:var(--text3); font-weight:500;
+}
+
+/* ========== MULTI-DAY PICKER ========== */
+.multi-cal-grid {
+  display:grid; grid-template-columns:repeat(7,1fr);
+  gap:3px; text-align:center;
+  margin-bottom:12px;
+}
+.multi-cal-day {
+  width:100%; aspect-ratio:1;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:10px; cursor:pointer;
+  font-size:13px; font-weight:500;
+  transition:0.15s; border:2px solid transparent;
+  background:var(--surface); color:var(--text);
+  font-family:inherit;
+}
+.multi-cal-day:active { transform:scale(0.92); }
+.multi-cal-day.other-month { color:var(--text3); opacity:0.3; pointer-events:none; }
+.multi-cal-day.today { border-color:var(--accent); color:var(--accent); }
+.multi-cal-day.picked {
+  background:var(--text); color:var(--bg);
+  border-color:var(--text); font-weight:700;
+}
+.multi-cal-day.today.picked { border-color:var(--text); }
+
+.picked-summary {
+  display:flex; flex-wrap:wrap; gap:6px;
+  margin-bottom:12px; min-height:28px;
+}
+.picked-tag {
+  display:flex; align-items:center; gap:4px;
+  padding:4px 10px; border-radius:8px;
+  background:var(--accent-bg); color:var(--accent);
+  font-size:11px; font-weight:600;
+}
+.picked-tag .remove-day {
+  cursor:pointer; opacity:0.6;
+  font-size:13px; margin-left:2px;
+}
+.picked-tag .remove-day:hover { opacity:1; }
+
+/* ========== TIME SLOT GRID ========== */
+.time-slots-label {
+  font-size:11px; font-weight:600; color:var(--text3);
+  text-transform:uppercase; letter-spacing:0.5px;
+  margin-bottom:8px;
+}
+.time-slots-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:6px; margin-bottom:14px;
+}
+.time-slot {
+  padding:10px 4px; border-radius:8px;
+  background:var(--surface); border:1px solid var(--border-light);
+  cursor:pointer; text-align:center;
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px; color:var(--text2);
+  transition:0.15s; font-weight:500;
+}
+.time-slot:active { transform:scale(0.95); }
+.time-slot.picked {
+  background:var(--text); color:var(--bg);
+  border-color:var(--text); font-weight:600;
+}
+.time-custom-row {
+  display:flex; gap:8px; align-items:center;
+  margin-bottom:14px;
+}
+.time-custom-row label {
+  font-size:11px; color:var(--text3); font-weight:500; white-space:nowrap;
+}
+.time-custom-row input {
+  flex:1; padding:10px 12px;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:8px; color:var(--text);
+  font-family:inherit; font-size:13px;
+  outline:none;
+}
+.time-custom-row input:focus { border-color:var(--accent); }
+
+/* Fav manage modal */
+.fav-manage-item {
+  display:flex; align-items:center; gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border-light);
+}
+.fav-manage-item:last-child { border-bottom:none; }
+.fav-manage-body { flex:1; min-width:0; }
+.fav-manage-title { font-size:14px; font-weight:500; }
+.fav-manage-meta { font-size:11px; color:var(--text3); margin-top:2px; }
+.fav-manage-del {
+  width:32px; height:32px; border-radius:8px;
+  background:var(--red-bg); color:var(--red);
+  border:none; cursor:pointer; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ========== GOOGLE CALENDAR EVENTS ========== */
+.gcal-accent { background: linear-gradient(135deg, #4285f4, #34a853) !important; }
+/* Google Calendar colorId accent overrides */
+.gcal-c1 { background: #7986CB !important; }
+.gcal-c2 { background: #33B679 !important; }
+.gcal-c3 { background: #8E24AA !important; }
+.gcal-c4 { background: #E67C73 !important; }
+.gcal-c5 { background: #F6BF26 !important; }
+.gcal-c6 { background: #F4511E !important; }
+.gcal-c7 { background: #039BE5 !important; }
+.gcal-c8 { background: #616161 !important; }
+.gcal-c9 { background: #3F51B5 !important; }
+.gcal-c10 { background: #0B8043 !important; }
+.gcal-c11 { background: #D50000 !important; }
+.gcal-badge {
+  display:inline-flex; align-items:center; gap:3px;
+  padding:2px 8px; border-radius:6px;
+  background:rgba(66,133,244,0.1); color:#4285f4;
+  font-size:10px; font-weight:600;
+}
+.gcal-badge svg { width:10px; height:10px; }
+.card-item.gcal-item { opacity:0.88; }
+.card-item.gcal-item:active { opacity:1; }
+
+/* Google sign-in button */
+.g-signin-btn {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; padding:12px; border-radius:var(--r-sm);
+  background:#fff; border:1px solid #dadce0;
+  color:#3c4043; font-size:14px; font-weight:500;
+  cursor:pointer; font-family:inherit;
+  box-shadow:0 1px 2px rgba(0,0,0,0.08);
+  transition:0.15s;
+}
+.g-signin-btn:active { background:#f8f9fa; }
+.g-signin-btn svg { width:18px; height:18px; flex-shrink:0; }
+.g-signout-btn {
+  padding:10px 16px; border-radius:var(--r-sm);
+  background:var(--red-bg); color:var(--red);
+  border:none; font-size:13px; cursor:pointer;
+  font-family:inherit; font-weight:500;
+}
+.g-user-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; background:var(--bg2);
+  border-radius:var(--r-sm); margin-bottom:12px;
+}
+.g-user-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--accent-bg); color:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:700;
+}
+.g-user-info { flex:1; min-width:0; }
+.g-user-name { font-size:14px; font-weight:600; }
+.g-user-email { font-size:11px; color:var(--text3); overflow:hidden; text-overflow:ellipsis; }
+.g-sync-status {
+  display:flex; align-items:center; gap:6px;
+  font-size:12px; color:var(--text3);
+  margin-top:8px;
+}
+.g-sync-status .spinner {
+  width:14px; height:14px; border:2px solid var(--border);
+  border-top-color:var(--accent); border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ========== RESPONSIVE ========== */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  body { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- ===================== DASHBOARD ===================== -->
+  <div class="panel active" id="p-dashboard">
+    <div class="page-head">
+      <div class="greeting" id="greetingText"></div>
+      <h1 id="dashTitle">Today</h1>
+      <div class="sub" id="hDate"></div>
+    </div>
+
+    <div class="stats-scroll">
+      <div class="stat-pill s1"><div class="pill-icon">📅</div><div><div class="pill-num" id="statEvents">0</div><div class="pill-label">今日行程</div></div></div>
+      <div class="stat-pill s2"><div class="pill-icon">⚡</div><div><div class="pill-num" id="statTodos">0</div><div class="pill-label">待辦事項</div></div></div>
+      <div class="stat-pill s3"><div class="pill-icon">✓</div><div><div class="pill-num" id="statDone">0</div><div class="pill-label">已完成</div></div></div>
+      <div class="stat-pill s4"><div class="pill-icon">⚠</div><div><div class="pill-num" id="statOverdue">0</div><div class="pill-label">已過期</div></div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title"><span class="line"></span> Today's Schedule</div>
+        <button class="section-more" onclick="sw('schedule',1)">全部 →</button>
+      </div>
+      <div class="card-list" id="dashSchedule"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title"><span class="line"></span> Urgent Tasks</div>
+        <button class="section-more" onclick="sw('todos',2)">全部 →</button>
+      </div>
+      <div class="card-list" id="dashTodos"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title"><span class="line"></span> Recent Notes</div>
+        <button class="section-more" onclick="sw('notes',3)">全部 →</button>
+      </div>
+      <div class="note-scroll" id="dashNotes"></div>
+    </div>
+  </div>
+
+  <!-- ===================== SCHEDULE ===================== -->
+  <div class="panel" id="p-schedule">
+    <div class="page-head"><h1>Schedule</h1></div>
+
+    <!-- Calendar -->
+    <div class="cal-grid">
+      <div class="cal-header">
+        <div class="cal-title" id="calTitle"></div>
+        <div class="cal-nav">
+          <button class="cal-today-btn" onclick="calGoToday()">今天</button>
+          <button class="cal-nav-btn" onclick="calNav(-1)">◂</button>
+          <button class="cal-nav-btn" onclick="calNav(1)">▸</button>
+        </div>
+      </div>
+      <div class="cal-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+      <div class="cal-days" id="calDays"></div>
+    </div>
+
+    <!-- 常用行程 -->
+    <div class="fav-section">
+      <div class="section-head">
+        <div class="section-title"><span class="line"></span> 常用行程</div>
+        <button class="section-more" onclick="openFavManage()">管理 →</button>
+      </div>
+      <div class="fav-scroll" id="favScroll"></div>
+    </div>
+
+    <!-- Day schedule list -->
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title" id="dayListTitle"></div>
+      </div>
+      <div class="card-list" id="scheduleList"></div>
+    </div>
+  </div>
+
+  <!-- ===================== TODOS ===================== -->
+  <div class="panel" id="p-todos">
+    <div class="page-head"><h1>Tasks</h1></div>
+    <div class="quick-add">
+      <input type="text" id="quickInput" placeholder="新增待辦事項..." onkeydown="if(event.key==='Enter')quickAdd()">
+      <button class="add-btn" onclick="quickAdd()">+</button>
+    </div>
+    <div class="filter-scroll">
+      <button class="chip on" onclick="setFilter('all',this)">全部</button>
+      <button class="chip" onclick="setFilter('urgent-important',this)">🔴 緊急重要</button>
+      <button class="chip" onclick="setFilter('important',this)">🟡 重要</button>
+      <button class="chip" onclick="setFilter('urgent',this)">🔵 緊急</button>
+      <button class="chip" onclick="setFilter('normal',this)">🟣 一般</button>
+      <button class="chip" onclick="setFilter('completed',this)">✓ 已完成</button>
+    </div>
+    <div class="card-list" id="todoList"></div>
+  </div>
+
+  <!-- ===================== NOTES ===================== -->
+  <div class="panel" id="p-notes">
+    <div class="page-head"><h1>Notes</h1></div>
+    <div class="notes-grid" id="notesList"></div>
+  </div>
+
+  <!-- ===================== SETTINGS ===================== -->
+  <div class="panel" id="p-settings">
+    <div class="page-head"><h1>Settings</h1></div>
+
+    <div class="settings-card">
+      <h4>📅 Google Calendar 直連</h4>
+      <p>直接讀取 Google 日曆事件，在行程頁面合併顯示</p>
+      <div id="gcalNotConnected">
+        <div class="form-group">
+          <label class="form-label">OAuth Client ID</label>
+          <input type="text" class="form-input" id="gcalClientId" placeholder="xxxx.apps.googleusercontent.com">
+          <div style="font-size:10px;color:var(--text3);margin-top:4px;">從 Google Cloud Console → APIs → 憑證 取得</div>
+        </div>
+        <button class="g-signin-btn" onclick="googleSignIn()">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          使用 Google 帳號登入
+        </button>
+      </div>
+      <div id="gcalConnected" style="display:none;">
+        <div class="g-user-row">
+          <div class="g-user-avatar" id="gcalAvatar">G</div>
+          <div class="g-user-info">
+            <div class="g-user-name" id="gcalUserName">已連線</div>
+            <div class="g-user-email" id="gcalUserEmail"></div>
+          </div>
+          <button class="g-signout-btn" onclick="googleSignOut()">登出</button>
+        </div>
+        <div class="g-sync-status" id="gcalSyncStatus">
+          <span style="color:var(--green);">●</span> 已連線
+        </div>
+        <button class="settings-btn" onclick="refreshGCalEvents()" style="margin-top:8px;">🔄 重新拉取事件</button>
+      </div>
+    </div>
+
+    <div class="settings-card">
+      <h4>🔗 Make.com Webhook</h4>
+      <p>寫入同步 — 新增/編輯/刪除行程 → Google Calendar</p>
+      <div class="form-group">
+        <label class="form-label">行程同步 Webhook</label>
+        <input type="text" class="form-input" id="whCalendar" placeholder="https://hook.us2.make.com/...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">LINE 通知 Webhook</label>
+        <input type="text" class="form-input" id="whLine" placeholder="https://hook.us2.make.com/...">
+      </div>
+      <button class="settings-btn" onclick="saveSettings()" style="background:var(--text);color:var(--bg);border:none;width:100%;">💾 儲存設定</button>
+    </div>
+
+    <div class="settings-card">
+      <h4>🔔 每日提醒</h4>
+      <p>透過 LINE 推播當日摘要</p>
+      <div class="form-row" style="margin-bottom:12px;">
+        <div class="form-group"><label class="form-label">提醒時間</label><input type="time" class="form-input" id="reminderTime" value="07:30"></div>
+        <div class="form-group"><label class="form-label">狀態</label><div style="padding-top:8px;"><span class="status-dot" id="lineStatus">● 未設定</span></div></div>
+      </div>
+      <button class="settings-btn" onclick="testLine()">📤 測試 LINE 通知</button>
+    </div>
+
+    <div class="settings-card">
+      <h4>📊 資料管理</h4>
+      <p>匯出備份或清除資料</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="settings-btn" onclick="exportData()">📥 匯出</button>
+        <button class="settings-btn" onclick="document.getElementById('importFile').click()">📤 匯入</button>
+        <button class="settings-btn danger" onclick="clearAll()">🗑 清除</button>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fabBtn" onclick="fabAction()">+</button>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="sw('dashboard',0)"><span class="nav-icon">◐</span>總覽</button>
+  <button class="nav-btn" onclick="sw('schedule',1)"><span class="nav-icon">◷</span>行程<span class="badge" id="bSched">0</span></button>
+  <button class="nav-btn" onclick="sw('todos',2)"><span class="nav-icon">☑</span>待辦<span class="badge" id="bTodo">0</span></button>
+  <button class="nav-btn" onclick="sw('notes',3)"><span class="nav-icon">✎</span>筆記</button>
+  <button class="nav-btn" onclick="sw('settings',4)"><span class="nav-icon">⚙</span>設定</button>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+
+<!-- Schedule Modal -->
+<div class="modal-overlay" id="scheduleModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="smTitle">新增行程</h3>
+      <button class="modal-close" onclick="closeModal('scheduleModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="smEditId">
+      <div class="form-group"><label class="form-label">行程名稱</label><input type="text" class="form-input" id="smName" placeholder="會議、看牙醫..."></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">日期</label><input type="date" class="form-input" id="smDate"></div>
+        <div class="form-group"><label class="form-label">分類</label>
+          <select class="form-select" id="smCat">
+            <option value="work">💼 工作</option><option value="personal">🏠 個人</option>
+            <option value="meeting">👥 會議</option><option value="health">💊 健康</option>
+            <option value="other">📌 其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">開始時間</label><input type="time" class="form-input" id="smStart"></div>
+        <div class="form-group"><label class="form-label">結束時間</label><input type="time" class="form-input" id="smEnd"></div>
+      </div>
+      <div class="form-group"><label class="form-label">地點（選填）</label><input type="text" class="form-input" id="smLoc" placeholder="辦公室、線上..."></div>
+      <div class="form-group"><label class="form-label">備註（選填）</label><textarea class="form-textarea" id="smNote" placeholder="備註..."></textarea></div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;color:var(--text2);"><input type="checkbox" id="smSync" checked> 同步 Google Calendar</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;color:var(--text2);margin-top:8px;"><input type="checkbox" id="smSaveFav"> 儲存為常用行程</label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="smDeleteBtn" onclick="deleteScheduleFromModal()" style="display:none;background:var(--red-bg);color:var(--red);">刪除</button>
+      <button class="btn btn-secondary" onclick="closeModal('scheduleModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveSchedule()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Todo Modal -->
+<div class="modal-overlay" id="todoModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="tmTitle">新增待辦</h3>
+      <button class="modal-close" onclick="closeModal('todoModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="tmEditId">
+      <div class="form-group"><label class="form-label">待辦內容</label><input type="text" class="form-input" id="tmName" placeholder="要做的事..."></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">優先等級</label>
+          <select class="form-select" id="tmPri">
+            <option value="urgent-important">🔴 緊急重要</option><option value="important">🟡 重要</option>
+            <option value="urgent">🔵 緊急</option><option value="normal" selected>🟣 一般</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">到期日</label><input type="date" class="form-input" id="tmDue"></div>
+      </div>
+      <div class="form-group"><label class="form-label">備註（選填）</label><textarea class="form-textarea" id="tmNote" placeholder="備註..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('todoModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveTodo()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal-overlay" id="noteModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="nmTitle">新增筆記</h3>
+      <button class="modal-close" onclick="closeModal('noteModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="nmEditId">
+      <div class="form-group"><label class="form-label">標題</label><input type="text" class="form-input" id="nmName" placeholder="筆記標題..."></div>
+      <div class="form-group"><label class="form-label">內容</label><textarea class="form-textarea" id="nmContent" placeholder="記下想法..." style="min-height:120px;"></textarea></div>
+      <div class="form-group"><label class="form-label">標籤（逗號分隔）</label><input type="text" class="form-input" id="nmTags" placeholder="靈感, 工作..."></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('noteModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveNote()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Apply Favorite Modal (multi-day + time) -->
+<div class="modal-overlay" id="favApplyModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="faTitle">快速新增</h3>
+      <button class="modal-close" onclick="closeModal('favApplyModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="faFavId">
+
+      <!-- Fav info preview -->
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border-radius:var(--r-sm);margin-bottom:16px;">
+        <span id="faIcon" style="font-size:20px;">📅</span>
+        <div>
+          <div id="faName" style="font-size:15px;font-weight:600;"></div>
+          <div id="faMeta" style="font-size:11px;color:var(--text3);"></div>
+        </div>
+      </div>
+
+      <!-- Multi-day calendar picker -->
+      <div class="form-label">選擇日期（可多選）</div>
+      <div style="background:var(--surface);border:1px solid var(--border-light);border-radius:var(--r-sm);padding:10px 8px;margin-bottom:8px;">
+        <div class="cal-header" style="margin-bottom:8px;">
+          <div class="cal-title" id="faCalTitle" style="font-size:15px;"></div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="faCalNav(-1)" style="width:28px;height:28px;">◂</button>
+            <button class="cal-nav-btn" onclick="faCalNav(1)" style="width:28px;height:28px;">▸</button>
+          </div>
+        </div>
+        <div class="cal-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+        <div class="multi-cal-grid" id="faCalDays"></div>
+      </div>
+      <div class="picked-summary" id="faPickedDays"></div>
+
+      <!-- Time slot grid -->
+      <div class="time-slots-label">時段</div>
+      <div class="time-slots-grid" id="faTimeSlots"></div>
+
+      <!-- Custom time -->
+      <div class="time-custom-row">
+        <label>自訂</label>
+        <input type="time" id="faCustomStart" placeholder="開始">
+        <span style="color:var(--text3);">—</span>
+        <input type="time" id="faCustomEnd" placeholder="結束">
+      </div>
+
+      <!-- Sync option -->
+      <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;color:var(--text2);"><input type="checkbox" id="faSync" checked> 同步 Google Calendar</label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('favApplyModal')">取消</button>
+      <button class="btn btn-primary" onclick="applyFavorite()">新增 <span id="faDayCount">0</span> 筆</button>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Favorites Modal -->
+<div class="modal-overlay" id="favManageModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3>管理常用行程</h3>
+      <button class="modal-close" onclick="closeModal('favManageModal')">✕</button>
+    </div>
+    <div class="modal-body" id="favManageList"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('favManageModal')" style="flex:1;">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastBox"></div>
+
+<script>
+// =============== DATA LAYER ===============
+const SK = { schedules:'pa_s', todos:'pa_t', notes:'pa_n', settings:'pa_set', favorites:'pa_f' };
+// In-memory cache to survive localStorage quirks in artifact preview
+const _cache = {};
+const get = k => {
+  try {
+    const v = localStorage.getItem(SK[k]);
+    if(v) { _cache[k] = JSON.parse(v); return _cache[k]; }
+    return _cache[k] || [];
+  } catch{ return _cache[k] || []; }
+};
+const set = (k,v) => {
+  _cache[k] = v;
+  try { localStorage.setItem(SK[k], JSON.stringify(v)); } catch{}
+};
+const getSett = () => { try { const v=localStorage.getItem(SK.settings); if(v){_cache.settings=JSON.parse(v);return _cache.settings;} return _cache.settings||{}; } catch{ return _cache.settings||{}; }};
+const uid = () => Date.now().toString(36)+Math.random().toString(36).substr(2,5);
+
+// =============== DATE UTILS ===============
+let viewDate = new Date();
+const fmtDate = d => { const x=new Date(d); return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`; };
+const today = () => fmtDate(new Date());
+const isOverdue = d => d && new Date(d) < new Date(today());
+const DAYS = ['日','一','二','三','四','五','六'];
+const fmtDateZh = d => { const x=new Date(d); return `${x.getMonth()+1} 月 ${x.getDate()} 日（${DAYS[x.getDay()]}）`; };
+
+// =============== TOAST ===============
+function toast(msg, type='info') {
+  const c = document.getElementById('toastBox');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(), 3000);
+}
+
+// =============== NAVIGATION ===============
+let currentPanel = 'dashboard';
+function sw(name, idx) {
+  currentPanel = name;
+  document.querySelectorAll('.nav-btn').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  document.getElementById('p-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='dashboard') renderDashboard();
+  if(name==='schedule') { renderSchedule(); fetchGCalMonthEvents(calYear,calMonth).then(()=>renderSchedule()); }
+  if(name==='todos') renderTodos();
+  if(name==='notes') renderNotes();
+  if(name==='settings') loadSettings();
+  // FAB visibility
+  document.getElementById('fabBtn').style.display = name==='settings'?'none':'flex';
+}
+
+// =============== MODAL ===============
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('active'); });
+});
+
+// =============== FAB ===============
+function fabAction() {
+  if(currentPanel==='schedule') openScheduleModal();
+  else if(currentPanel==='todos') openTodoModal();
+  else if(currentPanel==='notes') openNoteModal();
+  else openScheduleModal(); // dashboard default
+}
+
+// =============== SCHEDULE ===============
+let calMonth = new Date().getMonth();
+let calYear = new Date().getFullYear();
+
+const CAT_MAP = {work:'acc-work',personal:'acc-personal',meeting:'acc-meeting',health:'acc-health',other:'acc-other'};
+const CAT_CHIP = {work:'cat-work',personal:'cat-personal',meeting:'cat-meeting',health:'cat-health',other:'cat-other'};
+const CAT_LABEL = {work:'💼 工作',personal:'🏠 個人',meeting:'👥 會議',health:'💊 健康',other:'📌 其他'};
+const CAT_ICON = {work:'💼',personal:'🏠',meeting:'👥',health:'💊',other:'📌'};
+
+const TIME_SLOTS = [
+  {label:'06:00',s:'06:00',e:'07:00'},{label:'07:00',s:'07:00',e:'08:00'},
+  {label:'08:00',s:'08:00',e:'09:00'},{label:'09:00',s:'09:00',e:'10:00'},
+  {label:'10:00',s:'10:00',e:'11:00'},{label:'11:00',s:'11:00',e:'12:00'},
+  {label:'12:00',s:'12:00',e:'13:00'},{label:'13:00',s:'13:00',e:'14:00'},
+  {label:'14:00',s:'14:00',e:'15:00'},{label:'15:00',s:'15:00',e:'16:00'},
+  {label:'16:00',s:'16:00',e:'17:00'},{label:'17:00',s:'17:00',e:'18:00'},
+  {label:'18:00',s:'18:00',e:'19:00'},{label:'19:00',s:'19:00',e:'20:00'},
+  {label:'20:00',s:'20:00',e:'21:00'},{label:'21:00',s:'21:00',e:'22:00'},
+];
+
+// --- Calendar rendering ---
+function calNav(n) { calMonth+=n; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); fetchGCalMonthEvents(calYear, calMonth).then(()=>renderCalendar()); }
+function calGoToday() { const n=new Date(); calMonth=n.getMonth(); calYear=n.getFullYear(); viewDate=new Date(); renderCalendar(); renderDaySchedule(); fetchGCalMonthEvents(calYear, calMonth).then(()=>{renderCalendar();renderDaySchedule();}); }
+
+function renderCalendar() {
+  document.getElementById('calTitle').textContent = `${calYear} 年 ${calMonth+1} 月`;
+  const first = new Date(calYear, calMonth, 1);
+  const lastDay = new Date(calYear, calMonth+1, 0).getDate();
+  const startDow = first.getDay();
+  const todayStr = today();
+  const selectedStr = fmtDate(viewDate);
+  const scheds = get('schedules');
+  const eventDates = new Set(scheds.map(s=>s.date));
+  // Merge Google Calendar event dates
+  const gcalDates = getGCalEventDates();
+  gcalDates.forEach(d => eventDates.add(d));
+
+  let html = '';
+  // Previous month fill
+  const prevLast = new Date(calYear, calMonth, 0).getDate();
+  for(let i=startDow-1; i>=0; i--) {
+    html += `<button class="cal-day other-month">${prevLast-i}</button>`;
+  }
+  // Current month
+  for(let d=1; d<=lastDay; d++) {
+    const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cls = [];
+    if(ds===todayStr) cls.push('today');
+    if(ds===selectedStr) cls.push('selected');
+    if(eventDates.has(ds)) cls.push('has-event');
+    html += `<button class="cal-day ${cls.join(' ')}" onclick="selectCalDay('${ds}')">${d}</button>`;
+  }
+  // Next month fill
+  const total = startDow + lastDay;
+  const fill = total <= 35 ? 35 - total : 42 - total;
+  for(let i=1; i<=fill; i++) {
+    html += `<button class="cal-day other-month">${i}</button>`;
+  }
+  document.getElementById('calDays').innerHTML = html;
+}
+
+function selectCalDay(ds) {
+  viewDate = new Date(ds + 'T00:00:00');
+  renderCalendar();
+  renderDaySchedule();
+}
+
+function renderDaySchedule() {
+  const ds = fmtDate(viewDate);
+  document.getElementById('dayListTitle').innerHTML = `<span class="line"></span> ${fmtDateZh(viewDate)}`;
+
+  // Local events
+  const localItems = get('schedules').filter(s=>s.date===ds);
+  // Google Calendar events (exclude those already synced from this app)
+  const gcalItems = getGCalEventsForDate(ds).filter(g => {
+    // Skip if a local event has the same calendarEventId
+    return !localItems.some(l => l.calendarEventId && g.gcalId && l.calendarEventId === g.gcalId);
+  });
+
+  // Merge and sort
+  const allItems = [
+    ...localItems.map(s => ({...s, isGcal: false})),
+    ...gcalItems.map(g => ({...g, isGcal: true})),
+  ].sort((a,b) => (a.startTime||'99').localeCompare(b.startTime||'99'));
+
+  const el = document.getElementById('scheduleList');
+  if(!allItems.length) {
+    el.innerHTML=`<div class="empty"><div class="icon">📅</div><div class="msg">這天沒有行程</div><button class="btn btn-primary" onclick="openScheduleModal()" style="margin-top:12px;display:inline-block;flex:unset;padding:10px 24px;">＋ 新增行程</button></div>`;
+    return;
+  }
+  el.innerHTML = allItems.map(s => {
+    if(s.isGcal) {
+      // Google Calendar event (read-only, open in new tab)
+      const accentCls = s.colorId ? `gcal-c${s.colorId}` : 'gcal-accent';
+      return `
+      <div class="card-item gcal-item" ${s.htmlLink?`onclick="window.open('${s.htmlLink}','_blank')"`:''}">
+        <div class="sched-accent ${accentCls}"></div>
+        <div class="card-body">
+          <div class="card-title">${esc(s.title)}</div>
+          <div class="card-meta">
+            <span class="gcal-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/></svg> Google</span>
+            ${s.location?`<span>📍 ${esc(s.location)}</span>`:''}
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-main">${s.startTime||'全天'}</div>
+          ${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}
+        </div>
+      </div>`;
+    } else {
+      // Local event
+      return `
+      <div class="card-item" onclick="openScheduleModal('${s.id}')">
+        <div class="sched-accent ${CAT_MAP[s.category]||'acc-other'}"></div>
+        <div class="card-body">
+          <div class="card-title">${esc(s.title)}</div>
+          <div class="card-meta">
+            <span class="sched-cat ${CAT_CHIP[s.category]||'cat-other'}">${CAT_LABEL[s.category]||'📌 其他'}</span>
+            ${s.location?`<span>📍 ${esc(s.location)}</span>`:''}
+            ${s.syncCal?'<span style="color:var(--green)">● 已同步</span>':''}
+          </div>
+        </div>
+        <div class="time-block">
+          <div class="time-main">${s.startTime||'全天'}</div>
+          ${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}
+        </div>
+        <span class="chevron">›</span>
+      </div>`;
+    }
+  }).join('');
+}
+
+function renderSchedule() {
+  try { renderCalendar(); } catch(e) { console.error('renderCalendar:', e); }
+  try { renderFavScroll(); } catch(e) { console.error('renderFavScroll:', e); }
+  try { renderDaySchedule(); } catch(e) { console.error('renderDaySchedule:', e); }
+}
+
+// --- Schedule Modal ---
+function openScheduleModal(editId=null) {
+  document.getElementById('smEditId').value = editId||'';
+  document.getElementById('smTitle').textContent = editId?'編輯行程':'新增行程';
+  document.getElementById('smDeleteBtn').style.display = editId?'block':'none';
+  document.getElementById('smSaveFav').checked = false;
+  if(editId) {
+    const s = get('schedules').find(x=>x.id===editId);
+    if(s) {
+      document.getElementById('smName').value=s.title;
+      document.getElementById('smDate').value=s.date;
+      document.getElementById('smStart').value=s.startTime||'';
+      document.getElementById('smEnd').value=s.endTime||'';
+      document.getElementById('smCat').value=s.category||'other';
+      document.getElementById('smLoc').value=s.location||'';
+      document.getElementById('smNote').value=s.note||'';
+      document.getElementById('smSync').checked=s.syncCal!==false;
+    }
+  } else {
+    ['smName','smStart','smEnd','smLoc','smNote'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('smDate').value=fmtDate(viewDate);
+    document.getElementById('smCat').value='other';
+    document.getElementById('smSync').checked=true;
+  }
+  openModal('scheduleModal');
+}
+
+async function saveSchedule() {
+  const title=document.getElementById('smName').value.trim();
+  if(!title) { toast('請輸入行程名稱','error'); return; }
+  const editId=document.getElementById('smEditId').value;
+  const list=get('schedules');
+  const entry = {
+    id: editId||uid(), title,
+    date: document.getElementById('smDate').value,
+    startTime: document.getElementById('smStart').value,
+    endTime: document.getElementById('smEnd').value,
+    category: document.getElementById('smCat').value,
+    location: document.getElementById('smLoc').value.trim(),
+    note: document.getElementById('smNote').value.trim(),
+    syncCal: document.getElementById('smSync').checked,
+    createdAt: editId?(list.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    calendarEventId: editId?(list.find(x=>x.id===editId)?.calendarEventId||null):null,
+  };
+  if(editId) { const i=list.findIndex(x=>x.id===editId); if(i>=0) list[i]=entry; }
+  else list.push(entry);
+  set('schedules', list);
+
+  // Save as favorite if checked
+  if(document.getElementById('smSaveFav').checked) {
+    const favs = get('favorites');
+    favs.push({
+      id: uid(), title, category: entry.category,
+      startTime: entry.startTime, endTime: entry.endTime,
+      location: entry.location, note: entry.note, syncCal: entry.syncCal,
+      createdAt: new Date().toISOString()
+    });
+    set('favorites', favs);
+    toast('行程已新增，並儲存為常用','success');
+  } else {
+    toast(editId?'行程已更新':'行程已新增','success');
+  }
+
+  closeModal('scheduleModal');
+  renderSchedule(); updateBadges();
+  if(entry.syncCal) syncCal(editId?'update':'create', entry);
+}
+
+function deleteScheduleFromModal() {
+  const editId = document.getElementById('smEditId').value;
+  if(!editId) return;
+  deleteSchedule(editId);
+  closeModal('scheduleModal');
+}
+
+function deleteSchedule(id) {
+  if(!confirm('刪除此行程？')) return;
+  const list=get('schedules'); const item=list.find(x=>x.id===id);
+  set('schedules', list.filter(x=>x.id!==id));
+  toast('行程已刪除','success');
+  renderSchedule(); updateBadges();
+  if(item?.calendarEventId) syncCal('delete', item);
+}
+
+// --- Favorites ---
+function renderFavScroll() {
+  const favs = get('favorites');
+  const el = document.getElementById('favScroll');
+  let html = favs.map(f => `
+    <button class="fav-chip" onclick="openFavApply('${f.id}')">
+      <span class="fav-icon">${CAT_ICON[f.category]||'📌'}</span>
+      <span>${esc(f.title)}</span>
+      ${f.startTime?`<span class="fav-time">${f.startTime}</span>`:''}
+    </button>`).join('');
+  html += `<button class="fav-chip fav-chip-add" onclick="openScheduleModal()">＋ 新增</button>`;
+  el.innerHTML = html;
+}
+
+function openFavManage() {
+  const favs = get('favorites');
+  const el = document.getElementById('favManageList');
+  if(!favs.length) {
+    el.innerHTML = '<div class="empty"><div class="icon">⭐</div><div class="msg">還沒有常用行程<br><small style="color:var(--text3)">新增行程時勾選「儲存為常用行程」即可</small></div></div>';
+  } else {
+    el.innerHTML = favs.map(f => `
+      <div class="fav-manage-item">
+        <div style="font-size:20px;">${CAT_ICON[f.category]||'📌'}</div>
+        <div class="fav-manage-body">
+          <div class="fav-manage-title">${esc(f.title)}</div>
+          <div class="fav-manage-meta">${CAT_LABEL[f.category]||'其他'} ${f.startTime?'· '+f.startTime+'-'+(f.endTime||''):''} ${f.location?'· 📍'+esc(f.location):''}</div>
+        </div>
+        <button class="fav-manage-del" onclick="deleteFav('${f.id}')">✕</button>
+      </div>`).join('');
+  }
+  openModal('favManageModal');
+}
+
+function deleteFav(id) {
+  set('favorites', get('favorites').filter(x=>x.id!==id));
+  openFavManage(); renderFavScroll();
+  toast('已刪除常用行程','success');
+}
+
+// --- Quick Apply Favorite (multi-day + time) ---
+let faPickedDays = [];
+let faPickedSlot = null;
+let faCalMonth, faCalYear;
+
+function openFavApply(favId) {
+  const fav = get('favorites').find(x=>x.id===favId);
+  if(!fav) return;
+  document.getElementById('faFavId').value = favId;
+  document.getElementById('faName').textContent = fav.title;
+  document.getElementById('faIcon').textContent = CAT_ICON[fav.category]||'📌';
+  document.getElementById('faMeta').textContent = `${CAT_LABEL[fav.category]||'其他'} ${fav.startTime?'· '+fav.startTime+'-'+(fav.endTime||''):''} ${fav.location?'· 📍'+fav.location:''}`;
+
+  // Init state
+  faPickedDays = [fmtDate(viewDate)];
+  faPickedSlot = fav.startTime ? { s: fav.startTime, e: fav.endTime||'' } : null;
+  faCalMonth = viewDate.getMonth();
+  faCalYear = viewDate.getFullYear();
+
+  // Set custom time to fav defaults
+  document.getElementById('faCustomStart').value = fav.startTime||'';
+  document.getElementById('faCustomEnd').value = fav.endTime||'';
+  document.getElementById('faSync').checked = fav.syncCal!==false;
+
+  renderFaCal();
+  renderFaPickedDays();
+  renderFaTimeSlots();
+  openModal('favApplyModal');
+}
+
+function faCalNav(n) { faCalMonth+=n; if(faCalMonth>11){faCalMonth=0;faCalYear++;} if(faCalMonth<0){faCalMonth=11;faCalYear--;} renderFaCal(); }
+
+function renderFaCal() {
+  document.getElementById('faCalTitle').textContent = `${faCalYear} 年 ${faCalMonth+1} 月`;
+  const first = new Date(faCalYear, faCalMonth, 1);
+  const lastDay = new Date(faCalYear, faCalMonth+1, 0).getDate();
+  const startDow = first.getDay();
+  const todayStr = today();
+  let html = '';
+  const prevLast = new Date(faCalYear, faCalMonth, 0).getDate();
+  for(let i=startDow-1;i>=0;i--) html+=`<button class="multi-cal-day other-month">${prevLast-i}</button>`;
+  for(let d=1;d<=lastDay;d++) {
+    const ds = `${faCalYear}-${String(faCalMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cls = [];
+    if(ds===todayStr) cls.push('today');
+    if(faPickedDays.includes(ds)) cls.push('picked');
+    html+=`<button class="multi-cal-day ${cls.join(' ')}" onclick="toggleFaDay('${ds}')">${d}</button>`;
+  }
+  const total=startDow+lastDay; const fill=total<=35?35-total:42-total;
+  for(let i=1;i<=fill;i++) html+=`<button class="multi-cal-day other-month">${i}</button>`;
+  document.getElementById('faCalDays').innerHTML = html;
+}
+
+function toggleFaDay(ds) {
+  const idx = faPickedDays.indexOf(ds);
+  if(idx>=0) faPickedDays.splice(idx,1);
+  else faPickedDays.push(ds);
+  faPickedDays.sort();
+  renderFaCal();
+  renderFaPickedDays();
+}
+
+function removeFaDay(ds) {
+  faPickedDays = faPickedDays.filter(d=>d!==ds);
+  renderFaCal();
+  renderFaPickedDays();
+}
+
+function renderFaPickedDays() {
+  const el = document.getElementById('faPickedDays');
+  if(!faPickedDays.length) { el.innerHTML='<span style="font-size:12px;color:var(--text3);">請選擇至少一天</span>'; }
+  else {
+    el.innerHTML = faPickedDays.map(ds => {
+      const x = new Date(ds+'T00:00:00');
+      return `<span class="picked-tag">${x.getMonth()+1}/${x.getDate()}（${DAYS[x.getDay()]}）<span class="remove-day" onclick="removeFaDay('${ds}')">✕</span></span>`;
+    }).join('');
+  }
+  document.getElementById('faDayCount').textContent = faPickedDays.length;
+}
+
+function renderFaTimeSlots() {
+  const el = document.getElementById('faTimeSlots');
+  el.innerHTML = TIME_SLOTS.map((t,i) => {
+    const picked = faPickedSlot && faPickedSlot.s===t.s;
+    return `<button class="time-slot ${picked?'picked':''}" onclick="pickTimeSlot(${i})">${t.label}</button>`;
+  }).join('');
+}
+
+function pickTimeSlot(idx) {
+  const t = TIME_SLOTS[idx];
+  if(faPickedSlot && faPickedSlot.s===t.s) { faPickedSlot=null; }
+  else { faPickedSlot = { s:t.s, e:t.e }; }
+  document.getElementById('faCustomStart').value = faPickedSlot?faPickedSlot.s:'';
+  document.getElementById('faCustomEnd').value = faPickedSlot?faPickedSlot.e:'';
+  renderFaTimeSlots();
+}
+
+// Listen for custom time input changes
+document.addEventListener('DOMContentLoaded', () => {
+  ['faCustomStart','faCustomEnd'].forEach(id => {
+    document.getElementById(id)?.addEventListener('change', () => {
+      const s = document.getElementById('faCustomStart').value;
+      const e = document.getElementById('faCustomEnd').value;
+      faPickedSlot = s ? { s, e } : null;
+      renderFaTimeSlots(); // deselect grid if custom
+    });
+  });
+});
+
+async function applyFavorite() {
+  if(!faPickedDays.length) { toast('請選擇至少一天','error'); return; }
+  const favId = document.getElementById('faFavId').value;
+  const favs = get('favorites');
+  const fav = favs.find(x=>x.id===favId);
+  if(!fav) { toast('找不到常用行程','error'); return; }
+
+  const startT = document.getElementById('faCustomStart').value || '';
+  const endT = document.getElementById('faCustomEnd').value || '';
+  const doSync = document.getElementById('faSync').checked;
+
+  const list = get('schedules');
+  const newEntries = [];
+  faPickedDays.forEach(ds => {
+    const entry = {
+      id: uid(), title: fav.title, date: ds,
+      startTime: startT, endTime: endT,
+      category: fav.category, location: fav.location||'',
+      note: fav.note||'', syncCal: doSync,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      calendarEventId: null,
+    };
+    list.push(entry);
+    newEntries.push(entry);
+  });
+  set('schedules', list);
+  closeModal('favApplyModal');
+  toast(`已新增 ${newEntries.length} 筆行程`, 'success');
+
+  // Explicitly re-render all parts
+  try { renderCalendar(); } catch(e) {}
+  try { renderFavScroll(); } catch(e) {}
+  try { renderDaySchedule(); } catch(e) {}
+  updateBadges();
+
+  // Sync each to calendar
+  if(doSync) {
+    for(const entry of newEntries) {
+      await syncCal('create', entry);
+    }
+  }
+}
+
+// =============== TODOS ===============
+let todoFilter = 'all';
+const PRI_ORDER = {'urgent-important':0,'important':1,'urgent':2,'normal':3};
+const PRI_LABEL = {'urgent-important':'緊急重要','important':'重要','urgent':'緊急','normal':'一般'};
+const PRI_CLASS = {'urgent-important':'pri-ui','important':'pri-i','urgent':'pri-u','normal':'pri-n'};
+
+function setFilter(f, el) {
+  todoFilter=f;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  el?.classList.add('on');
+  renderTodos();
+}
+
+function quickAdd() {
+  const inp=document.getElementById('quickInput');
+  const t=inp.value.trim(); if(!t) return;
+  const list=get('todos');
+  list.push({id:uid(),title:t,priority:'normal',dueDate:'',note:'',completed:false,createdAt:new Date().toISOString()});
+  set('todos',list); inp.value='';
+  toast('待辦已新增','success');
+  renderTodos(); updateBadges();
+}
+
+function openTodoModal(editId=null) {
+  document.getElementById('tmEditId').value=editId||'';
+  document.getElementById('tmTitle').textContent=editId?'編輯待辦':'新增待辦';
+  if(editId) {
+    const t=get('todos').find(x=>x.id===editId);
+    if(t) { document.getElementById('tmName').value=t.title; document.getElementById('tmPri').value=t.priority; document.getElementById('tmDue').value=t.dueDate||''; document.getElementById('tmNote').value=t.note||''; }
+  } else {
+    ['tmName','tmDue','tmNote'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('tmPri').value='normal';
+  }
+  openModal('todoModal');
+}
+
+function saveTodo() {
+  const title=document.getElementById('tmName').value.trim();
+  if(!title) { toast('請輸入待辦內容','error'); return; }
+  const editId=document.getElementById('tmEditId').value;
+  const list=get('todos');
+  const entry = {
+    id: editId||uid(), title,
+    priority: document.getElementById('tmPri').value,
+    dueDate: document.getElementById('tmDue').value,
+    note: document.getElementById('tmNote').value.trim(),
+    completed: editId?(list.find(x=>x.id===editId)?.completed||false):false,
+    completedAt: editId?(list.find(x=>x.id===editId)?.completedAt||null):null,
+    createdAt: editId?(list.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),
+  };
+  if(editId) { const i=list.findIndex(x=>x.id===editId); if(i>=0) list[i]=entry; }
+  else list.push(entry);
+  set('todos',list);
+  closeModal('todoModal');
+  toast(editId?'待辦已更新':'待辦已新增','success');
+  renderTodos(); updateBadges();
+}
+
+function toggleTodo(id, e) {
+  e?.stopPropagation();
+  const list=get('todos');
+  const t=list.find(x=>x.id===id);
+  if(t) { t.completed=!t.completed; t.completedAt=t.completed?new Date().toISOString():null; }
+  set('todos',list); renderTodos(); updateBadges();
+}
+
+function deleteTodo(id) {
+  if(!confirm('刪除此待辦？')) return;
+  set('todos', get('todos').filter(x=>x.id!==id));
+  toast('已刪除','success'); renderTodos(); updateBadges();
+}
+
+function renderTodos() {
+  let list=get('todos');
+  if(todoFilter==='completed') list=list.filter(t=>t.completed);
+  else if(todoFilter!=='all') list=list.filter(t=>!t.completed&&t.priority===todoFilter);
+  list.sort((a,b)=>{
+    if(a.completed!==b.completed) return a.completed?1:-1;
+    const pa=PRI_ORDER[a.priority]??3, pb=PRI_ORDER[b.priority]??3;
+    if(pa!==pb) return pa-pb;
+    if(a.dueDate&&b.dueDate) return a.dueDate.localeCompare(b.dueDate);
+    return a.dueDate?-1:b.dueDate?1:0;
+  });
+  const el=document.getElementById('todoList');
+  if(!list.length) { el.innerHTML='<div class="empty"><div class="icon">☑</div><div class="msg">沒有待辦事項</div></div>'; return; }
+  el.innerHTML = list.map(t=>{
+    const od=!t.completed&&isOverdue(t.dueDate);
+    return `
+    <div class="card-item ${t.completed?'done':''}" onclick="openTodoModal('${t.id}')">
+      <div class="todo-check" onclick="toggleTodo('${t.id}',event)">${t.completed?'✓':''}</div>
+      <div class="card-body">
+        <div class="card-title">${esc(t.title)}</div>
+        <div class="card-meta">
+          <span class="pri-tag ${PRI_CLASS[t.priority]}">${PRI_LABEL[t.priority]}</span>
+          ${t.dueDate?`<span class="${od?'overdue':''}">${od?'⚠ 已過期 ':'📅 '}${t.dueDate}</span>`:''}
+          ${t.note?'<span>📝</span>':''}
+        </div>
+      </div>
+      <span class="chevron">›</span>
+    </div>`;
+  }).join('');
+}
+
+// =============== NOTES ===============
+function openNoteModal(editId=null) {
+  document.getElementById('nmEditId').value=editId||'';
+  document.getElementById('nmTitle').textContent=editId?'編輯筆記':'新增筆記';
+  if(editId) {
+    const n=get('notes').find(x=>x.id===editId);
+    if(n) { document.getElementById('nmName').value=n.title; document.getElementById('nmContent').value=n.content; document.getElementById('nmTags').value=(n.tags||[]).join(', '); }
+  } else { ['nmName','nmContent','nmTags'].forEach(id=>document.getElementById(id).value=''); }
+  openModal('noteModal');
+}
+
+function saveNote() {
+  const title=document.getElementById('nmName').value.trim();
+  const content=document.getElementById('nmContent').value.trim();
+  if(!title&&!content) { toast('請輸入內容','error'); return; }
+  const editId=document.getElementById('nmEditId').value;
+  const list=get('notes');
+  const tags=document.getElementById('nmTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const entry = {
+    id: editId||uid(), title:title||'無標題', content, tags,
+    createdAt: editId?(list.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+  if(editId) { const i=list.findIndex(x=>x.id===editId); if(i>=0) list[i]=entry; }
+  else list.push(entry);
+  set('notes',list);
+  closeModal('noteModal');
+  toast(editId?'筆記已更新':'筆記已新增','success');
+  renderNotes();
+}
+
+function deleteNote(id) {
+  if(!confirm('刪除此筆記？')) return;
+  set('notes', get('notes').filter(x=>x.id!==id));
+  toast('已刪除','success'); renderNotes();
+}
+
+function renderNotes() {
+  const list=get('notes').sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
+  const el=document.getElementById('notesList');
+  if(!list.length) { el.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="icon">✎</div><div class="msg">還沒有筆記</div></div>'; return; }
+  el.innerHTML = list.map(n=>`
+    <div class="note-card" onclick="openNoteModal('${n.id}')">
+      <h4>${esc(n.title)}</h4>
+      <p>${esc(n.content)}</p>
+      ${n.tags?.length?`<div class="note-tags">${n.tags.map(t=>`<span class="note-tag">${esc(t)}</span>`).join('')}</div>`:''}
+    </div>`).join('');
+}
+
+// =============== DASHBOARD ===============
+function renderDashboard() {
+  const td=today();
+  const scheds=get('schedules');
+  const todos=get('todos');
+  const notes=get('notes');
+
+  const todayS=scheds.filter(s=>s.date===td);
+  // Merge Google Calendar events for today
+  const gcalToday = getGCalEventsForDate(td).filter(g => !todayS.some(l=>l.calendarEventId && g.gcalId && l.calendarEventId===g.gcalId));
+  const allTodayS = [...todayS.map(s=>({...s,isGcal:false})), ...gcalToday.map(g=>({...g,isGcal:true}))].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+
+  const pending=todos.filter(t=>!t.completed);
+  const doneToday=todos.filter(t=>t.completed&&t.completedAt&&fmtDate(t.completedAt)===td);
+  const overdue=todos.filter(t=>!t.completed&&isOverdue(t.dueDate));
+
+  document.getElementById('statEvents').textContent=allTodayS.length;
+  document.getElementById('statTodos').textContent=pending.length;
+  document.getElementById('statDone').textContent=doneToday.length;
+  document.getElementById('statOverdue').textContent=overdue.length;
+
+  // Greeting
+  const h=new Date().getHours();
+  document.getElementById('greetingText').textContent = h<12?'Good Morning ☀':h<18?'Good Afternoon 🌤':'Good Evening 🌙';
+
+  // Schedule preview
+  const se=document.getElementById('dashSchedule');
+  if(!allTodayS.length) { se.innerHTML='<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">今天沒有行程 🎉</div>'; }
+  else { se.innerHTML = allTodayS.slice(0,5).map(s=>{
+    if(s.isGcal) return `
+    <div class="card-item gcal-item" onclick="sw('schedule',1)">
+      <div class="sched-accent ${s.colorId?'gcal-c'+s.colorId:'gcal-accent'}"></div>
+      <div class="card-body"><div class="card-title">${esc(s.title)}</div><div class="card-meta"><span class="gcal-badge">G Google</span>${s.location?`<span>📍 ${esc(s.location)}</span>`:''}</div></div>
+      <div class="time-block"><div class="time-main">${s.startTime||'全天'}</div>${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}</div>
+    </div>`;
+    return `
+    <div class="card-item" onclick="sw('schedule',1)">
+      <div class="sched-accent ${CAT_MAP[s.category]||'acc-other'}"></div>
+      <div class="card-body"><div class="card-title">${esc(s.title)}</div><div class="card-meta"><span class="sched-cat ${CAT_CHIP[s.category]||'cat-other'}">${CAT_LABEL[s.category]||'其他'}</span>${s.location?`<span>📍 ${esc(s.location)}</span>`:''}</div></div>
+      <div class="time-block"><div class="time-main">${s.startTime||'全天'}</div>${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}</div>
+    </div>`;
+  }).join(''); }
+
+  // Urgent todos
+  const te=document.getElementById('dashTodos');
+  const urgent=pending.sort((a,b)=>(PRI_ORDER[a.priority]??3)-(PRI_ORDER[b.priority]??3)).slice(0,4);
+  if(!urgent.length) { te.innerHTML='<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">沒有待辦 ✨</div>'; }
+  else { te.innerHTML = urgent.map(t=>{
+    const od=isOverdue(t.dueDate);
+    return `
+    <div class="card-item" onclick="sw('todos',2)">
+      <div class="todo-check" onclick="toggleTodo('${t.id}',event)"></div>
+      <div class="card-body"><div class="card-title">${esc(t.title)}</div><div class="card-meta"><span class="pri-tag ${PRI_CLASS[t.priority]}">${PRI_LABEL[t.priority]}</span>${t.dueDate?`<span class="${od?'overdue':''}">${od?'⚠ 已過期':t.dueDate}</span>`:''}</div></div>
+    </div>`;
+  }).join(''); }
+
+  // Notes scroll
+  const ne=document.getElementById('dashNotes');
+  const recentN=notes.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).slice(0,5);
+  if(!recentN.length) { ne.innerHTML='<div style="padding:16px;color:var(--text3);font-size:13px;">還沒有筆記</div>'; }
+  else { ne.innerHTML = recentN.map(n=>`
+    <div class="note-card" onclick="sw('notes',3)">
+      <h4>${esc(n.title)}</h4>
+      <p>${esc(n.content)}</p>
+      ${n.tags?.length?`<div class="note-tags">${n.tags.slice(0,2).map(t=>`<span class="note-tag">${esc(t)}</span>`).join('')}</div>`:''}
+    </div>`).join(''); }
+}
+
+// =============== SETTINGS ===============
+function loadSettings() {
+  const s=getSett();
+  document.getElementById('whCalendar').value=s.whCalendar||'';
+  document.getElementById('whLine').value=s.whLine||'';
+  document.getElementById('gcalClientId').value=s.gcalClientId||'';
+  document.getElementById('reminderTime').value=s.reminderTime||'07:30';
+  const st=document.getElementById('lineStatus');
+  if(s.whLine) { st.className='status-dot status-on'; st.textContent='● 已連線'; }
+  else { st.className='status-dot status-off'; st.textContent='● 未設定'; }
+  // Google Calendar connection state
+  updateGCalUI();
+}
+function saveSettings() {
+  const prev = getSett();
+  const s = {
+    ...prev,
+    whCalendar:document.getElementById('whCalendar').value.trim(),
+    whLine:document.getElementById('whLine').value.trim(),
+    gcalClientId:document.getElementById('gcalClientId').value.trim(),
+    reminderTime:document.getElementById('reminderTime').value,
+  };
+  _cache.settings = s;
+  try { localStorage.setItem(SK.settings, JSON.stringify(s)); } catch{}
+  toast('設定已儲存','success'); loadSettings();
+}
+
+// =============== GOOGLE CALENDAR API ===============
+let gcalToken = null;       // OAuth2 access token (in memory only)
+let gcalUserInfo = null;    // { name, email }
+let gcalEventsCache = {};   // { 'YYYY-MM': [events] }
+let gcalTokenClient = null; // Google token client instance
+let gcalLoading = false;
+
+function updateGCalUI() {
+  const connected = !!gcalToken;
+  document.getElementById('gcalNotConnected').style.display = connected ? 'none' : 'block';
+  document.getElementById('gcalConnected').style.display = connected ? 'block' : 'none';
+  if(connected && gcalUserInfo) {
+    document.getElementById('gcalUserName').textContent = gcalUserInfo.name || '已連線';
+    document.getElementById('gcalUserEmail').textContent = gcalUserInfo.email || '';
+    document.getElementById('gcalAvatar').textContent = (gcalUserInfo.name||'G')[0].toUpperCase();
+  }
+}
+
+function googleSignIn() {
+  const clientId = document.getElementById('gcalClientId').value.trim();
+  if(!clientId) { toast('請先填入 OAuth Client ID','error'); return; }
+  // Save client ID
+  const s = getSett();
+  s.gcalClientId = clientId;
+  _cache.settings = s;
+  try { localStorage.setItem(SK.settings, JSON.stringify(s)); } catch{}
+
+  if(typeof google === 'undefined' || !google.accounts) {
+    toast('Google API 載入中，請稍後重試','error');
+    return;
+  }
+
+  try {
+    gcalTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+      callback: handleGoogleTokenResponse,
+    });
+    gcalTokenClient.requestAccessToken();
+  } catch(e) {
+    toast('Google 登入初始化失敗: ' + e.message, 'error');
+  }
+}
+
+async function handleGoogleTokenResponse(resp) {
+  if(resp.error) {
+    toast('Google 授權失敗: ' + resp.error, 'error');
+    return;
+  }
+  gcalToken = resp.access_token;
+
+  // Fetch user info
+  try {
+    const r = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: { 'Authorization': 'Bearer ' + gcalToken }
+    });
+    if(r.ok) gcalUserInfo = await r.json();
+  } catch{}
+
+  updateGCalUI();
+  toast('Google Calendar 已連線','success');
+
+  // Fetch events for current calendar view
+  await fetchGCalMonthEvents(calYear, calMonth);
+  renderSchedule();
+  renderDashboard();
+}
+
+function googleSignOut() {
+  if(gcalToken && typeof google !== 'undefined') {
+    try { google.accounts.oauth2.revoke(gcalToken); } catch{}
+  }
+  gcalToken = null;
+  gcalUserInfo = null;
+  gcalEventsCache = {};
+  updateGCalUI();
+  renderSchedule();
+  renderDashboard();
+  toast('已登出 Google','success');
+}
+
+async function fetchGCalMonthEvents(year, month) {
+  if(!gcalToken) return;
+  const key = `${year}-${String(month+1).padStart(2,'0')}`;
+  // Skip if already cached
+  if(gcalEventsCache[key]) return;
+
+  const timeMin = new Date(year, month, 1).toISOString();
+  const timeMax = new Date(year, month+1, 0, 23, 59, 59).toISOString();
+
+  gcalLoading = true;
+  const statusEl = document.getElementById('gcalSyncStatus');
+  if(statusEl) statusEl.innerHTML = '<div class="spinner"></div> 同步中...';
+
+  try {
+    const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?` +
+      `timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}` +
+      `&singleEvents=true&orderBy=startTime&maxResults=250`;
+    const r = await fetch(url, {
+      headers: { 'Authorization': 'Bearer ' + gcalToken }
+    });
+    if(r.status === 401) {
+      // Token expired
+      gcalToken = null;
+      updateGCalUI();
+      toast('Google 授權已過期，請重新登入','error');
+      return;
+    }
+    if(!r.ok) throw new Error('API error ' + r.status);
+    const data = await r.json();
+
+    // Parse events
+    const events = (data.items || []).map(ev => {
+      const start = ev.start?.dateTime || ev.start?.date || '';
+      const end = ev.end?.dateTime || ev.end?.date || '';
+      const isAllDay = !ev.start?.dateTime;
+      const startDate = start.slice(0, 10);
+      const startTime = isAllDay ? '' : start.slice(11, 16);
+      const endTime = isAllDay ? '' : end.slice(11, 16);
+      return {
+        id: 'gcal_' + ev.id,
+        gcalId: ev.id,
+        title: ev.summary || '（無標題）',
+        date: startDate,
+        startTime, endTime,
+        location: ev.location || '',
+        description: ev.description || '',
+        colorId: ev.colorId || null,
+        isGcal: true,
+        isAllDay,
+        htmlLink: ev.htmlLink || '',
+      };
+    });
+
+    gcalEventsCache[key] = events;
+  } catch(e) {
+    console.error('GCal fetch error:', e);
+  }
+
+  gcalLoading = false;
+  if(statusEl) statusEl.innerHTML = '<span style="color:var(--green);">●</span> 已連線';
+}
+
+function getGCalEventsForDate(ds) {
+  const key = ds.slice(0, 7); // 'YYYY-MM'
+  const events = gcalEventsCache[key] || [];
+  return events.filter(e => e.date === ds);
+}
+
+function getGCalEventDates() {
+  const dates = new Set();
+  Object.values(gcalEventsCache).forEach(events => {
+    events.forEach(e => dates.add(e.date));
+  });
+  return dates;
+}
+
+async function refreshGCalEvents() {
+  gcalEventsCache = {};
+  await fetchGCalMonthEvents(calYear, calMonth);
+  renderSchedule();
+  renderDashboard();
+  toast('已重新拉取 Google Calendar 事件','success');
+}
+
+// =============== WEBHOOK ===============
+async function syncCal(action, data) {
+  const s=getSett(); if(!s.whCalendar) { toast('未設定行程 Webhook','error'); return; }
+  // 將 localId 嵌入 description，讓 Make.com Search 後可精確比對
+  const desc = `[PA:${data.id}][${data.category||'other'}] ${data.note||''}`.trim();
+  // Google Calendar colorId 對應
+  const CAT_COLOR = { work:'7', personal:'4', meeting:'1', health:'5', other:'8' };
+  try {
+    const r=await fetch(s.whCalendar, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action,
+        localId: data.id,
+        eventId: data.calendarEventId || null,
+        title: data.title,
+        date: data.date,
+        startTime: data.startTime || null,
+        endTime: data.endTime || null,
+        location: data.location || '',
+        description: desc,
+        category: data.category || 'other',
+        colorId: CAT_COLOR[data.category] || '8'
+      })
+    });
+    if(r.ok) {
+      const res=await r.json().catch(()=>({}));
+      // 不管 create 或 update，只要回傳 calendarEventId 就存起來
+      if(res.calendarEventId) {
+        const l=get('schedules');
+        const x=l.find(i=>i.id===data.id);
+        if(x) { x.calendarEventId=res.calendarEventId; set('schedules',l); }
+      }
+      const statusMsg = {
+        created:'已新增至 Google Calendar',
+        updated:'已更新 Google Calendar',
+        deleted:'已從 Google Calendar 刪除',
+        not_found:'Google Calendar 未找到事件',
+        updated_existing:'已更新既有 Google Calendar 事件'
+      };
+      toast(statusMsg[res.status]||'Google Calendar 同步成功','success');
+    } else toast('同步失敗','error');
+  } catch{ toast('Webhook 連線失敗','error'); }
+}
+
+async function testLine() {
+  const s=getSett(); if(!s.whLine) { toast('未設定 LINE Webhook','error'); return; }
+  const td=today();
+  const scheds=get('schedules').filter(x=>x.date===td).sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+  const todos=get('todos').filter(t=>!t.completed);
+  let msg=`📋 每日摘要 — ${fmtDateZh(new Date())}\n\n📅 今日行程（${scheds.length}）\n`;
+  scheds.forEach(s=>{ msg+=`  ${s.startTime||'全天'} ${s.title}${s.location?' 📍'+s.location:''}\n`; });
+  msg+=`\n☑ 待辦（${todos.length} 項未完成）\n`;
+  todos.filter(t=>PRI_ORDER[t.priority]<=1).slice(0,5).forEach(t=>{ msg+=`  ${PRI_LABEL[t.priority]} ${t.title}\n`; });
+  try {
+    const r=await fetch(s.whLine, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type:'daily_summary', message:msg, date:td}) });
+    toast(r.ok?'LINE 測試已發送':'發送失敗', r.ok?'success':'error');
+  } catch{ toast('連線失敗','error'); }
+}
+
+// =============== DATA MANAGEMENT ===============
+function exportData() {
+  const d={schedules:get('schedules'),todos:get('todos'),notes:get('notes'),favorites:get('favorites'),settings:getSett(),exportedAt:new Date().toISOString()};
+  const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`assistant-backup-${today()}.json`; a.click();
+  toast('已匯出','success');
+}
+function importData(e) {
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{ try { const d=JSON.parse(ev.target.result); if(d.schedules)set('schedules',d.schedules); if(d.todos)set('todos',d.todos); if(d.notes)set('notes',d.notes); if(d.favorites)set('favorites',d.favorites); if(d.settings){_cache.settings=d.settings; try{localStorage.setItem(SK.settings,JSON.stringify(d.settings));}catch{}} toast('匯入成功','success'); renderDashboard(); updateBadges(); } catch{toast('格式錯誤','error');} };
+  r.readAsText(f); e.target.value='';
+}
+function clearAll() {
+  if(!confirm('確定清除所有資料？')) return;
+  Object.keys(SK).forEach(k => { _cache[k] = undefined; });
+  Object.values(SK).forEach(k=>{ try { localStorage.removeItem(k); } catch{} });
+  toast('已清除','success'); loadDemo(); renderDashboard(); updateBadges();
+}
+
+// =============== HELPERS ===============
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function updateBadges() {
+  const td=today();
+  document.getElementById('bSched').textContent=get('schedules').filter(s=>s.date===td).length;
+  document.getElementById('bTodo').textContent=get('todos').filter(t=>!t.completed).length;
+}
+
+// =============== DEMO DATA ===============
+function loadDemo() {
+  // Always ensure favorites exist (independent of schedule/todo data)
+  if(!get('favorites').length) {
+    set('favorites',[
+      {id:uid(),title:'團隊週會',category:'meeting',startTime:'09:00',endTime:'10:00',location:'3F 會議室 A',note:'',syncCal:true,createdAt:new Date().toISOString()},
+      {id:uid(),title:'健身訓練',category:'health',startTime:'18:30',endTime:'19:30',location:'衡點健康',note:'',syncCal:false,createdAt:new Date().toISOString()},
+      {id:uid(),title:'Code Review',category:'work',startTime:'15:00',endTime:'16:00',location:'Google Meet',note:'',syncCal:true,createdAt:new Date().toISOString()},
+      {id:uid(),title:'午餐',category:'personal',startTime:'12:00',endTime:'13:00',location:'',note:'',syncCal:false,createdAt:new Date().toISOString()},
+    ]);
+  }
+  if(get('schedules').length||get('todos').length) return;
+  const td=today(), tm=fmtDate(new Date(Date.now()+864e5)), yd=fmtDate(new Date(Date.now()-864e5)), da=fmtDate(new Date(Date.now()+864e5*2));
+  set('schedules',[
+    {id:uid(),title:'團隊週會',date:td,startTime:'09:00',endTime:'10:00',category:'meeting',location:'3F 會議室 A',note:'討論 Q1 進度',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
+    {id:uid(),title:'系統開發 — 排班模組',date:td,startTime:'10:30',endTime:'12:30',category:'work',location:'',note:'Make.com 整合測試',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
+    {id:uid(),title:'午餐 — 客戶餐敘',date:td,startTime:'12:30',endTime:'14:00',category:'personal',location:'欣葉台菜 信義店',note:'',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
+    {id:uid(),title:'Code Review',date:td,startTime:'15:00',endTime:'16:00',category:'work',location:'線上 Google Meet',note:'PR #42',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
+    {id:uid(),title:'健身 — 腿部訓練',date:td,startTime:'18:30',endTime:'19:30',category:'health',location:'衡點健康',note:'深蹲+腿推+弓步蹲',syncCal:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
+    {id:uid(),title:'牙醫回診',date:tm,startTime:'10:00',endTime:'11:00',category:'health',location:'品悅牙醫',note:'',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
+  ]);
+  set('todos',[
+    {id:uid(),title:'完成代課系統即時聊天功能',priority:'urgent-important',dueDate:td,note:'Supabase Realtime',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'修復教練排班重複寫入問題',priority:'urgent-important',dueDate:td,note:'Make.com Router',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'撰寫 API 文件',priority:'important',dueDate:tm,note:'',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'設計會員資料綁定表單 UI',priority:'important',dueDate:da,note:'LINE LIFF 整合',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'回覆合作廠商報價信',priority:'urgent',dueDate:td,note:'',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'更新 Google Sheets 同步腳本',priority:'urgent',dueDate:tm,note:'Apps Script',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'提交上週工時表',priority:'urgent',dueDate:yd,note:'',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'建立 MySQL 備份排程',priority:'important',dueDate:yd,note:'',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'研究 LINE Messaging API',priority:'normal',dueDate:'',note:'Flex Message',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'整理 Docker 設定',priority:'normal',dueDate:'',note:'',completed:false,createdAt:new Date().toISOString()},
+    {id:uid(),title:'部署排班系統到正式環境',priority:'urgent-important',dueDate:td,note:'',completed:true,completedAt:new Date().toISOString(),createdAt:new Date(Date.now()-864e5).toISOString()},
+    {id:uid(),title:'修復 LIFF token 過期問題',priority:'urgent-important',dueDate:yd,note:'',completed:true,completedAt:new Date().toISOString(),createdAt:new Date(Date.now()-864e5*2).toISOString()},
+    {id:uid(),title:'完成試上課回饋表單',priority:'important',dueDate:yd,note:'',completed:true,completedAt:new Date().toISOString(),createdAt:new Date(Date.now()-864e5*3).toISOString()},
+  ]);
+  set('notes',[
+    {id:uid(),title:'三帳號架構遷移筆記',content:'客服帳號：會員互動、預約通知\n教學帳號：課程提醒、教練溝通\n管理帳號：內部行政、排班管理',tags:['LINE','架構','衡點健康'],createdAt:new Date(Date.now()-864e5*2).toISOString(),updatedAt:new Date(Date.now()-864e5).toISOString()},
+    {id:uid(),title:'Make.com 成本優化方案',content:'合併重複 scenario，用 Router 取代多個 webhook，批次處理取代逐筆觸發',tags:['Make.com','成本'],createdAt:new Date(Date.now()-864e5*5).toISOString(),updatedAt:new Date(Date.now()-864e5*3).toISOString()},
+    {id:uid(),title:'Supabase Realtime 測試結果',content:'延遲約 50-100ms，免費方案 200 concurrent connections，搭配 MySQL 持久化',tags:['Supabase','技術筆記'],createdAt:new Date(Date.now()-864e5*4).toISOString(),updatedAt:new Date(Date.now()-864e5*4).toISOString()},
+    {id:uid(),title:'會員健康問卷規劃',content:'基本資料：身高、體重、BMI\n健康史：病史、手術、用藥\nAI 姿態分析整合',tags:['衡點健康','問卷'],createdAt:new Date(Date.now()-864e5*7).toISOString(),updatedAt:new Date(Date.now()-864e5*6).toISOString()},
+    {id:uid(),title:'下週要買的東西',content:'機械鍵盤（茶軸）、USB-C Hub、螢幕架、咖啡豆',tags:['個人','購物'],createdAt:new Date(Date.now()-864e5).toISOString(),updatedAt:new Date(Date.now()-864e5).toISOString()},
+    {id:uid(),title:'年度目標 2026',content:'技術：完成衡點健康全系統\n學習：TypeScript + Next.js\n健康：每週訓練 3 次',tags:['目標','年度計畫'],createdAt:new Date(Date.now()-864e5*30).toISOString(),updatedAt:new Date(Date.now()-864e5*2).toISOString()},
+  ]);
+}
+
+// =============== INIT ===============
+function init() {
+  const now=new Date();
+  document.getElementById('hDate').textContent = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${DAYS[now.getDay()]}`;
+  loadDemo();
+  updateBadges();
+  renderDashboard();
+  // Pre-fetch current month Google Calendar events (if token exists from this session)
+  if(gcalToken) {
+    fetchGCalMonthEvents(now.getFullYear(), now.getMonth()).then(() => { renderDashboard(); updateBadges(); });
+  }
+}
+init();
+</script>
+</body>
+</html>
