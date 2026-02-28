@@ -2431,6 +2431,12 @@ function updateBadges() {
 
 // =============== INIT ===============
 function init() {
+  // One-time cleanup: remove old demo data
+  if(!localStorage.getItem('pa_cleaned')) {
+    Object.values(SK).forEach(k => { try { localStorage.removeItem(k); } catch{} });
+    Object.keys(_cache).forEach(k => delete _cache[k]);
+    localStorage.setItem('pa_cleaned','1');
+  }
   const now=new Date();
   document.getElementById('hDate').textContent = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${DAYS[now.getDay()]}`;
   updateBadges();
