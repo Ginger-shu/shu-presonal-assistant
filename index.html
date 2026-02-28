@@ -2213,29 +2213,42 @@ async function fetchGCalMonthEvents(year, month) {
       body: JSON.stringify({ action:'list', timeMin, timeMax })
     });
     if(!r.ok) throw new Error('Webhook error ' + r.status);
-    const data = await r.json();
+    const rawText = await r.text();
+    let items;
+    try { items = JSON.parse(rawText); } catch { items = []; }
+    if(!Array.isArray(items)) items = items.events || items.items || [];
 
-    // Make.com returns array of events (from Webhook Response)
-    const items = Array.isArray(data) ? data : (data.events || data.items || []);
+    // Convert UTC datetime string to local date/time parts
+    function parseGCalDT(raw) {
+      if(!raw || typeof raw !== 'string') return { date:'', time:'', isAllDay:true };
+      if(raw.length <= 10) return { date:raw, time:'', isAllDay:true }; // YYYY-MM-DD
+      const d = new Date(raw);
+      if(isNaN(d)) return { date:raw.slice(0,10), time:'', isAllDay:true };
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      return { date:`${y}-${m}-${day}`, time:`${hh}:${mm}`, isAllDay:false };
+    }
+
     const events = items.map(ev => {
-      // Support both Google Calendar API format and simplified format
-      const start = ev.start?.dateTime || ev.startDateTime || ev.start?.date || ev.startDate || '';
-      const end = ev.end?.dateTime || ev.endDateTime || ev.end?.date || ev.endDate || '';
-      const isAllDay = !(ev.start?.dateTime || ev.startDateTime);
-      const startDate = start.slice(0, 10);
-      const startTime = isAllDay ? '' : start.slice(11, 16);
-      const endTime = isAllDay ? '' : end.slice(11, 16);
+      const startRaw = ev.start?.dateTime || ev.startDateTime || ev.start || '';
+      const endRaw = ev.end?.dateTime || ev.endDateTime || ev.end || '';
+      const s = parseGCalDT(startRaw);
+      const e = parseGCalDT(endRaw);
       return {
         id: 'gcal_' + (ev.id || ev.eventId || Math.random().toString(36).substr(2)),
         gcalId: ev.id || ev.eventId || '',
         title: ev.summary || ev.title || '（無標題）',
-        date: startDate,
-        startTime, endTime,
+        date: s.date,
+        startTime: s.time,
+        endTime: e.time,
         location: ev.location || '',
         description: ev.description || '',
         colorId: ev.colorId || null,
         isGcal: true,
-        isAllDay,
+        isAllDay: s.isAllDay,
         htmlLink: ev.htmlLink || '',
       };
     });
