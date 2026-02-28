@@ -1094,50 +1094,21 @@ body::before {
     <div class="page-head"><h1>Settings</h1></div>
 
     <div class="settings-card">
-      <h4>📅 Google Calendar 直連</h4>
-      <p>直接讀取 Google 日曆事件，在行程頁面合併顯示</p>
-      <div id="gcalNotConnected">
-        <div class="form-group">
-          <label class="form-label">OAuth Client ID</label>
-          <input type="text" class="form-input" id="gcalClientId" placeholder="xxxx.apps.googleusercontent.com">
-          <div style="font-size:10px;color:var(--text3);margin-top:4px;">從 Google Cloud Console → APIs → 憑證 取得</div>
-        </div>
-        <!-- LINE browser warning -->
-        <div id="lineBrowserHint" style="display:none;background:var(--orange-bg);border-radius:10px;padding:12px 14px;margin-bottom:10px;">
-          <div style="font-size:13px;font-weight:600;color:var(--orange);margin-bottom:6px;">⚠ LINE 瀏覽器無法直接登入 Google</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:8px;">請點下方按鈕用外部瀏覽器開啟，登入後即可使用。</div>
-          <button class="g-signin-btn" onclick="openInExtBrowser()" style="background:#ff9800;margin-bottom:6px;">
-            🌐 用外部瀏覽器開啟
-          </button>
-          <div style="font-size:10px;color:var(--text3);line-height:1.4;">或手動操作：點右下角 ⋯ 選單 →「在預設瀏覽器中開啟」</div>
-        </div>
-        <button class="g-signin-btn" id="gcalSignInBtn" onclick="googleSignIn()">
-          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          使用 Google 帳號登入
-        </button>
+      <h4>📅 Google Calendar</h4>
+      <p>透過 Make.com 讀取/寫入 Google 日曆，永久有效不需登入</p>
+      <div class="g-sync-status" id="gcalSyncStatus">
+        <span id="gcalStatusDot" style="color:var(--text3);">●</span> <span id="gcalStatusText">未同步</span>
       </div>
-      <div id="gcalConnected" style="display:none;">
-        <div class="g-user-row">
-          <div class="g-user-avatar" id="gcalAvatar">G</div>
-          <div class="g-user-info">
-            <div class="g-user-name" id="gcalUserName">已連線</div>
-            <div class="g-user-email" id="gcalUserEmail"></div>
-          </div>
-          <button class="g-signout-btn" onclick="googleSignOut()">登出</button>
-        </div>
-        <div class="g-sync-status" id="gcalSyncStatus">
-          <span style="color:var(--green);">●</span> 已連線
-        </div>
-        <button class="settings-btn" onclick="refreshGCalEvents()" style="margin-top:8px;">🔄 重新拉取事件</button>
-      </div>
+      <button class="settings-btn" onclick="refreshGCalEvents()" style="margin-top:8px;">🔄 同步日曆事件</button>
     </div>
 
     <div class="settings-card">
       <h4>🔗 Make.com Webhook</h4>
-      <p>寫入同步 — 新增/編輯/刪除行程 → Google Calendar</p>
+      <p>連接 Make.com 自動化場景（Router 依 action 分流）</p>
       <div class="form-group">
-        <label class="form-label">行程同步 Webhook</label>
+        <label class="form-label">行程 Webhook（讀取 / 新增 / 編輯 / 刪除）</label>
         <input type="text" class="form-input" id="whCalendar" placeholder="https://hook.us2.make.com/...">
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">action: list / create / update / delete</div>
       </div>
       <div class="form-group">
         <label class="form-label">LINE 通知 Webhook</label>
@@ -1363,7 +1334,6 @@ const set = (k,v) => {
   try { localStorage.setItem(SK[k], JSON.stringify(v)); } catch{}
 };
 const DEFAULTS = {
-  gcalClientId: '798333358781-2bni6foillkt9r64q9vjid4j8feok7es.apps.googleusercontent.com',
   whCalendar: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
   whLine: 'https://hook.us2.make.com/8n4u37jnbr495eomnxn04y4iqaxp67rp',
   reminderTime: '07:30',
@@ -2177,12 +2147,10 @@ function loadSettings() {
   const s=getSett();
   document.getElementById('whCalendar').value=s.whCalendar||'';
   document.getElementById('whLine').value=s.whLine||'';
-  document.getElementById('gcalClientId').value=s.gcalClientId||'';
   document.getElementById('reminderTime').value=s.reminderTime||'07:30';
   const st=document.getElementById('lineStatus');
   if(s.whLine) { st.className='status-dot status-on'; st.textContent='● 已連線'; }
   else { st.className='status-dot status-off'; st.textContent='● 未設定'; }
-  // Google Calendar connection state
   updateGCalUI();
 }
 function saveSettings() {
@@ -2191,192 +2159,76 @@ function saveSettings() {
     ...prev,
     whCalendar:document.getElementById('whCalendar').value.trim(),
     whLine:document.getElementById('whLine').value.trim(),
-    gcalClientId:document.getElementById('gcalClientId').value.trim(),
     reminderTime:document.getElementById('reminderTime').value,
   };
   _cache.settings = s;
   try { localStorage.setItem(SK.settings, JSON.stringify(s)); } catch{}
   toast('設定已儲存','success'); loadSettings();
+  // Auto-sync calendar if read webhook is set
+  if(s.whCalendar) {
+    gcalEventsCache = {};
+    fetchGCalMonthEvents(calYear, calMonth).then(() => { renderSchedule(); renderDashboard(); });
+  }
 }
 
-// =============== GOOGLE CALENDAR API ===============
-let gcalToken = null;       // OAuth2 access token (in memory only)
-let gcalUserInfo = null;    // { name, email }
+// =============== GOOGLE CALENDAR via Make.com ===============
 let gcalEventsCache = {};   // { 'YYYY-MM': [events] }
 let gcalLoading = false;
 
-const GCAL_SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
-
-function isLineBrowser() {
-  return /Line\//i.test(navigator.userAgent);
-}
-
-function detectLineBrowser() {
-  if(isLineBrowser()) {
-    document.getElementById('lineBrowserHint').style.display = 'block';
-    document.getElementById('gcalSignInBtn').style.display = 'none';
-  }
-}
-
-function openInExtBrowser() {
-  const url = window.location.href.split('#')[0].split('?')[0];
-  const ua = navigator.userAgent;
-  if(/iPhone|iPad|iPod/i.test(ua)) {
-    // iOS: Try LINE's URL action to open in Safari
-    // Method 1: LINE URL scheme
-    window.location.href = 'https://line.me/R/nv/externalBrowser?url=' + encodeURIComponent(url);
-  } else {
-    // Android: intent to open in Chrome/default browser
-    const stripped = url.replace(/^https?:\/\//, '');
-    window.location.href = 'intent://' + stripped + '#Intent;scheme=https;action=android.intent.action.VIEW;end';
-  }
-  // Fallback: show manual instructions after a short delay
-  setTimeout(() => {
-    toast('如果沒有自動開啟，請點右下角 ⋯ →「在預設瀏覽器中開啟」', 'info');
-  }, 1500);
-}
-
 function updateGCalUI() {
-  const connected = !!gcalToken;
-  document.getElementById('gcalNotConnected').style.display = connected ? 'none' : 'block';
-  document.getElementById('gcalConnected').style.display = connected ? 'block' : 'none';
-  if(connected && gcalUserInfo) {
-    document.getElementById('gcalUserName').textContent = gcalUserInfo.name || '已連線';
-    document.getElementById('gcalUserEmail').textContent = gcalUserInfo.email || '';
-    document.getElementById('gcalAvatar').textContent = (gcalUserInfo.name||'G')[0].toUpperCase();
+  const statusDot = document.getElementById('gcalStatusDot');
+  const statusText = document.getElementById('gcalStatusText');
+  if(!statusDot || !statusText) return;
+  if(gcalLoading) {
+    statusDot.style.color = 'var(--orange)';
+    statusText.textContent = '同步中...';
+  } else {
+    const total = Object.values(gcalEventsCache).reduce((s,a) => s+a.length, 0);
+    if(total > 0) {
+      statusDot.style.color = 'var(--green)';
+      statusText.textContent = '已同步（' + total + ' 個事件）';
+    } else {
+      statusDot.style.color = 'var(--text3)';
+      statusText.textContent = '未同步';
+    }
   }
-  if(!connected) detectLineBrowser();
-}
-
-function googleSignIn() {
-  const clientId = document.getElementById('gcalClientId').value.trim() || getSett().gcalClientId;
-  if(!clientId) { toast('請先填入 OAuth Client ID','error'); return; }
-
-  // Block OAuth in LINE browser
-  if(isLineBrowser()) {
-    toast('請先用外部瀏覽器開啟此頁面','error');
-    detectLineBrowser();
-    return;
-  }
-  // Save client ID before redirect
-  const s = getSett();
-  s.gcalClientId = clientId;
-  _cache.settings = s;
-  try { localStorage.setItem(SK.settings, JSON.stringify(s)); } catch{}
-
-  // Redirect to Google OAuth2 (implicit grant - mobile friendly)
-  const redirectUri = window.location.origin + window.location.pathname;
-  const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' + [
-    'client_id=' + encodeURIComponent(clientId),
-    'redirect_uri=' + encodeURIComponent(redirectUri),
-    'response_type=token',
-    'scope=' + encodeURIComponent(GCAL_SCOPES),
-    'include_granted_scopes=true',
-    'prompt=consent',
-  ].join('&');
-
-  window.location.href = authUrl;
-}
-
-// Parse token from URL hash after Google redirect
-function handleOAuthRedirect() {
-  const hash = window.location.hash;
-  if(!hash || !hash.includes('access_token=')) return false;
-
-  const params = {};
-  hash.substring(1).split('&').forEach(p => {
-    const [k,v] = p.split('=');
-    params[decodeURIComponent(k)] = decodeURIComponent(v||'');
-  });
-
-  if(params.access_token) {
-    gcalToken = params.access_token;
-    // Clean up URL hash
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-    return true;
-  }
-  if(params.error) {
-    toast('Google 授權失敗: ' + (params.error_description||params.error), 'error');
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-  }
-  return false;
-}
-
-async function completeGoogleSignIn() {
-  if(!gcalToken) return;
-  // Fetch user info
-  try {
-    const r = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { 'Authorization': 'Bearer ' + gcalToken }
-    });
-    if(r.ok) gcalUserInfo = await r.json();
-  } catch{}
-
-  updateGCalUI();
-  toast('Google Calendar 已連線','success');
-
-  // Fetch events for current calendar view
-  await fetchGCalMonthEvents(calYear, calMonth);
-  renderSchedule();
-  renderDashboard();
-}
-
-function googleSignOut() {
-  if(gcalToken) {
-    // Revoke token via Google endpoint
-    fetch('https://oauth2.googleapis.com/revoke?token=' + gcalToken, { method:'POST' }).catch(()=>{});
-  }
-  gcalToken = null;
-  gcalUserInfo = null;
-  gcalEventsCache = {};
-  updateGCalUI();
-  renderSchedule();
-  renderDashboard();
-  toast('已登出 Google','success');
 }
 
 async function fetchGCalMonthEvents(year, month) {
-  if(!gcalToken) return;
+  const s = getSett();
+  if(!s.whCalendar) return;
   const key = `${year}-${String(month+1).padStart(2,'0')}`;
-  // Skip if already cached
   if(gcalEventsCache[key]) return;
 
   const timeMin = new Date(year, month, 1).toISOString();
   const timeMax = new Date(year, month+1, 0, 23, 59, 59).toISOString();
 
   gcalLoading = true;
-  const statusEl = document.getElementById('gcalSyncStatus');
-  if(statusEl) statusEl.innerHTML = '<div class="spinner"></div> 同步中...';
+  updateGCalUI();
 
   try {
-    const url = `https://www.googleapis.com/calendar/v3/calendars/primary/events?` +
-      `timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}` +
-      `&singleEvents=true&orderBy=startTime&maxResults=250`;
-    const r = await fetch(url, {
-      headers: { 'Authorization': 'Bearer ' + gcalToken }
+    const r = await fetch(s.whCalendar, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'list', timeMin, timeMax })
     });
-    if(r.status === 401) {
-      // Token expired
-      gcalToken = null;
-      updateGCalUI();
-      toast('Google 授權已過期，請重新登入','error');
-      return;
-    }
-    if(!r.ok) throw new Error('API error ' + r.status);
+    if(!r.ok) throw new Error('Webhook error ' + r.status);
     const data = await r.json();
 
-    // Parse events
-    const events = (data.items || []).map(ev => {
-      const start = ev.start?.dateTime || ev.start?.date || '';
-      const end = ev.end?.dateTime || ev.end?.date || '';
-      const isAllDay = !ev.start?.dateTime;
+    // Make.com returns array of events (from Webhook Response)
+    const items = Array.isArray(data) ? data : (data.events || data.items || []);
+    const events = items.map(ev => {
+      // Support both Google Calendar API format and simplified format
+      const start = ev.start?.dateTime || ev.startDateTime || ev.start?.date || ev.startDate || '';
+      const end = ev.end?.dateTime || ev.endDateTime || ev.end?.date || ev.endDate || '';
+      const isAllDay = !(ev.start?.dateTime || ev.startDateTime);
       const startDate = start.slice(0, 10);
       const startTime = isAllDay ? '' : start.slice(11, 16);
       const endTime = isAllDay ? '' : end.slice(11, 16);
       return {
-        id: 'gcal_' + ev.id,
-        gcalId: ev.id,
-        title: ev.summary || '（無標題）',
+        id: 'gcal_' + (ev.id || ev.eventId || Math.random().toString(36).substr(2)),
+        gcalId: ev.id || ev.eventId || '',
+        title: ev.summary || ev.title || '（無標題）',
         date: startDate,
         startTime, endTime,
         location: ev.location || '',
@@ -2390,15 +2242,16 @@ async function fetchGCalMonthEvents(year, month) {
 
     gcalEventsCache[key] = events;
   } catch(e) {
-    console.error('GCal fetch error:', e);
+    console.error('GCal webhook fetch error:', e);
+    toast('日曆同步失敗，請檢查 Webhook 設定','error');
   }
 
   gcalLoading = false;
-  if(statusEl) statusEl.innerHTML = '<span style="color:var(--green);">●</span> 已連線';
+  updateGCalUI();
 }
 
 function getGCalEventsForDate(ds) {
-  const key = ds.slice(0, 7); // 'YYYY-MM'
+  const key = ds.slice(0, 7);
   const events = gcalEventsCache[key] || [];
   return events.filter(e => e.date === ds);
 }
@@ -2416,7 +2269,7 @@ async function refreshGCalEvents() {
   await fetchGCalMonthEvents(calYear, calMonth);
   renderSchedule();
   renderDashboard();
-  toast('已重新拉取 Google Calendar 事件','success');
+  toast('已同步 Google Calendar 事件','success');
 }
 
 // =============== WEBHOOK ===============
@@ -2545,7 +2398,11 @@ self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{if(r.o
 
 // =============== INIT ===============
 function init() {
-  // One-time cleanup: remove old demo data
+  // One-time cleanup: remove old demo/OAuth data
+  if(!localStorage.getItem('pa_cleaned2')) {
+    try { localStorage.removeItem('pa_gcal_session'); } catch{}
+    localStorage.setItem('pa_cleaned2','1');
+  }
   if(!localStorage.getItem('pa_cleaned')) {
     Object.values(SK).forEach(k => { try { localStorage.removeItem(k); } catch{} });
     Object.keys(_cache).forEach(k => delete _cache[k]);
@@ -2558,12 +2415,14 @@ function init() {
   renderDashboard();
   initPWA();
 
-  // Handle Google OAuth redirect (if returning from Google login)
-  if(handleOAuthRedirect()) {
-    sw('settings', 4);
-    completeGoogleSignIn();
-  } else if(gcalToken) {
-    fetchGCalMonthEvents(now.getFullYear(), now.getMonth()).then(() => { renderDashboard(); updateBadges(); });
+  // Auto-fetch Google Calendar events via Make.com webhook
+  const s = getSett();
+  if(s.whCalendar) {
+    fetchGCalMonthEvents(now.getFullYear(), now.getMonth()).then(() => {
+      renderDashboard();
+      renderSchedule();
+      updateBadges();
+    });
   }
 }
 init();
