@@ -112,45 +112,157 @@ body::before {
 .panel.active { display:block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-/* ========== STATS SCROLL ========== */
-.stats-scroll {
-  display:flex; gap:10px;
-  overflow-x:auto; padding:4px 0 18px;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+/* ========== BENTO GRID DASHBOARD ========== */
+.bento { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.bento-card {
+  background:var(--surface); border:1px solid var(--border-light);
+  border-radius:var(--r); padding:16px; overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.02);
 }
-.stats-scroll::-webkit-scrollbar { display:none; }
+.bento-card.span2 { grid-column:span 2; }
 
-.stat-pill {
-  display:flex; align-items:center; gap:10px;
-  padding:14px 18px;
-  background:var(--surface);
-  border:1px solid var(--border-light);
-  border-radius:28px;
-  flex-shrink:0; min-width:128px;
-  box-shadow:0 1px 3px rgba(0,0,0,0.03);
+/* Hero - next event (warm gold) */
+.bento-hero {
+  background:linear-gradient(135deg, #b8956a 0%, #d4b896 100%);
+  color:#fff; border:none; position:relative;
 }
-.stat-pill .pill-icon {
-  width:36px; height:36px; border-radius:50%;
+.bento-hero .hero-label {
+  font-size:9px; font-weight:600; letter-spacing:1.5px; opacity:0.55; margin-bottom:8px;
+}
+.bento-hero .hero-time {
+  font-family:'IBM Plex Mono', monospace; font-size:26px; font-weight:500; margin-bottom:4px;
+}
+.bento-hero .hero-title { font-size:18px; font-weight:600; margin-bottom:8px; }
+.bento-hero .hero-meta { display:flex; gap:10px; font-size:11px; opacity:0.6; }
+.bento-hero .hero-ring {
+  position:absolute; right:16px; top:16px;
+  width:52px; height:52px; border-radius:50%;
+  border:3px solid rgba(255,255,255,0.25);
   display:flex; align-items:center; justify-content:center;
-  font-size:15px;
 }
-.stat-pill .pill-num {
-  font-family:'Crimson Pro', serif;
-  font-size:24px; font-weight:700;
+.bento-hero .hero-ring-inner {
+  font-family:'Crimson Pro', serif; font-size:18px; font-weight:700; color:#fff;
 }
-.stat-pill .pill-label { font-size:10px; color:var(--text3); }
+.hero-stats {
+  display:flex; gap:0; margin-top:14px;
+  padding-top:12px; border-top:1px solid rgba(255,255,255,0.18);
+}
+.hero-stat {
+  flex:1; text-align:center; position:relative;
+}
+.hero-stat::after {
+  content:''; position:absolute; right:0; top:2px; bottom:2px;
+  width:1px; background:rgba(255,255,255,0.15);
+}
+.hero-stat:last-child::after { display:none; }
+.hero-stat-num {
+  font-family:'Crimson Pro', serif; font-size:22px; font-weight:700; line-height:1;
+}
+.hero-stat-label {
+  font-size:9px; opacity:0.5; margin-top:2px; letter-spacing:0.3px;
+}
+.bento-hero-empty {
+  background:var(--surface); border:1px solid var(--border-light);
+  text-align:center; padding:24px 16px; color:var(--text3); font-size:13px;
+}
+.bento-hero-empty .hero-stats {
+  border-top:1px solid var(--border-light);
+}
+.bento-hero-empty .hero-stat::after {
+  background:var(--border-light);
+}
+.bento-hero-empty .hero-stat-num {
+  color:var(--text);
+}
+.bento-hero-empty .hero-stat-label {
+  color:var(--text3); opacity:1;
+}
 
-.stat-pill.s1 .pill-icon { background:var(--accent-bg); }
-.stat-pill.s1 .pill-num { color:var(--accent); }
-.stat-pill.s2 .pill-icon { background:var(--orange-bg); }
-.stat-pill.s2 .pill-num { color:var(--orange); }
-.stat-pill.s3 .pill-icon { background:var(--green-bg); }
-.stat-pill.s3 .pill-num { color:var(--green); }
-.stat-pill.s4 .pill-icon { background:var(--red-bg); }
-.stat-pill.s4 .pill-num { color:var(--red); }
+/* Stat mini in bento */
+.stat-mini { text-align:center; padding:18px 10px; }
+.stat-mini-icon { font-size:20px; margin-bottom:6px; }
+.stat-mini-num { font-family:'Crimson Pro', serif; font-size:32px; font-weight:700; line-height:1; }
+.stat-mini-label { font-size:10px; color:var(--text3); margin-top:4px; }
+.sm-accent .stat-mini-num { color:var(--accent); }
+.sm-orange .stat-mini-num { color:var(--orange); }
+.sm-green .stat-mini-num { color:var(--green); }
+.sm-red .stat-mini-num { color:var(--red); }
 
-/* ========== SECTION ========== */
+/* Bento section heads */
+.b-head {
+  font-size:11px; font-weight:700; color:var(--text3);
+  letter-spacing:0.5px; margin-bottom:10px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.b-more { font-size:11px; color:var(--accent); font-weight:500; cursor:pointer; background:none; border:none; font-family:inherit; }
+
+/* Bento schedule list */
+.b-sched {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 0; border-bottom:1px solid var(--border-light);
+}
+.b-sched:last-child { border:none; }
+.b-sched-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.b-sched-time {
+  font-family:'IBM Plex Mono', monospace; font-size:11px;
+  color:var(--text3); flex-shrink:0; width:42px;
+}
+.b-sched-title {
+  font-size:13px; font-weight:500; flex:1; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.b-sched-gcal { color:var(--blue); }
+.dot-work { background:#039BE5; }
+.dot-meeting { background:#7986CB; }
+.dot-health { background:#F6BF26; }
+.dot-personal { background:#E67C73; }
+.dot-other { background:#616161; }
+.dot-gcal { background:#4285f4; }
+
+/* Bento task list */
+.b-task {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 0; border-bottom:1px solid var(--border-light);
+}
+.b-task:last-child { border:none; }
+.b-task-check {
+  width:16px; height:16px; border-radius:4px;
+  border:2px solid var(--border); flex-shrink:0;
+}
+.b-task-title {
+  font-size:12px; font-weight:500; flex:1; min-width:0;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.b-task-pri {
+  width:6px; height:6px; border-radius:50%; flex-shrink:0;
+}
+.pri-dot-ui { background:var(--red); }
+.pri-dot-i { background:var(--orange); }
+.pri-dot-u { background:var(--blue); }
+.pri-dot-n { background:var(--green); }
+
+/* Progress bar */
+.progress-wrap { margin-top:10px; }
+.progress-bar {
+  height:5px; background:var(--bg2); border-radius:3px;
+  overflow:hidden; margin-bottom:4px;
+}
+.progress-fill { height:100%; border-radius:3px; background:var(--accent); transition:0.3s; }
+.progress-label {
+  font-size:10px; color:var(--text3);
+  display:flex; justify-content:space-between;
+}
+
+/* Bento note list */
+.b-note { padding:8px 0; border-bottom:1px solid var(--border-light); }
+.b-note:last-child { border:none; }
+.b-note-title { font-size:12px; font-weight:600; }
+.b-note-text {
+  font-size:10px; color:var(--text3); margin-top:2px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* ========== SECTION (used by favorites etc.) ========== */
 .section { margin-bottom:24px; }
 .section-head {
   display:flex; align-items:center; justify-content:space-between;
@@ -244,27 +356,111 @@ body::before {
 .pri-n { background:var(--purple-bg); color:var(--purple); }
 .overdue { color:var(--red) !important; font-weight:600; }
 
-/* ========== FILTERS ========== */
-.filter-scroll {
-  display:flex; gap:6px;
-  overflow-x:auto; padding:2px 0 14px;
+/* ========== KANBAN ========== */
+.kanban-scroll {
+  display:flex; gap:12px;
+  overflow-x:auto; padding:2px 0 16px;
+  scroll-snap-type:x mandatory;
   scrollbar-width:none;
+  margin:0 -16px; padding-left:16px; padding-right:16px;
 }
-.filter-scroll::-webkit-scrollbar { display:none; }
+.kanban-scroll::-webkit-scrollbar { display:none; }
 
-.chip {
-  padding:7px 16px; border-radius:20px;
-  background:var(--surface); color:var(--text3);
+.kanban-col {
+  flex-shrink:0;
+  width:78vw; max-width:320px;
+  scroll-snap-align:center;
+  background:var(--surface);
   border:1px solid var(--border-light);
-  font-family:inherit; font-size:12px; font-weight:500;
-  cursor:pointer; white-space:nowrap; flex-shrink:0;
-  transition:0.2s;
-  box-shadow:0 1px 2px rgba(0,0,0,0.02);
+  border-radius:var(--r);
+  display:flex; flex-direction:column;
+  box-shadow:0 2px 8px rgba(0,0,0,0.03);
 }
-.chip.on {
-  background:var(--text); color:var(--bg);
-  border-color:var(--text);
+.k-head {
+  padding:12px 14px;
+  border-bottom:1px solid var(--border-light);
+  display:flex; align-items:center; gap:10px;
 }
+.k-dot {
+  width:10px; height:10px; border-radius:50%;
+  flex-shrink:0;
+}
+.k-info { flex:1; }
+.k-label { font-size:13px; font-weight:600; }
+.k-sub { font-size:10px; color:var(--text3); margin-top:1px; }
+.k-count {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; font-weight:600;
+  padding:3px 8px; border-radius:8px;
+}
+.k-items { padding:6px 10px 10px; flex:1; }
+
+.k-card {
+  background:var(--bg);
+  border:1px solid var(--border-light);
+  border-radius:var(--r-sm);
+  padding:11px 12px;
+  margin-bottom:8px;
+  display:flex; align-items:flex-start; gap:10px;
+  transition:0.15s;
+}
+.k-card:active { transform:scale(0.98); background:var(--bg2); }
+.k-card:last-child { margin-bottom:0; }
+
+.k-check {
+  width:20px; height:20px; border-radius:6px;
+  border:2px solid var(--border);
+  flex-shrink:0; margin-top:1px; cursor:pointer;
+  transition:0.15s;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; color:transparent;
+}
+.k-check:active { transform:scale(0.85); }
+.k-check.done { background:var(--accent); border-color:var(--accent); color:#fff; }
+.k-body { flex:1; min-width:0; }
+.k-title {
+  font-size:13px; font-weight:500;
+  line-height:1.35; margin-bottom:3px;
+}
+.k-title.done { text-decoration:line-through; color:var(--text3); }
+.k-note {
+  font-size:11px; color:var(--text3);
+  margin-bottom:3px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.k-due {
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10px; color:var(--text3);
+  display:inline-block;
+  padding:2px 6px; border-radius:4px;
+  background:var(--bg2);
+}
+.k-due.overdue { background:var(--red-bg); color:var(--red); font-weight:500; }
+.k-empty {
+  text-align:center; padding:20px 10px;
+  font-size:12px; color:var(--text3);
+}
+
+/* Kanban column color themes */
+.col-ui .k-dot { background:var(--red); }
+.col-ui .k-count { background:var(--red-bg); color:var(--red); }
+.col-i .k-dot { background:var(--orange); }
+.col-i .k-count { background:var(--orange-bg); color:var(--orange); }
+.col-u .k-dot { background:var(--blue); }
+.col-u .k-count { background:var(--blue-bg); color:var(--blue); }
+.col-n .k-dot { background:var(--green); }
+.col-n .k-count { background:var(--green-bg); color:var(--green); }
+
+/* Scroll indicator dots */
+.kanban-dots {
+  display:flex; justify-content:center; gap:6px;
+  margin-top:-6px; margin-bottom:10px;
+}
+.kanban-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--border); transition:0.2s;
+}
+.kanban-dot.active { background:var(--accent); width:18px; border-radius:3px; }
 
 /* ========== QUICK ADD ========== */
 .quick-add { display:flex; gap:8px; margin-bottom:14px; }
@@ -516,13 +712,13 @@ body::before {
   background:var(--surface);
   border:1px solid var(--border-light);
   border-radius:var(--r);
-  padding:12px 8px;
+  padding:10px 4px;
   box-shadow:0 1px 3px rgba(0,0,0,0.02);
   margin-bottom:16px;
 }
 .cal-weekdays {
   display:grid; grid-template-columns:repeat(7,1fr);
-  text-align:center; margin-bottom:6px;
+  text-align:center; margin-bottom:4px;
 }
 .cal-weekdays span {
   font-size:10px; font-weight:600; color:var(--text3);
@@ -530,34 +726,75 @@ body::before {
 }
 .cal-days {
   display:grid; grid-template-columns:repeat(7,1fr);
-  gap:2px; text-align:center;
+  gap:1px; text-align:left;
 }
 .cal-day {
   position:relative;
-  width:100%; aspect-ratio:1;
+  min-height:60px;
   display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  border-radius:10px; cursor:pointer;
-  font-size:13px; font-weight:500;
-  transition:0.15s; border:none; background:transparent;
+  align-items:stretch;
+  border-radius:8px; cursor:pointer;
+  font-size:12px; font-weight:500;
+  transition:0.12s; border:none; background:transparent;
   color:var(--text); font-family:inherit;
+  padding:3px 2px;
+  overflow:hidden;
 }
 .cal-day:active { background:var(--bg2); }
-.cal-day.other-month { color:var(--text3); opacity:0.4; }
-.cal-day.today {
+.cal-day.other-month { color:var(--text3); opacity:0.3; min-height:28px; }
+.cal-day .cal-num {
+  font-size:11px; font-weight:600;
+  padding:1px 4px; line-height:1.4;
+  align-self:flex-start;
+  border-radius:6px;
+}
+.cal-day.today .cal-num {
   background:var(--accent-bg2);
   color:var(--accent); font-weight:700;
 }
-.cal-day.selected {
+.cal-day.selected .cal-num {
   background:var(--text); color:var(--bg); font-weight:700;
 }
-.cal-day.has-event::after {
-  content:''; position:absolute; bottom:4px;
-  width:4px; height:4px; border-radius:50%;
-  background:var(--accent);
+/* Event snippets inside calendar cells */
+.cal-ev {
+  display:flex; align-items:center; gap:2px;
+  margin-top:1px;
+  padding:1px 3px;
+  border-radius:3px;
+  overflow:hidden;
+  font-size:9px; line-height:1.3;
+  white-space:nowrap;
 }
-.cal-day.today.has-event::after { background:var(--accent2); }
-.cal-day.selected.has-event::after { background:var(--bg); }
+.cal-ev-dot {
+  width:4px; height:4px; border-radius:50%;
+  flex-shrink:0;
+}
+.cal-ev-text {
+  overflow:hidden; text-overflow:ellipsis;
+  color:var(--text2); font-weight:500;
+}
+.cal-ev-time {
+  color:var(--text3); font-weight:400;
+  flex-shrink:0;
+}
+.cal-ev.gcal { background:rgba(66,133,244,0.06); }
+.cal-ev.gcal .cal-ev-dot { background:#4285f4; }
+.cal-ev.gcal .cal-ev-text { color:#4285f4; }
+.cal-ev.cat-work { background:rgba(3,155,229,0.06); }
+.cal-ev.cat-work .cal-ev-dot { background:#039BE5; }
+.cal-ev.cat-personal { background:rgba(227,124,115,0.06); }
+.cal-ev.cat-personal .cal-ev-dot { background:#E67C73; }
+.cal-ev.cat-meeting { background:rgba(121,134,203,0.06); }
+.cal-ev.cat-meeting .cal-ev-dot { background:#7986CB; }
+.cal-ev.cat-health { background:rgba(246,191,38,0.06); }
+.cal-ev.cat-health .cal-ev-dot { background:#F6BF26; }
+.cal-ev.cat-other { background:rgba(97,97,97,0.06); }
+.cal-ev.cat-other .cal-ev-dot { background:#616161; }
+.cal-more {
+  font-size:9px; color:var(--accent);
+  font-weight:600; padding:0 3px;
+  margin-top:1px;
+}
 
 /* ========== FAVORITES (常用行程) ========== */
 .fav-section { margin-bottom:18px; }
@@ -772,35 +1009,28 @@ body::before {
       <div class="sub" id="hDate"></div>
     </div>
 
-    <div class="stats-scroll">
-      <div class="stat-pill s1"><div class="pill-icon">📅</div><div><div class="pill-num" id="statEvents">0</div><div class="pill-label">今日行程</div></div></div>
-      <div class="stat-pill s2"><div class="pill-icon">⚡</div><div><div class="pill-num" id="statTodos">0</div><div class="pill-label">待辦事項</div></div></div>
-      <div class="stat-pill s3"><div class="pill-icon">✓</div><div><div class="pill-num" id="statDone">0</div><div class="pill-label">已完成</div></div></div>
-      <div class="stat-pill s4"><div class="pill-icon">⚠</div><div><div class="pill-num" id="statOverdue">0</div><div class="pill-label">已過期</div></div></div>
-    </div>
+    <div class="bento" id="bentoDash">
+      <!-- Hero: next event + stats -->
+      <div class="bento-card span2 bento-hero" id="bentoHero"></div>
 
-    <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="line"></span> Today's Schedule</div>
-        <button class="section-more" onclick="sw('schedule',1)">全部 →</button>
+      <!-- Schedule list -->
+      <div class="bento-card span2" id="bentoSchedule">
+        <div class="b-head"><span>TODAY'S SCHEDULE</span><button class="b-more" onclick="sw('schedule',1)">全部 →</button></div>
+        <div id="dashSchedule"></div>
       </div>
-      <div class="card-list" id="dashSchedule"></div>
-    </div>
 
-    <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="line"></span> Urgent Tasks</div>
-        <button class="section-more" onclick="sw('todos',2)">全部 →</button>
+      <!-- Tasks -->
+      <div class="bento-card" id="bentoTasks">
+        <div class="b-head"><span>TASKS</span><button class="b-more" onclick="sw('todos',2)">→</button></div>
+        <div id="dashTodos"></div>
+        <div class="progress-wrap" id="dashProgress"></div>
       </div>
-      <div class="card-list" id="dashTodos"></div>
-    </div>
 
-    <div class="section">
-      <div class="section-head">
-        <div class="section-title"><span class="line"></span> Recent Notes</div>
-        <button class="section-more" onclick="sw('notes',3)">全部 →</button>
+      <!-- Notes -->
+      <div class="bento-card" id="bentoNotes">
+        <div class="b-head"><span>NOTES</span><button class="b-more" onclick="sw('notes',3)">→</button></div>
+        <div id="dashNotes"></div>
       </div>
-      <div class="note-scroll" id="dashNotes"></div>
     </div>
   </div>
 
@@ -847,15 +1077,8 @@ body::before {
       <input type="text" id="quickInput" placeholder="新增待辦事項..." onkeydown="if(event.key==='Enter')quickAdd()">
       <button class="add-btn" onclick="quickAdd()">+</button>
     </div>
-    <div class="filter-scroll">
-      <button class="chip on" onclick="setFilter('all',this)">全部</button>
-      <button class="chip" onclick="setFilter('urgent-important',this)">🔴 緊急重要</button>
-      <button class="chip" onclick="setFilter('important',this)">🟡 重要</button>
-      <button class="chip" onclick="setFilter('urgent',this)">🔵 緊急</button>
-      <button class="chip" onclick="setFilter('normal',this)">🟣 一般</button>
-      <button class="chip" onclick="setFilter('completed',this)">✓ 已完成</button>
-    </div>
-    <div class="card-list" id="todoList"></div>
+    <div class="kanban-scroll" id="kanbanScroll"></div>
+    <div class="kanban-dots" id="kanbanDots"></div>
   </div>
 
   <!-- ===================== NOTES ===================== -->
@@ -1212,17 +1435,50 @@ function renderCalendar() {
   const startDow = first.getDay();
   const todayStr = today();
   const selectedStr = fmtDate(viewDate);
+
+  // Build event map: date -> [{title, startTime, category, isGcal}]
   const scheds = get('schedules');
-  const eventDates = new Set(scheds.map(s=>s.date));
-  // Merge Google Calendar event dates
-  const gcalDates = getGCalEventDates();
-  gcalDates.forEach(d => eventDates.add(d));
+  const eventMap = {};
+  scheds.forEach(s => {
+    if(!eventMap[s.date]) eventMap[s.date] = [];
+    eventMap[s.date].push({ title:s.title, startTime:s.startTime, category:s.category||'other', isGcal:false });
+  });
+  // Merge Google Calendar events
+  Object.values(gcalEventsCache).flat().forEach(g => {
+    if(!eventMap[g.date]) eventMap[g.date] = [];
+    // Deduplicate
+    if(!eventMap[g.date].some(e => !e.isGcal && e.title === g.title && e.startTime === g.startTime)) {
+      eventMap[g.date].push({ title:g.title, startTime:g.startTime, category:null, isGcal:true, colorId:g.colorId });
+    }
+  });
+  // Sort each day's events by time
+  Object.keys(eventMap).forEach(k => {
+    eventMap[k].sort((a,b) => (a.startTime||'99').localeCompare(b.startTime||'99'));
+  });
+
+  const MAX_SHOW = 2; // max events visible per cell
+
+  function evSnippets(ds) {
+    const evts = eventMap[ds];
+    if(!evts || !evts.length) return '';
+    let html = '';
+    const show = evts.slice(0, MAX_SHOW);
+    show.forEach(ev => {
+      const cls = ev.isGcal ? 'gcal' : `cat-${ev.category||'other'}`;
+      const timeStr = ev.startTime ? ev.startTime.slice(0,5) : '';
+      html += `<div class="cal-ev ${cls}"><span class="cal-ev-dot"></span><span class="cal-ev-text">${timeStr?timeStr+' ':''}${esc(ev.title)}</span></div>`;
+    });
+    if(evts.length > MAX_SHOW) {
+      html += `<div class="cal-more">+${evts.length - MAX_SHOW} 更多</div>`;
+    }
+    return html;
+  }
 
   let html = '';
   // Previous month fill
   const prevLast = new Date(calYear, calMonth, 0).getDate();
   for(let i=startDow-1; i>=0; i--) {
-    html += `<button class="cal-day other-month">${prevLast-i}</button>`;
+    html += `<button class="cal-day other-month"><span class="cal-num">${prevLast-i}</span></button>`;
   }
   // Current month
   for(let d=1; d<=lastDay; d++) {
@@ -1230,14 +1486,13 @@ function renderCalendar() {
     const cls = [];
     if(ds===todayStr) cls.push('today');
     if(ds===selectedStr) cls.push('selected');
-    if(eventDates.has(ds)) cls.push('has-event');
-    html += `<button class="cal-day ${cls.join(' ')}" onclick="selectCalDay('${ds}')">${d}</button>`;
+    html += `<button class="cal-day ${cls.join(' ')}" onclick="selectCalDay('${ds}')"><span class="cal-num">${d}</span>${evSnippets(ds)}</button>`;
   }
   // Next month fill
   const total = startDow + lastDay;
   const fill = total <= 35 ? 35 - total : 42 - total;
   for(let i=1; i<=fill; i++) {
-    html += `<button class="cal-day other-month">${i}</button>`;
+    html += `<button class="cal-day other-month"><span class="cal-num">${i}</span></button>`;
   }
   document.getElementById('calDays').innerHTML = html;
 }
@@ -1602,12 +1857,12 @@ const PRI_ORDER = {'urgent-important':0,'important':1,'urgent':2,'normal':3};
 const PRI_LABEL = {'urgent-important':'緊急重要','important':'重要','urgent':'緊急','normal':'一般'};
 const PRI_CLASS = {'urgent-important':'pri-ui','important':'pri-i','urgent':'pri-u','normal':'pri-n'};
 
-function setFilter(f, el) {
-  todoFilter=f;
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
-  el?.classList.add('on');
-  renderTodos();
-}
+const KANBAN_COLS = [
+  { key:'urgent-important', cls:'col-ui', icon:'🔥', label:'緊急重要', sub:'立刻做' },
+  { key:'important', cls:'col-i', icon:'⭐', label:'重要', sub:'安排時間做' },
+  { key:'urgent', cls:'col-u', icon:'⚡', label:'緊急', sub:'委派或快速處理' },
+  { key:'normal', cls:'col-n', icon:'📋', label:'一般', sub:'有空再做' },
+];
 
 function quickAdd() {
   const inp=document.getElementById('quickInput');
@@ -1668,35 +1923,74 @@ function deleteTodo(id) {
   toast('已刪除','success'); renderTodos(); updateBadges();
 }
 
+function fmtDueLabel(t) {
+  if(!t.dueDate) return { text:'無期限', od:false };
+  const td = today();
+  const tm = fmtDate(new Date(Date.now()+864e5));
+  if(t.completed) return { text:'✓ 已完成', od:false };
+  if(t.dueDate < td) return { text:'⚠ 已過期', od:true };
+  if(t.dueDate === td) return { text:'⚠ 今天到期', od:true };
+  if(t.dueDate === tm) return { text:'明天到期', od:false };
+  return { text: t.dueDate, od:false };
+}
+
 function renderTodos() {
-  let list=get('todos');
-  if(todoFilter==='completed') list=list.filter(t=>t.completed);
-  else if(todoFilter!=='all') list=list.filter(t=>!t.completed&&t.priority===todoFilter);
-  list.sort((a,b)=>{
-    if(a.completed!==b.completed) return a.completed?1:-1;
-    const pa=PRI_ORDER[a.priority]??3, pb=PRI_ORDER[b.priority]??3;
-    if(pa!==pb) return pa-pb;
-    if(a.dueDate&&b.dueDate) return a.dueDate.localeCompare(b.dueDate);
-    return a.dueDate?-1:b.dueDate?1:0;
-  });
-  const el=document.getElementById('todoList');
-  if(!list.length) { el.innerHTML='<div class="empty"><div class="icon">☑</div><div class="msg">沒有待辦事項</div></div>'; return; }
-  el.innerHTML = list.map(t=>{
-    const od=!t.completed&&isOverdue(t.dueDate);
+  const all = get('todos');
+  const el = document.getElementById('kanbanScroll');
+
+  el.innerHTML = KANBAN_COLS.map(col => {
+    const items = all.filter(t => t.priority === col.key)
+      .sort((a,b) => {
+        if(a.completed !== b.completed) return a.completed ? 1 : -1;
+        if(a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
+        return a.dueDate ? -1 : b.dueDate ? 1 : 0;
+      });
+    const pending = items.filter(t => !t.completed).length;
+
     return `
-    <div class="card-item ${t.completed?'done':''}" onclick="openTodoModal('${t.id}')">
-      <div class="todo-check" onclick="toggleTodo('${t.id}',event)">${t.completed?'✓':''}</div>
-      <div class="card-body">
-        <div class="card-title">${esc(t.title)}</div>
-        <div class="card-meta">
-          <span class="pri-tag ${PRI_CLASS[t.priority]}">${PRI_LABEL[t.priority]}</span>
-          ${t.dueDate?`<span class="${od?'overdue':''}">${od?'⚠ 已過期 ':'📅 '}${t.dueDate}</span>`:''}
-          ${t.note?'<span>📝</span>':''}
-        </div>
+    <div class="kanban-col ${col.cls}">
+      <div class="k-head">
+        <div class="k-dot"></div>
+        <div class="k-info"><div class="k-label">${col.icon} ${col.label}</div><div class="k-sub">${col.sub}</div></div>
+        <div class="k-count">${pending}</div>
       </div>
-      <span class="chevron">›</span>
+      <div class="k-items">
+        ${items.length ? items.map(t => {
+          const dl = fmtDueLabel(t);
+          return `
+          <div class="k-card" onclick="openTodoModal('${t.id}')">
+            <div class="k-check ${t.completed?'done':''}" onclick="toggleTodo('${t.id}',event)">${t.completed?'✓':''}</div>
+            <div class="k-body">
+              <div class="k-title ${t.completed?'done':''}">${esc(t.title)}</div>
+              ${t.note?`<div class="k-note">${esc(t.note)}</div>`:''}
+              <span class="k-due ${dl.od?'overdue':''}">${dl.text}</span>
+            </div>
+          </div>`;
+        }).join('') : '<div class="k-empty">沒有待辦 ✨</div>'}
+      </div>
     </div>`;
   }).join('');
+
+  // Scroll indicator dots
+  const dots = document.getElementById('kanbanDots');
+  dots.innerHTML = KANBAN_COLS.map((_,i) => `<div class="kanban-dot ${i===0?'active':''}" data-idx="${i}"></div>`).join('');
+
+  // Track active column on scroll
+  initKanbanDots();
+}
+
+function initKanbanDots() {
+  const scroll = document.getElementById('kanbanScroll');
+  const dots = document.querySelectorAll('.kanban-dot');
+  if(!scroll || !dots.length) return;
+
+  scroll.onscroll = () => {
+    const cols = scroll.querySelectorAll('.kanban-col');
+    const scrollLeft = scroll.scrollLeft;
+    const colWidth = cols[0]?.offsetWidth + 12; // gap
+    const idx = Math.round(scrollLeft / colWidth);
+    dots.forEach((d,i) => d.classList.toggle('active', i===idx));
+  };
 }
 
 // =============== NOTES ===============
@@ -1756,7 +2050,6 @@ function renderDashboard() {
   const notes=get('notes');
 
   const todayS=scheds.filter(s=>s.date===td);
-  // Merge Google Calendar events for today
   const gcalToday = getGCalEventsForDate(td).filter(g => !todayS.some(l=>l.calendarEventId && g.gcalId && l.calendarEventId===g.gcalId));
   const allTodayS = [...todayS.map(s=>({...s,isGcal:false})), ...gcalToday.map(g=>({...g,isGcal:true}))].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
 
@@ -1764,55 +2057,95 @@ function renderDashboard() {
   const doneToday=todos.filter(t=>t.completed&&t.completedAt&&fmtDate(t.completedAt)===td);
   const overdue=todos.filter(t=>!t.completed&&isOverdue(t.dueDate));
 
-  document.getElementById('statEvents').textContent=allTodayS.length;
-  document.getElementById('statTodos').textContent=pending.length;
-  document.getElementById('statDone').textContent=doneToday.length;
-  document.getElementById('statOverdue').textContent=overdue.length;
-
   // Greeting
   const h=new Date().getHours();
   document.getElementById('greetingText').textContent = h<12?'Good Morning ☀':h<18?'Good Afternoon 🌤':'Good Evening 🌙';
 
-  // Schedule preview
+  // Stats row HTML (shared across hero states)
+  const statsHTML = `<div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">${allTodayS.length}</div><div class="hero-stat-label">📅 行程</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">${pending.length}</div><div class="hero-stat-label">⚡ 待辦</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">${doneToday.length}</div><div class="hero-stat-label">✓ 完成</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">${overdue.length}</div><div class="hero-stat-label">⚠ 過期</div></div>
+  </div>`;
+
+  // === HERO: Next upcoming event + stats ===
+  const heroEl = document.getElementById('bentoHero');
+  const now = new Date();
+  const nowHHMM = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const nextEv = allTodayS.find(s => (s.endTime||s.startTime||'99:99') > nowHHMM);
+  if(nextEv) {
+    const isNow = nextEv.startTime && nextEv.startTime <= nowHHMM;
+    const label = isNow ? 'NOW' : 'NEXT UP';
+    const loc = nextEv.location ? `📍 ${esc(nextEv.location)}` : '';
+    const cat = nextEv.isGcal ? '📅 Google' : (CAT_LABEL[nextEv.category]||'');
+    const catIcon = nextEv.isGcal ? '' : ({'work':'💼','personal':'🌿','meeting':'👥','health':'💊','other':'📌'}[nextEv.category]||'📌');
+    let ringText = '';
+    if(isNow) { ringText = 'NOW'; }
+    else if(nextEv.startTime) {
+      const [sh,sm]=nextEv.startTime.split(':').map(Number);
+      const diff = (sh*60+sm) - (now.getHours()*60+now.getMinutes());
+      ringText = diff <= 60 ? diff+'m' : Math.floor(diff/60)+'h';
+    }
+    heroEl.className = 'bento-card span2 bento-hero';
+    heroEl.innerHTML = `
+      <div class="hero-label">${label}</div>
+      <div class="hero-time">${nextEv.startTime||'全天'}${nextEv.endTime?' – '+nextEv.endTime:''}</div>
+      <div class="hero-title">${esc(nextEv.title)}</div>
+      <div class="hero-meta">${catIcon?`<span>${catIcon} ${cat}</span>`:cat?`<span>${cat}</span>`:''}${loc?`<span>${loc}</span>`:''}</div>
+      ${ringText?`<div class="hero-ring"><div class="hero-ring-inner">${ringText}</div></div>`:''}
+      ${statsHTML}`;
+  } else if(allTodayS.length) {
+    heroEl.className = 'bento-card span2 bento-hero';
+    heroEl.innerHTML = `<div class="hero-label">ALL DONE</div><div class="hero-title" style="margin-top:8px;">今天行程已全部結束 🎉</div><div class="hero-meta"><span>${allTodayS.length} 個行程已完成</span></div>${statsHTML}`;
+  } else {
+    heroEl.className = 'bento-card span2 bento-hero-empty';
+    heroEl.innerHTML = `<div style="font-size:24px;margin-bottom:6px;">🌿</div><div>今天沒有行程</div>${statsHTML}`;
+  }
+
+  // === Schedule list (bento) ===
   const se=document.getElementById('dashSchedule');
-  if(!allTodayS.length) { se.innerHTML='<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">今天沒有行程 🎉</div>'; }
-  else { se.innerHTML = allTodayS.slice(0,5).map(s=>{
-    if(s.isGcal) return `
-    <div class="card-item gcal-item" onclick="sw('schedule',1)">
-      <div class="sched-accent ${s.colorId?'gcal-c'+s.colorId:'gcal-accent'}"></div>
-      <div class="card-body"><div class="card-title">${esc(s.title)}</div><div class="card-meta"><span class="gcal-badge">G Google</span>${s.location?`<span>📍 ${esc(s.location)}</span>`:''}</div></div>
-      <div class="time-block"><div class="time-main">${s.startTime||'全天'}</div>${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}</div>
-    </div>`;
-    return `
-    <div class="card-item" onclick="sw('schedule',1)">
-      <div class="sched-accent ${CAT_MAP[s.category]||'acc-other'}"></div>
-      <div class="card-body"><div class="card-title">${esc(s.title)}</div><div class="card-meta"><span class="sched-cat ${CAT_CHIP[s.category]||'cat-other'}">${CAT_LABEL[s.category]||'其他'}</span>${s.location?`<span>📍 ${esc(s.location)}</span>`:''}</div></div>
-      <div class="time-block"><div class="time-main">${s.startTime||'全天'}</div>${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}</div>
-    </div>`;
-  }).join(''); }
+  if(!allTodayS.length) { se.innerHTML='<div style="padding:10px 0;text-align:center;color:var(--text3);font-size:12px;">無行程</div>'; }
+  else {
+    const DOT_MAP = { work:'dot-work', personal:'dot-personal', meeting:'dot-meeting', health:'dot-health', other:'dot-other' };
+    se.innerHTML = allTodayS.slice(0,6).map(s => {
+      const dotCls = s.isGcal ? 'dot-gcal' : (DOT_MAP[s.category]||'dot-other');
+      const time = s.startTime || '全天';
+      return `<div class="b-sched" onclick="sw('schedule',1)"><span class="b-sched-dot ${dotCls}"></span><span class="b-sched-time">${time}</span><span class="b-sched-title ${s.isGcal?'b-sched-gcal':''}">${esc(s.title)}</span></div>`;
+    }).join('');
+    if(allTodayS.length>6) se.innerHTML += `<div style="text-align:center;padding:4px 0;font-size:11px;color:var(--accent);cursor:pointer;" onclick="sw('schedule',1)">+${allTodayS.length-6} 更多</div>`;
+  }
 
-  // Urgent todos
+  // === Tasks (bento) ===
   const te=document.getElementById('dashTodos');
-  const urgent=pending.sort((a,b)=>(PRI_ORDER[a.priority]??3)-(PRI_ORDER[b.priority]??3)).slice(0,4);
-  if(!urgent.length) { te.innerHTML='<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px;">沒有待辦 ✨</div>'; }
-  else { te.innerHTML = urgent.map(t=>{
-    const od=isOverdue(t.dueDate);
-    return `
-    <div class="card-item" onclick="sw('todos',2)">
-      <div class="todo-check" onclick="toggleTodo('${t.id}',event)"></div>
-      <div class="card-body"><div class="card-title">${esc(t.title)}</div><div class="card-meta"><span class="pri-tag ${PRI_CLASS[t.priority]}">${PRI_LABEL[t.priority]}</span>${t.dueDate?`<span class="${od?'overdue':''}">${od?'⚠ 已過期':t.dueDate}</span>`:''}</div></div>
-    </div>`;
-  }).join(''); }
+  const urgent=pending.sort((a,b)=>(PRI_ORDER[a.priority]??3)-(PRI_ORDER[b.priority]??3)).slice(0,5);
+  if(!urgent.length) { te.innerHTML='<div style="padding:8px 0;text-align:center;color:var(--text3);font-size:11px;">沒有待辦 ✨</div>'; }
+  else {
+    const PRI_DOT = {'urgent-important':'pri-dot-ui','important':'pri-dot-i','urgent':'pri-dot-u','normal':'pri-dot-n'};
+    te.innerHTML = urgent.map(t => `
+      <div class="b-task" onclick="sw('todos',2)">
+        <div class="b-task-check"></div>
+        <div class="b-task-title">${esc(t.title)}</div>
+        <div class="b-task-pri ${PRI_DOT[t.priority]||'pri-dot-n'}"></div>
+      </div>`).join('');
+  }
+  // Progress
+  const totalT = todos.length;
+  const doneT = todos.filter(t=>t.completed).length;
+  const pct = totalT ? Math.round(doneT/totalT*100) : 0;
+  const progEl = document.getElementById('dashProgress');
+  if(totalT) {
+    progEl.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><div class="progress-label"><span>已完成 ${doneT}/${totalT}</span><span>${pct}%</span></div>`;
+  } else { progEl.innerHTML = ''; }
 
-  // Notes scroll
+  // === Notes (bento) ===
   const ne=document.getElementById('dashNotes');
-  const recentN=notes.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).slice(0,5);
-  if(!recentN.length) { ne.innerHTML='<div style="padding:16px;color:var(--text3);font-size:13px;">還沒有筆記</div>'; }
+  const recentN=notes.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).slice(0,4);
+  if(!recentN.length) { ne.innerHTML='<div style="padding:8px 0;text-align:center;color:var(--text3);font-size:11px;">還沒有筆記</div>'; }
   else { ne.innerHTML = recentN.map(n=>`
-    <div class="note-card" onclick="sw('notes',3)">
-      <h4>${esc(n.title)}</h4>
-      <p>${esc(n.content)}</p>
-      ${n.tags?.length?`<div class="note-tags">${n.tags.slice(0,2).map(t=>`<span class="note-tag">${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="b-note" onclick="sw('notes',3)">
+      <div class="b-note-title">${esc(n.title||'無標題')}</div>
+      <div class="b-note-text">${esc(n.content)}</div>
     </div>`).join(''); }
 }
 
@@ -2085,7 +2418,7 @@ function clearAll() {
   if(!confirm('確定清除所有資料？')) return;
   Object.keys(SK).forEach(k => { _cache[k] = undefined; });
   Object.values(SK).forEach(k=>{ try { localStorage.removeItem(k); } catch{} });
-  toast('已清除','success'); loadDemo(); renderDashboard(); updateBadges();
+  toast('已清除','success'); renderDashboard(); updateBadges();
 }
 
 // =============== HELPERS ===============
@@ -2096,60 +2429,12 @@ function updateBadges() {
   document.getElementById('bTodo').textContent=get('todos').filter(t=>!t.completed).length;
 }
 
-// =============== DEMO DATA ===============
-function loadDemo() {
-  // Always ensure favorites exist (independent of schedule/todo data)
-  if(!get('favorites').length) {
-    set('favorites',[
-      {id:uid(),title:'團隊週會',category:'meeting',startTime:'09:00',endTime:'10:00',location:'3F 會議室 A',note:'',syncCal:true,createdAt:new Date().toISOString()},
-      {id:uid(),title:'健身訓練',category:'health',startTime:'18:30',endTime:'19:30',location:'衡點健康',note:'',syncCal:false,createdAt:new Date().toISOString()},
-      {id:uid(),title:'Code Review',category:'work',startTime:'15:00',endTime:'16:00',location:'Google Meet',note:'',syncCal:true,createdAt:new Date().toISOString()},
-      {id:uid(),title:'午餐',category:'personal',startTime:'12:00',endTime:'13:00',location:'',note:'',syncCal:false,createdAt:new Date().toISOString()},
-    ]);
-  }
-  if(get('schedules').length||get('todos').length) return;
-  const td=today(), tm=fmtDate(new Date(Date.now()+864e5)), yd=fmtDate(new Date(Date.now()-864e5)), da=fmtDate(new Date(Date.now()+864e5*2));
-  set('schedules',[
-    {id:uid(),title:'團隊週會',date:td,startTime:'09:00',endTime:'10:00',category:'meeting',location:'3F 會議室 A',note:'討論 Q1 進度',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
-    {id:uid(),title:'系統開發 — 排班模組',date:td,startTime:'10:30',endTime:'12:30',category:'work',location:'',note:'Make.com 整合測試',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
-    {id:uid(),title:'午餐 — 客戶餐敘',date:td,startTime:'12:30',endTime:'14:00',category:'personal',location:'欣葉台菜 信義店',note:'',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
-    {id:uid(),title:'Code Review',date:td,startTime:'15:00',endTime:'16:00',category:'work',location:'線上 Google Meet',note:'PR #42',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
-    {id:uid(),title:'健身 — 腿部訓練',date:td,startTime:'18:30',endTime:'19:30',category:'health',location:'衡點健康',note:'深蹲+腿推+弓步蹲',syncCal:false,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
-    {id:uid(),title:'牙醫回診',date:tm,startTime:'10:00',endTime:'11:00',category:'health',location:'品悅牙醫',note:'',syncCal:true,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),calendarEventId:null},
-  ]);
-  set('todos',[
-    {id:uid(),title:'完成代課系統即時聊天功能',priority:'urgent-important',dueDate:td,note:'Supabase Realtime',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'修復教練排班重複寫入問題',priority:'urgent-important',dueDate:td,note:'Make.com Router',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'撰寫 API 文件',priority:'important',dueDate:tm,note:'',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'設計會員資料綁定表單 UI',priority:'important',dueDate:da,note:'LINE LIFF 整合',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'回覆合作廠商報價信',priority:'urgent',dueDate:td,note:'',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'更新 Google Sheets 同步腳本',priority:'urgent',dueDate:tm,note:'Apps Script',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'提交上週工時表',priority:'urgent',dueDate:yd,note:'',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'建立 MySQL 備份排程',priority:'important',dueDate:yd,note:'',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'研究 LINE Messaging API',priority:'normal',dueDate:'',note:'Flex Message',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'整理 Docker 設定',priority:'normal',dueDate:'',note:'',completed:false,createdAt:new Date().toISOString()},
-    {id:uid(),title:'部署排班系統到正式環境',priority:'urgent-important',dueDate:td,note:'',completed:true,completedAt:new Date().toISOString(),createdAt:new Date(Date.now()-864e5).toISOString()},
-    {id:uid(),title:'修復 LIFF token 過期問題',priority:'urgent-important',dueDate:yd,note:'',completed:true,completedAt:new Date().toISOString(),createdAt:new Date(Date.now()-864e5*2).toISOString()},
-    {id:uid(),title:'完成試上課回饋表單',priority:'important',dueDate:yd,note:'',completed:true,completedAt:new Date().toISOString(),createdAt:new Date(Date.now()-864e5*3).toISOString()},
-  ]);
-  set('notes',[
-    {id:uid(),title:'三帳號架構遷移筆記',content:'客服帳號：會員互動、預約通知\n教學帳號：課程提醒、教練溝通\n管理帳號：內部行政、排班管理',tags:['LINE','架構','衡點健康'],createdAt:new Date(Date.now()-864e5*2).toISOString(),updatedAt:new Date(Date.now()-864e5).toISOString()},
-    {id:uid(),title:'Make.com 成本優化方案',content:'合併重複 scenario，用 Router 取代多個 webhook，批次處理取代逐筆觸發',tags:['Make.com','成本'],createdAt:new Date(Date.now()-864e5*5).toISOString(),updatedAt:new Date(Date.now()-864e5*3).toISOString()},
-    {id:uid(),title:'Supabase Realtime 測試結果',content:'延遲約 50-100ms，免費方案 200 concurrent connections，搭配 MySQL 持久化',tags:['Supabase','技術筆記'],createdAt:new Date(Date.now()-864e5*4).toISOString(),updatedAt:new Date(Date.now()-864e5*4).toISOString()},
-    {id:uid(),title:'會員健康問卷規劃',content:'基本資料：身高、體重、BMI\n健康史：病史、手術、用藥\nAI 姿態分析整合',tags:['衡點健康','問卷'],createdAt:new Date(Date.now()-864e5*7).toISOString(),updatedAt:new Date(Date.now()-864e5*6).toISOString()},
-    {id:uid(),title:'下週要買的東西',content:'機械鍵盤（茶軸）、USB-C Hub、螢幕架、咖啡豆',tags:['個人','購物'],createdAt:new Date(Date.now()-864e5).toISOString(),updatedAt:new Date(Date.now()-864e5).toISOString()},
-    {id:uid(),title:'年度目標 2026',content:'技術：完成衡點健康全系統\n學習：TypeScript + Next.js\n健康：每週訓練 3 次',tags:['目標','年度計畫'],createdAt:new Date(Date.now()-864e5*30).toISOString(),updatedAt:new Date(Date.now()-864e5*2).toISOString()},
-  ]);
-}
-
 // =============== INIT ===============
 function init() {
   const now=new Date();
   document.getElementById('hDate').textContent = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${DAYS[now.getDay()]}`;
-  loadDemo();
   updateBadges();
   renderDashboard();
-  // Pre-fetch current month Google Calendar events (if token exists from this session)
   if(gcalToken) {
     fetchGCalMonthEvents(now.getFullYear(), now.getMonth()).then(() => { renderDashboard(); updateBadges(); });
   }
