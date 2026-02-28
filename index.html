@@ -7,6 +7,9 @@
 <meta name="theme-color" content="#f8f5f0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PA">
+<meta name="description" content="Personal Assistant - 行程、待辦、筆記管理">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%23b8956a' width='180' height='180' rx='40'/%3E%3Ctext x='90' y='120' font-size='100' text-anchor='middle' fill='white' font-family='serif'%3EPA%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&family=Crimson+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1099,7 +1102,16 @@ body::before {
           <input type="text" class="form-input" id="gcalClientId" placeholder="xxxx.apps.googleusercontent.com">
           <div style="font-size:10px;color:var(--text3);margin-top:4px;">從 Google Cloud Console → APIs → 憑證 取得</div>
         </div>
-        <button class="g-signin-btn" onclick="googleSignIn()">
+        <!-- LINE browser warning -->
+        <div id="lineBrowserHint" style="display:none;background:var(--orange-bg);border-radius:10px;padding:12px 14px;margin-bottom:10px;">
+          <div style="font-size:13px;font-weight:600;color:var(--orange);margin-bottom:6px;">⚠ LINE 瀏覽器無法直接登入 Google</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:8px;">請點下方按鈕用外部瀏覽器開啟，登入後即可使用。</div>
+          <button class="g-signin-btn" onclick="openInExtBrowser()" style="background:#ff9800;margin-bottom:6px;">
+            🌐 用外部瀏覽器開啟
+          </button>
+          <div style="font-size:10px;color:var(--text3);line-height:1.4;">或手動操作：點右下角 ⋯ 選單 →「在預設瀏覽器中開啟」</div>
+        </div>
+        <button class="g-signin-btn" id="gcalSignInBtn" onclick="googleSignIn()">
           <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
           使用 Google 帳號登入
         </button>
@@ -1350,7 +1362,19 @@ const set = (k,v) => {
   _cache[k] = v;
   try { localStorage.setItem(SK[k], JSON.stringify(v)); } catch{}
 };
-const getSett = () => { try { const v=localStorage.getItem(SK.settings); if(v){_cache.settings=JSON.parse(v);return _cache.settings;} return _cache.settings||{}; } catch{ return _cache.settings||{}; }};
+const DEFAULTS = {
+  gcalClientId: '798333358781-2bni6foillkt9r64q9vjid4j8feok7es.apps.googleusercontent.com',
+  whCalendar: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
+  whLine: 'https://hook.us2.make.com/8n4u37jnbr495eomnxn04y4iqaxp67rp',
+  reminderTime: '07:30',
+};
+const getSett = () => {
+  try {
+    const v = localStorage.getItem(SK.settings);
+    if(v) { _cache.settings = { ...DEFAULTS, ...JSON.parse(v) }; return _cache.settings; }
+    return _cache.settings = { ...DEFAULTS, ...(_cache.settings||{}) };
+  } catch { return _cache.settings = { ...DEFAULTS, ...(_cache.settings||{}) }; }
+};
 const uid = () => Date.now().toString(36)+Math.random().toString(36).substr(2,5);
 
 // =============== DATE UTILS ===============
@@ -2183,6 +2207,35 @@ let gcalLoading = false;
 
 const GCAL_SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
 
+function isLineBrowser() {
+  return /Line\//i.test(navigator.userAgent);
+}
+
+function detectLineBrowser() {
+  if(isLineBrowser()) {
+    document.getElementById('lineBrowserHint').style.display = 'block';
+    document.getElementById('gcalSignInBtn').style.display = 'none';
+  }
+}
+
+function openInExtBrowser() {
+  const url = window.location.href.split('#')[0].split('?')[0];
+  const ua = navigator.userAgent;
+  if(/iPhone|iPad|iPod/i.test(ua)) {
+    // iOS: Try LINE's URL action to open in Safari
+    // Method 1: LINE URL scheme
+    window.location.href = 'https://line.me/R/nv/externalBrowser?url=' + encodeURIComponent(url);
+  } else {
+    // Android: intent to open in Chrome/default browser
+    const stripped = url.replace(/^https?:\/\//, '');
+    window.location.href = 'intent://' + stripped + '#Intent;scheme=https;action=android.intent.action.VIEW;end';
+  }
+  // Fallback: show manual instructions after a short delay
+  setTimeout(() => {
+    toast('如果沒有自動開啟，請點右下角 ⋯ →「在預設瀏覽器中開啟」', 'info');
+  }, 1500);
+}
+
 function updateGCalUI() {
   const connected = !!gcalToken;
   document.getElementById('gcalNotConnected').style.display = connected ? 'none' : 'block';
@@ -2192,11 +2245,19 @@ function updateGCalUI() {
     document.getElementById('gcalUserEmail').textContent = gcalUserInfo.email || '';
     document.getElementById('gcalAvatar').textContent = (gcalUserInfo.name||'G')[0].toUpperCase();
   }
+  if(!connected) detectLineBrowser();
 }
 
 function googleSignIn() {
-  const clientId = document.getElementById('gcalClientId').value.trim();
+  const clientId = document.getElementById('gcalClientId').value.trim() || getSett().gcalClientId;
   if(!clientId) { toast('請先填入 OAuth Client ID','error'); return; }
+
+  // Block OAuth in LINE browser
+  if(isLineBrowser()) {
+    toast('請先用外部瀏覽器開啟此頁面','error');
+    detectLineBrowser();
+    return;
+  }
   // Save client ID before redirect
   const s = getSett();
   s.gcalClientId = clientId;
@@ -2446,6 +2507,42 @@ function updateBadges() {
   document.getElementById('bTodo').textContent=get('todos').filter(t=>!t.completed).length;
 }
 
+// =============== PWA ===============
+function initPWA() {
+  // Dynamic manifest via blob URL
+  const manifest = {
+    name: 'Personal Assistant',
+    short_name: 'PA',
+    description: '行程、待辦、筆記管理',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#f8f5f0',
+    theme_color: '#f8f5f0',
+    icons: [{
+      src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect fill="#b8956a" width="512" height="512" rx="100"/><text x="256" y="340" font-size="280" text-anchor="middle" fill="white" font-family="serif">PA</text></svg>'),
+      sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable'
+    }]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = URL.createObjectURL(blob);
+  document.head.appendChild(link);
+
+  // Register service worker
+  if('serviceWorker' in navigator) {
+    const swCode = `
+const CACHE='pa-v1';
+const URLS=['./', self.location.href.replace(/\\/sw\\.js$/,'')];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS)).then(()=>self.skipWaiting()))});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c))}return r}).catch(()=>caches.match(e.request)))});
+    `;
+    const swBlob = new Blob([swCode], {type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+  }
+}
+
 // =============== INIT ===============
 function init() {
   // One-time cleanup: remove old demo data
@@ -2459,10 +2556,10 @@ function init() {
   loadSettings();
   updateBadges();
   renderDashboard();
+  initPWA();
 
   // Handle Google OAuth redirect (if returning from Google login)
   if(handleOAuthRedirect()) {
-    // Switch to settings panel to show connected state
     sw('settings', 4);
     completeGoogleSignIn();
   } else if(gcalToken) {
