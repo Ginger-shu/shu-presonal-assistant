@@ -70,7 +70,7 @@ body::before {
 }
 .nav-btn {
   display:flex; flex-direction:column; align-items:center;
-  padding:4px 18px; border:none; background:transparent;
+  padding:4px 10px; border:none; background:transparent;
   color:var(--text3); font-family:inherit; font-size:10px;
   font-weight:500; cursor:pointer; transition:0.2s;
   position:relative;
@@ -114,152 +114,63 @@ body::before {
 .panel.active { display:block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-/* ========== BENTO GRID DASHBOARD ========== */
-.bento { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-.bento-card {
-  background:var(--surface); border:1px solid var(--border-light);
-  border-radius:var(--r); padding:16px; overflow:hidden;
-  box-shadow:0 1px 3px rgba(0,0,0,0.02);
-}
-.bento-card.span2 { grid-column:span 2; }
+/* ========== DASHBOARD ========== */
+.dash-greeting { font-size:13px; color:var(--text3); }
+.dash-date { font-family:'Crimson Pro',serif; font-size:26px; font-weight:700; }
 
-/* Hero - next event (warm gold) */
-.bento-hero {
-  background:linear-gradient(135deg, #b8956a 0%, #d4b896 100%);
-  color:#fff; border:none; position:relative;
-}
-.bento-hero .hero-label {
-  font-size:9px; font-weight:600; letter-spacing:1.5px; opacity:0.55; margin-bottom:8px;
-}
-.bento-hero .hero-time {
-  font-family:'IBM Plex Mono', monospace; font-size:26px; font-weight:500; margin-bottom:4px;
-}
-.bento-hero .hero-title { font-size:18px; font-weight:600; margin-bottom:8px; }
-.bento-hero .hero-meta { display:flex; gap:10px; font-size:11px; opacity:0.6; }
-.bento-hero .hero-ring {
-  position:absolute; right:16px; top:16px;
-  width:52px; height:52px; border-radius:50%;
-  border:3px solid rgba(255,255,255,0.25);
-  display:flex; align-items:center; justify-content:center;
-}
-.bento-hero .hero-ring-inner {
-  font-family:'Crimson Pro', serif; font-size:18px; font-weight:700; color:#fff;
-}
-.hero-stats {
-  display:flex; gap:0; margin-top:14px;
-  padding-top:12px; border-top:1px solid rgba(255,255,255,0.18);
-}
-.hero-stat {
-  flex:1; text-align:center; position:relative;
-}
-.hero-stat::after {
-  content:''; position:absolute; right:0; top:2px; bottom:2px;
-  width:1px; background:rgba(255,255,255,0.15);
-}
-.hero-stat:last-child::after { display:none; }
-.hero-stat-num {
-  font-family:'Crimson Pro', serif; font-size:22px; font-weight:700; line-height:1;
-}
-.hero-stat-label {
-  font-size:9px; opacity:0.5; margin-top:2px; letter-spacing:0.3px;
-}
-.bento-hero-empty {
-  background:var(--surface); border:1px solid var(--border-light);
-  text-align:center; padding:24px 16px; color:var(--text3); font-size:13px;
-}
-.bento-hero-empty .hero-stats {
-  border-top:1px solid var(--border-light);
-}
-.bento-hero-empty .hero-stat::after {
-  background:var(--border-light);
-}
-.bento-hero-empty .hero-stat-num {
-  color:var(--text);
-}
-.bento-hero-empty .hero-stat-label {
-  color:var(--text3); opacity:1;
-}
+/* MIT compact */
+.d-mit { background:linear-gradient(135deg,#0d2137,#1a3a5c,#2e6b9c); border-radius:var(--r); padding:14px 16px; color:white; margin-bottom:12px; position:relative; overflow:hidden; cursor:pointer; }
+.d-mit::after { content:''; position:absolute; top:-30px; right:-30px; width:90px; height:90px; border-radius:50%; background:rgba(255,255,255,0.04); }
+.d-mit-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.d-mit-label { font-size:12px; font-weight:600; }
+.d-mit-pct { font-size:11px; opacity:0.5; }
+.d-mit-bar { height:4px; background:rgba(255,255,255,0.12); border-radius:2px; overflow:hidden; margin-bottom:10px; }
+.d-mit-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,#64b5f6,#42a5f5); }
+.d-mit-row { display:flex; align-items:center; gap:8px; padding:6px 0; }
+.d-mit-row + .d-mit-row { border-top:1px solid rgba(255,255,255,0.06); }
+.d-mit-ck { width:18px; height:18px; border-radius:5px; border:2px solid rgba(255,255,255,0.25); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:9px; color:transparent; cursor:pointer; }
+.d-mit-ck.on { background:#64b5f6; border-color:#64b5f6; color:white; }
+.d-mit-title { font-size:12px; flex:1; }
+.d-mit-title.dk { text-decoration:line-through; opacity:0.5; }
+.d-mit-num { font-family:'Crimson Pro'; font-size:14px; opacity:0.15; }
+.d-mit-go { font-size:10px; opacity:0.4; text-align:right; margin-top:6px; }
+.d-mit-empty { text-align:center; padding:12px; font-size:11px; opacity:0.4; }
 
-/* Stat mini in bento */
-.stat-mini { text-align:center; padding:18px 10px; }
-.stat-mini-icon { font-size:20px; margin-bottom:6px; }
-.stat-mini-num { font-family:'Crimson Pro', serif; font-size:32px; font-weight:700; line-height:1; }
-.stat-mini-label { font-size:10px; color:var(--text3); margin-top:4px; }
-.sm-accent .stat-mini-num { color:var(--accent); }
-.sm-orange .stat-mini-num { color:var(--orange); }
-.sm-green .stat-mini-num { color:var(--green); }
-.sm-red .stat-mini-num { color:var(--red); }
+/* Schedule strip */
+.d-sec-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.d-sec-title { font-size:10px; letter-spacing:1.5px; color:var(--text3); font-weight:600; }
+.d-sec-more { font-size:11px; color:var(--accent2); background:none; border:none; cursor:pointer; font-family:inherit; }
+.d-sched { background:var(--surface); border-radius:12px; padding:10px 14px; border:1px solid var(--border); margin-bottom:6px; display:flex; align-items:center; gap:12px; cursor:pointer; }
+.d-sched:active { background:var(--bg); }
+.d-sched-time { font-family:'IBM Plex Mono'; font-size:12px; font-weight:600; color:var(--accent2); min-width:44px; flex-shrink:0; }
+.d-sched-dot { width:4px; height:28px; border-radius:2px; flex-shrink:0; }
+.d-sched-info { flex:1; min-width:0; }
+.d-sched-title { font-size:13px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.d-sched-loc { font-size:10px; color:var(--text3); margin-top:1px; }
+.d-sched-cd { font-size:10px; color:var(--accent2); font-weight:500; flex-shrink:0; }
+.d-sched-now { animation:glow 2s infinite; }
+@keyframes glow { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-/* Bento section heads */
-.b-head {
-  font-size:11px; font-weight:700; color:var(--text3);
-  letter-spacing:0.5px; margin-bottom:10px;
-  display:flex; justify-content:space-between; align-items:center;
-}
-.b-more { font-size:11px; color:var(--accent); font-weight:500; cursor:pointer; background:none; border:none; font-family:inherit; }
+/* Habit ring strip */
+.d-habit { background:var(--surface); border-radius:var(--r); padding:14px; border:1px solid var(--border); margin-bottom:12px; display:flex; align-items:center; gap:14px; cursor:pointer; }
+.d-habit:active { background:var(--bg); }
+.dh-ring { width:50px; height:50px; position:relative; flex-shrink:0; }
+.dh-ring svg { width:50px; height:50px; transform:rotate(-90deg); }
+.dh-ring-bg { fill:none; stroke:var(--bg2); stroke-width:5; }
+.dh-ring-fill { fill:none; stroke:var(--done); stroke-width:5; stroke-linecap:round; }
+.dh-ring-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Crimson Pro'; font-size:15px; font-weight:700; color:var(--done); }
+.d-habit-info { flex:1; }
+.d-habit-title { font-size:13px; font-weight:600; }
+.d-habit-sub { font-size:11px; color:var(--text3); margin-top:2px; }
+.d-habit-chips { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+.d-habit-chip { padding:2px 8px; border-radius:5px; font-size:9px; font-weight:500; background:var(--bg2); color:var(--text3); }
+.d-habit-go { font-size:11px; color:var(--accent2); flex-shrink:0; }
 
-/* Bento schedule list */
-.b-sched {
-  display:flex; align-items:center; gap:10px;
-  padding:8px 0; border-bottom:1px solid var(--border-light);
-}
-.b-sched:last-child { border:none; }
-.b-sched-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
-.b-sched-time {
-  font-family:'IBM Plex Mono', monospace; font-size:11px;
-  color:var(--text3); flex-shrink:0; width:42px;
-}
-.b-sched-title {
-  font-size:13px; font-weight:500; flex:1; min-width:0;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-.b-sched-gcal { color:var(--blue); }
-.dot-work { background:#039BE5; }
-.dot-meeting { background:#7986CB; }
-.dot-health { background:#F6BF26; }
-.dot-personal { background:#E67C73; }
-.dot-other { background:#616161; }
-.dot-gcal { background:#4285f4; }
-
-/* Bento task list */
-.b-task {
-  display:flex; align-items:center; gap:8px;
-  padding:7px 0; border-bottom:1px solid var(--border-light);
-}
-.b-task:last-child { border:none; }
-.b-task-check {
-  width:16px; height:16px; border-radius:4px;
-  border:2px solid var(--border); flex-shrink:0;
-}
-.b-task-title {
-  font-size:12px; font-weight:500; flex:1; min-width:0;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-.b-task-pri {
-  width:6px; height:6px; border-radius:50%; flex-shrink:0;
-}
-.pri-dot-ui { background:var(--red); }
-.pri-dot-i { background:var(--orange); }
-.pri-dot-u { background:var(--blue); }
-.pri-dot-n { background:var(--green); }
-
-/* Progress bar */
-.progress-wrap { margin-top:10px; }
-.progress-bar {
-  height:5px; background:var(--bg2); border-radius:3px;
-  overflow:hidden; margin-bottom:4px;
-}
-.progress-fill { height:100%; border-radius:3px; background:var(--accent); transition:0.3s; }
-.progress-label {
-  font-size:10px; color:var(--text3);
-  display:flex; justify-content:space-between;
-}
-
-/* Bento note list */
-.b-note { padding:8px 0; border-bottom:1px solid var(--border-light); }
-.b-note:last-child { border:none; }
-.b-note-title { font-size:12px; font-weight:600; }
-.b-note-text {
+/* Quick note */
+.d-qnote { display:flex; gap:8px; margin-bottom:16px; }
+.d-qnote-input { flex:1; padding:10px 14px; border-radius:var(--r); border:1px solid var(--border-light); background:var(--surface); font-family:inherit; font-size:12px; color:var(--text); outline:none; }
+.d-qnote-input:focus { border-color:var(--accent); }
+.d-qnote-btn { width:36px; height:36px; border-radius:10px; background:var(--text); color:var(--bg); border:none; font-size:16px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
   font-size:10px; color:var(--text3); margin-top:2px;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
@@ -358,111 +269,139 @@ body::before {
 .pri-n { background:var(--purple-bg); color:var(--purple); }
 .overdue { color:var(--red) !important; font-weight:600; }
 
-/* ========== KANBAN ========== */
-.kanban-scroll {
-  display:flex; gap:12px;
-  overflow-x:auto; padding:2px 0 16px;
-  scroll-snap-type:x mandatory;
-  scrollbar-width:none;
-  margin:0 -16px; padding-left:16px; padding-right:16px;
+/* ========== MIT FOCUS CARD ========== */
+.mit-card {
+  border-radius:var(--r); padding:16px 18px; color:white; margin-bottom:12px;
+  position:relative; overflow:hidden;
 }
-.kanban-scroll::-webkit-scrollbar { display:none; }
-
-.kanban-col {
-  flex-shrink:0;
-  width:78vw; max-width:320px;
-  scroll-snap-align:center;
-  background:var(--surface);
-  border:1px solid var(--border-light);
-  border-radius:var(--r);
-  display:flex; flex-direction:column;
-  box-shadow:0 2px 8px rgba(0,0,0,0.03);
-}
-.k-head {
-  padding:12px 14px;
-  border-bottom:1px solid var(--border-light);
+.mit-card::after { content:''; position:absolute; top:-30px; right:-30px; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.05); }
+.mit-today { background:linear-gradient(135deg,#0d2137,#1a3a5c,#2e6b9c); }
+.mit-tomorrow { background:linear-gradient(135deg,#1a1a3e,#2a2a5e,#3f3f8a); }
+.mit-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.mit-title { font-size:14px; font-weight:600; }
+.mit-date { font-size:10px; opacity:0.5; }
+.mit-progress { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+.mit-bar { flex:1; height:6px; background:rgba(255,255,255,0.15); border-radius:3px; overflow:hidden; }
+.mit-bar-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,#64b5f6,#42a5f5); transition:0.5s; }
+.mit-pct { font-size:11px; opacity:0.6; }
+.mit-item {
   display:flex; align-items:center; gap:10px;
-}
-.k-dot {
-  width:10px; height:10px; border-radius:50%;
-  flex-shrink:0;
-}
-.k-info { flex:1; }
-.k-label { font-size:13px; font-weight:600; }
-.k-sub { font-size:10px; color:var(--text3); margin-top:1px; }
-.k-count {
-  font-family:'IBM Plex Mono', monospace;
-  font-size:11px; font-weight:600;
-  padding:3px 8px; border-radius:8px;
-}
-.k-items { padding:6px 10px 10px; flex:1; }
-
-.k-card {
-  background:var(--bg);
-  border:1px solid var(--border-light);
-  border-radius:var(--r-sm);
-  padding:11px 12px;
-  margin-bottom:8px;
-  display:flex; align-items:flex-start; gap:10px;
+  padding:9px 12px; margin-bottom:5px;
+  background:rgba(255,255,255,0.08); border-radius:10px;
   transition:0.15s;
 }
-.k-card:active { transform:scale(0.98); background:var(--bg2); }
-.k-card:last-child { margin-bottom:0; }
+.mit-item.done { opacity:0.4; }
+.mit-check {
+  width:22px; height:22px; border-radius:7px;
+  border:2px solid rgba(255,255,255,0.3); background:none;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:11px; color:transparent; flex-shrink:0; transition:0.2s;
+}
+.mit-check.on { background:#64b5f6; border-color:#64b5f6; color:white; }
+.mit-item-body { flex:1; min-width:0; }
+.mit-item-title { font-size:13px; font-weight:500; }
+.mit-item-title.striked { text-decoration:line-through; opacity:0.6; }
+.mit-item-tag { font-size:9px; opacity:0.5; margin-top:2px; }
+.mit-item-order { font-family:'Crimson Pro'; font-size:18px; font-weight:700; opacity:0.2; flex-shrink:0; }
+.mit-empty { text-align:center; padding:8px; font-size:11px; opacity:0.4; }
+.mit-pick-btn {
+  display:block; width:100%; margin-top:6px; padding:10px;
+  background:rgba(255,255,255,0.08); border:1px dashed rgba(255,255,255,0.2);
+  border-radius:10px; color:white; font-size:12px; cursor:pointer;
+  font-family:inherit; text-align:center; transition:0.15s;
+}
+.mit-pick-btn:active { background:rgba(255,255,255,0.15); }
+.mit-remove { background:none; border:none; color:rgba(255,255,255,0.3); font-size:14px; cursor:pointer; padding:2px; flex-shrink:0; }
 
-.k-check {
-  width:20px; height:20px; border-radius:6px;
-  border:2px solid var(--border);
-  flex-shrink:0; margin-top:1px; cursor:pointer;
-  transition:0.15s;
+/* ========== DONE LIST ========== */
+.done-card {
+  background:var(--surface); border-radius:var(--r); padding:14px;
+  border:1px solid var(--border); margin-bottom:16px;
+}
+.done-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.done-title { font-size:13px; font-weight:600; }
+.done-count { font-size:20px; font-weight:700; font-family:'Crimson Pro'; color:var(--done); }
+.done-item { display:flex; align-items:center; gap:10px; padding:6px 0; }
+.done-item + .done-item { border-top:1px solid var(--border); }
+.done-check { width:18px; height:18px; border-radius:5px; background:var(--done); color:white; display:flex; align-items:center; justify-content:center; font-size:10px; flex-shrink:0; }
+.done-item-body { flex:1; }
+.done-item-title { font-size:12px; font-weight:500; color:var(--text2); text-decoration:line-through; }
+.done-item-time { font-size:9px; color:var(--text3); font-family:'IBM Plex Mono'; }
+.done-item-src { font-size:9px; padding:1px 6px; border-radius:4px; flex-shrink:0; }
+.done-empty { text-align:center; padding:16px; color:var(--text3); font-size:12px; }
+.done-motivate { text-align:center; margin-top:10px; padding:10px; background:var(--bg2); border-radius:10px; font-size:12px; color:var(--text2); }
+
+/* ========== MIT PICK MODAL LIST ========== */
+.mit-pick-item {
+  display:flex; align-items:center; gap:10px; padding:10px;
+  border-radius:10px; cursor:pointer; transition:0.15s;
+  border:1px solid var(--border-light); margin-bottom:6px;
+}
+.mit-pick-item:active { background:var(--bg2); }
+.mit-pick-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.mit-pick-title { font-size:13px; font-weight:500; flex:1; }
+.mit-pick-due { font-size:10px; color:var(--text3); font-family:'IBM Plex Mono'; }
+
+/* ========== TODO 2×2 GRID ========== */
+.todo-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px; margin-bottom:16px;
+}
+.tg-card {
+  border-radius:var(--r); padding:10px 12px;
+  display:flex; flex-direction:column;
+  min-height:140px; border:1px solid var(--border-light);
+}
+.tg-head {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(0,0,0,0.06);
+}
+.tg-label { font-size:12px; font-weight:600; }
+.tg-count {
+  font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600;
+  padding:2px 7px; border-radius:6px; min-width:20px; text-align:center;
+}
+.tg-items { flex:1; overflow-y:auto; max-height:220px; }
+.tg-item {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:6px 0; cursor:pointer; transition:0.1s;
+}
+.tg-item + .tg-item { border-top:1px solid rgba(0,0,0,0.04); }
+.tg-item:active { opacity:0.7; }
+.tg-ck {
+  width:18px; height:18px; border-radius:5px;
+  border:2px solid var(--border); flex-shrink:0; margin-top:1px;
   display:flex; align-items:center; justify-content:center;
-  font-size:10px; color:transparent;
+  font-size:9px; color:transparent; cursor:pointer; transition:0.15s;
 }
-.k-check:active { transform:scale(0.85); }
-.k-check.done { background:var(--accent); border-color:var(--accent); color:#fff; }
-.k-body { flex:1; min-width:0; }
-.k-title {
-  font-size:13px; font-weight:500;
-  line-height:1.35; margin-bottom:3px;
-}
-.k-title.done { text-decoration:line-through; color:var(--text3); }
-.k-note {
-  font-size:11px; color:var(--text3);
-  margin-bottom:3px;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-.k-due {
-  font-family:'IBM Plex Mono', monospace;
-  font-size:10px; color:var(--text3);
-  display:inline-block;
-  padding:2px 6px; border-radius:4px;
-  background:var(--bg2);
-}
-.k-due.overdue { background:var(--red-bg); color:var(--red); font-weight:500; }
-.k-empty {
-  text-align:center; padding:20px 10px;
-  font-size:12px; color:var(--text3);
-}
+.tg-ck.done { border-color:var(--accent); background:var(--accent); color:white; }
+.tg-body { flex:1; min-width:0; }
+.tg-title { font-size:12px; font-weight:500; line-height:1.3; word-break:break-word; }
+.tg-title.done { text-decoration:line-through; color:var(--text3); }
+.tg-due { font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--text3); margin-top:2px; }
+.tg-due.overdue { color:var(--red); font-weight:600; }
+.tg-empty { text-align:center; padding:14px 4px; font-size:11px; color:var(--text3); }
 
-/* Kanban column color themes */
-.col-ui .k-dot { background:var(--red); }
-.col-ui .k-count { background:var(--red-bg); color:var(--red); }
-.col-i .k-dot { background:var(--orange); }
-.col-i .k-count { background:var(--orange-bg); color:var(--orange); }
-.col-u .k-dot { background:var(--blue); }
-.col-u .k-count { background:var(--blue-bg); color:var(--blue); }
-.col-n .k-dot { background:var(--green); }
-.col-n .k-count { background:var(--green-bg); color:var(--green); }
+/* Card colors */
+.tg-ui { background:linear-gradient(135deg, #fff5f5, #fff); }
+.tg-ui .tg-label { color:var(--red); }
+.tg-ui .tg-count { background:var(--red-bg); color:var(--red); }
+.tg-ui .tg-ck.done { border-color:var(--red); background:var(--red); }
 
-/* Scroll indicator dots */
-.kanban-dots {
-  display:flex; justify-content:center; gap:6px;
-  margin-top:-6px; margin-bottom:10px;
-}
-.kanban-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--border); transition:0.2s;
-}
-.kanban-dot.active { background:var(--accent); width:18px; border-radius:3px; }
+.tg-i { background:linear-gradient(135deg, #fff8f0, #fff); }
+.tg-i .tg-label { color:var(--orange); }
+.tg-i .tg-count { background:var(--orange-bg); color:var(--orange); }
+.tg-i .tg-ck.done { border-color:var(--orange); background:var(--orange); }
+
+.tg-u { background:linear-gradient(135deg, #f0f6ff, #fff); }
+.tg-u .tg-label { color:var(--blue); }
+.tg-u .tg-count { background:var(--blue-bg); color:var(--blue); }
+.tg-u .tg-ck.done { border-color:var(--blue); background:var(--blue); }
+
+.tg-n { background:linear-gradient(135deg, #f0faf0, #fff); }
+.tg-n .tg-label { color:var(--green); }
+.tg-n .tg-count { background:var(--green-bg); color:var(--green); }
+.tg-n .tg-ck.done { border-color:var(--green); background:var(--green); }
 
 /* ========== QUICK ADD ========== */
 .quick-add { display:flex; gap:8px; margin-bottom:14px; }
@@ -505,39 +444,47 @@ body::before {
 }
 
 /* ========== NOTES ========== */
-.note-scroll {
-  display:flex; gap:10px;
-  overflow-x:auto; padding:4px 0 12px;
-  scrollbar-width:none;
-}
-.note-scroll::-webkit-scrollbar { display:none; }
-
-.notes-grid {
-  display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;
-}
-
-.note-card {
-  background:var(--surface);
-  border:1px solid var(--border-light);
-  border-radius:var(--r); padding:18px;
-  cursor:pointer; transition:0.2s;
-  box-shadow:0 1px 3px rgba(0,0,0,0.02);
-  min-width:180px; flex-shrink:0;
-}
-.note-card:active { background:var(--surface2); }
-.note-card h4 {
-  font-family:'Crimson Pro', serif;
-  font-size:15px; font-weight:600; margin-bottom:6px;
-}
-.note-card p {
-  font-size:11px; color:var(--text2); line-height:1.7;
-  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
-}
-.note-tags { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
-.note-tag {
-  font-size:9px; padding:2px 7px; border-radius:4px;
-  border:1px solid var(--border); color:var(--text3);
-}
+.capture-bar { display:flex; gap:8px; margin-bottom:12px; }
+.capture-input { flex:1; padding:12px 16px; border-radius:var(--r); border:1px solid var(--border-light); background:var(--surface); font-family:inherit; font-size:13px; color:var(--text); outline:none; resize:none; min-height:44px; max-height:120px; line-height:1.4; }
+.capture-input:focus { border-color:var(--accent); }
+.capture-voice { width:44px; height:44px; border-radius:var(--r); background:var(--surface); border:1px solid var(--border-light); color:var(--red); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:0.2s; flex-shrink:0; }
+.capture-voice.recording { background:var(--red); color:white; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(217,48,37,0.3)} 50%{box-shadow:0 0 0 8px rgba(217,48,37,0)} }
+.voice-indicator { display:none; align-items:center; gap:8px; padding:8px 14px; background:rgba(217,48,37,0.08); border-radius:10px; margin-bottom:10px; font-size:12px; color:var(--red); }
+.voice-indicator.active { display:flex; }
+.voice-dot { width:8px; height:8px; border-radius:50%; background:var(--red); animation:blink 1s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.voice-live { flex:1; font-style:italic; color:var(--text2); font-size:11px; }
+.voice-stop { background:var(--red); color:white; border:none; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer; font-family:inherit; }
+.tag-bar { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; }
+.tag-bar::-webkit-scrollbar { display:none; }
+.tag-chip { padding:6px 14px; border-radius:20px; font-size:11px; font-weight:500; background:var(--surface); border:1.5px solid var(--border-light); cursor:pointer; white-space:nowrap; color:var(--text2); flex-shrink:0; transition:0.15s; }
+.tag-chip:active { transform:scale(0.95); }
+.tag-chip.active { background:var(--text); color:var(--bg); border-color:var(--text); }
+.tpl-row { display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.tpl-row::-webkit-scrollbar { display:none; }
+.tpl-chip { padding:8px 14px; border-radius:12px; font-size:11px; font-weight:500; background:var(--surface); border:1px dashed var(--border); cursor:pointer; white-space:nowrap; color:var(--accent2); flex-shrink:0; }
+.tpl-chip:active { transform:scale(0.95); background:var(--bg2); }
+.n-card { background:var(--surface); border-radius:var(--r); padding:14px; border:1px solid var(--border); margin-bottom:10px; cursor:pointer; transition:0.15s; position:relative; }
+.n-card:active { transform:scale(0.99); }
+.n-card.pinned { border-left:3px solid var(--done); }
+.n-pin { position:absolute; top:10px; right:12px; font-size:14px; }
+.n-time { font-size:10px; color:var(--text3); font-family:'IBM Plex Mono'; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.n-voice-badge { font-size:9px; padding:1px 6px; border-radius:4px; background:rgba(217,48,37,0.08); color:var(--red); }
+.n-title { font-size:14px; font-weight:600; margin-bottom:4px; }
+.n-body { font-size:12px; color:var(--text2); line-height:1.5; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; white-space:pre-wrap; }
+.n-tags { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+.n-tag { padding:2px 8px; border-radius:6px; font-size:10px; font-weight:500; background:var(--bg2); color:var(--text3); }
+.n-tag-訓練 { background:rgba(108,92,231,0.08); color:var(--purple); }
+.n-tag-工作 { background:rgba(26,115,232,0.08); color:#1a73e8; }
+.n-tag-靈感 { background:rgba(232,113,10,0.08); color:#e8710a; }
+.n-tag-學習 { background:rgba(52,168,83,0.08); color:var(--green); }
+.n-tag-身體 { background:rgba(217,48,37,0.08); color:var(--red); }
+.n-tag-生活 { background:rgba(184,149,106,0.08); color:var(--accent2); }
+.n-section { font-size:10px; letter-spacing:1.5px; color:var(--text3); font-weight:600; margin:4px 0 8px; }
+.nm-tag-picks { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.nm-tag-pick { padding:5px 12px; border-radius:8px; font-size:11px; background:var(--bg2); border:1.5px solid transparent; cursor:pointer; transition:0.15s; }
+.nm-tag-pick.sel { border-color:var(--accent); background:rgba(184,149,106,0.08); color:var(--accent2); font-weight:600; }
 
 /* ========== FAB ========== */
 .fab {
@@ -998,6 +945,200 @@ body::before {
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   body { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
 }
+/* ========== HABIT TRACKER ========== */
+/* Heat map: Warm Gold (B) | Done accent: Amber Gold (H) */
+:root { --h1:#f5e6d0; --h1-t:#7a5c3a; --h2:#dbb88a; --h3:#b8956a; --h4:#7a5c3a; --done:#d4a03e; --purple:#6c5ce7; --purple-bg:rgba(108,92,231,0.08); }
+
+/* Daily hero */
+.daily-hero { background:var(--surface); border-radius:var(--r); padding:14px 16px; border:1px solid var(--border); margin-bottom:14px; display:flex; align-items:center; gap:14px; }
+.dh-ring { width:60px; height:60px; position:relative; flex-shrink:0; }
+.dh-ring svg { width:60px; height:60px; transform:rotate(-90deg); }
+.dh-ring-bg { fill:none; stroke:var(--bg2); stroke-width:5; }
+.dh-ring-fill { fill:none; stroke:var(--done); stroke-width:5; stroke-linecap:round; transition:0.5s; }
+.dh-ring-text { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.dh-ring-num { font-family:'Crimson Pro'; font-size:18px; font-weight:700; color:var(--done); line-height:1; }
+.dh-ring-label { font-size:8px; color:var(--text3); }
+.dh-info { flex:1; }
+.dh-title { font-size:14px; font-weight:600; }
+.dh-sub { font-size:11px; color:var(--text3); margin-top:2px; }
+.dh-edit { background:none; border:none; font-size:13px; cursor:pointer; color:var(--text3); padding:4px; flex-shrink:0; }
+/* Stats toggle & panel */
+.stats-toggle { display:flex; align-items:center; justify-content:center; gap:6px; padding:10px; margin:12px 0 4px; border-radius:var(--r); background:var(--surface); border:1px solid var(--border); cursor:pointer; font-size:12px; color:var(--text2); font-weight:500; font-family:inherit; width:100%; }
+.stats-toggle:active { background:var(--bg2); }
+.stats-arrow { transition:0.3s; display:inline-block; }
+.stats-arrow.open { transform:rotate(180deg); }
+.stats-panel { overflow:hidden; max-height:0; transition:max-height 0.35s ease-out; }
+.stats-panel.open { max-height:1200px; padding-top:10px; }
+/* Type badges */
+.hl-type-badge { font-size:9px; padding:1px 6px; border-radius:4px; font-weight:600; }
+.hl-type-check { background:rgba(212,160,62,0.1); color:var(--done); }
+.hl-type-strength { background:rgba(108,92,231,0.1); color:var(--purple); }
+.hl-type-cardio { background:rgba(52,168,83,0.1); color:var(--green); }
+/* Duration display */
+.hl-duration { font-size:10px; color:var(--accent2); font-weight:500; margin-left:4px; }
+
+.habit-badges { display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.habit-badges::-webkit-scrollbar { display:none; }
+.hbdg { flex-shrink:0; display:flex; flex-direction:column; align-items:center; width:58px; padding:8px 4px; border-radius:12px; background:var(--surface); border:1px solid var(--border); }
+.hbdg.locked { opacity:0.25; filter:grayscale(1); }
+.hbdg-icon { font-size:20px; margin-bottom:2px; }
+.hbdg-name { font-size:8px; color:var(--text3); text-align:center; line-height:1.2; }
+
+.habit-stats { display:flex; gap:6px; margin-bottom:14px; }
+.hstat { flex:1; background:var(--surface); border-radius:12px; padding:10px 8px; text-align:center; border:1px solid var(--border); }
+.hstat-num { font-family:'Crimson Pro'; font-size:22px; font-weight:700; line-height:1; }
+.hstat-num.fire { color:#e85d04; }
+.hstat-num.done-c { color:var(--done); }
+.hstat-num.purple { color:var(--purple); }
+.hstat-label { font-size:9px; color:var(--text3); margin-top:3px; }
+
+.heat-card { background:var(--surface); border-radius:var(--r); padding:14px; border:1px solid var(--border); margin-bottom:16px; }
+.heat-card-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.heat-card-title { font-size:14px; font-weight:600; }
+.heat-card-month { font-family:'Crimson Pro'; font-size:15px; color:var(--accent2); font-weight:600; }
+.heat-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+.hd-label { font-size:9px; color:var(--text3); text-align:center; padding-bottom:2px; }
+.hc { aspect-ratio:1; border-radius:4px; background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:9px; color:var(--text3); cursor:pointer; transition:0.15s; }
+.hc:active { transform:scale(0.9); }
+.hc.today-c { box-shadow:inset 0 0 0 2px var(--accent); }
+.hc.future { opacity:0.2; }
+.hc.l1 { background:var(--h1); color:var(--h1-t); }
+.hc.l2 { background:var(--h2); color:white; }
+.hc.l3 { background:var(--h3); color:white; }
+.hc.l4 { background:var(--h4); color:white; }
+.heat-bottom { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.heat-legend { display:flex; align-items:center; gap:3px; font-size:9px; color:var(--text3); }
+.hl-box { width:12px; height:12px; border-radius:3px; }
+.heat-stat-text { font-size:10px; color:var(--text3); }
+.heat-stat-text strong { color:var(--text); }
+
+.habit-date-nav { display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:14px; }
+.habit-date-nav button { background:none; border:none; font-size:18px; cursor:pointer; color:var(--text2); padding:4px 8px; }
+.habit-date-label { font-family:'Crimson Pro'; font-size:18px; font-weight:600; }
+
+.habit-section { font-size:10px; letter-spacing:1.5px; color:var(--text3); font-weight:600; margin:18px 0 8px; }
+
+.gcard { background:var(--surface); border-radius:var(--r); padding:14px; margin-bottom:8px; border:1px solid var(--border); }
+.gcard.done { border-left:3px solid var(--done); }
+.gc-row { display:flex; align-items:center; gap:12px; }
+.gc-check {
+  width:30px; height:30px; border-radius:10px; border:2.5px solid var(--border); background:none;
+  cursor:pointer; font-size:14px; color:transparent; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:0.2s;
+}
+.gc-check.on { background:var(--done); border-color:var(--done); color:white; }
+.gc-body { flex:1; min-width:0; }
+.gc-top { display:flex; justify-content:space-between; align-items:center; }
+.gc-title { font-size:14px; font-weight:600; }
+.gc-xp { font-size:11px; color:var(--purple); font-weight:700; flex-shrink:0; }
+.gc-meta { font-size:11px; color:var(--text3); margin-top:2px; }
+.streak-fire { color:#e85d04; font-weight:700; }
+.mini-week { display:flex; gap:3px; margin-top:8px; }
+.mw { width:100%; height:14px; border-radius:4px; background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:7px; color:var(--text3); }
+.mw.on { background:var(--done); color:white; font-weight:600; }
+.mw.td { box-shadow:inset 0 0 0 1.5px var(--accent); }
+.wo-detail { margin-top:8px; background:var(--bg2); border-radius:10px; padding:10px; }
+.wo-row { display:flex; justify-content:space-between; align-items:center; padding:3px 0; font-size:12px; }
+.wo-row + .wo-row { border-top:1px solid var(--border); }
+.wo-name { color:var(--text2); }
+.wo-equip { font-size:10px; color:var(--accent2); font-weight:500; }
+.wo-val { font-family:'IBM Plex Mono'; font-size:11px; font-weight:500; }
+
+/* Habit modal extras */
+.step-label { font-size:10px; letter-spacing:1px; color:var(--purple); font-weight:700; margin-bottom:8px; }
+.bp-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+.bp-chip {
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  width:calc(25% - 6px); padding:10px 4px;
+  background:var(--surface); border:2px solid var(--border-light);
+  border-radius:12px; cursor:pointer; transition:0.15s;
+  font-size:10px; font-weight:500; color:var(--text2);
+}
+.bp-chip:active { transform:scale(0.95); }
+.bp-chip.sel { border-color:var(--accent); background:rgba(184,149,106,0.08); color:var(--accent2); font-weight:600; }
+.bp-icon { font-size:20px; }
+.ex-picks { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.ex-pick {
+  padding:7px 12px; border-radius:10px; font-size:12px; font-weight:500;
+  background:var(--surface); border:1.5px solid var(--border-light);
+  cursor:pointer; transition:0.15s; color:var(--text2);
+}
+.ex-pick:active { transform:scale(0.95); }
+.ex-pick.sel { border-color:var(--done); background:rgba(212,160,62,0.08); color:var(--accent2); font-weight:600; }
+.ex-pick.other { border-style:dashed; color:var(--text3); }
+.set-card { background:var(--bg); border-radius:12px; padding:12px; margin-bottom:10px; }
+.set-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.set-title-text { font-size:13px; font-weight:600; }
+.set-hint { font-size:10px; color:var(--done); font-weight:500; }
+.set-row { display:flex; gap:6px; align-items:center; margin-bottom:6px; }
+.set-num { width:22px; height:22px; border-radius:6px; background:var(--bg2); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; color:var(--text3); flex-shrink:0; }
+.set-input { flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--border-light); background:var(--surface); font-family:inherit; font-size:13px; color:var(--text); text-align:center; outline:none; }
+.set-input:focus { border-color:var(--accent); }
+.set-unit { font-size:10px; color:var(--text3); width:22px; flex-shrink:0; }
+.set-add-btn { width:100%; padding:6px; border-radius:6px; border:1px dashed var(--border); background:none; color:var(--text3); font-size:11px; cursor:pointer; font-family:inherit; }
+.eq-row { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
+.eq-chip { padding:4px 9px; border-radius:6px; font-size:10px; background:var(--bg2); border:1px solid transparent; cursor:pointer; color:var(--text3); }
+.eq-chip.sel { border-color:var(--accent); background:rgba(184,149,106,0.08); color:var(--accent2); font-weight:600; }
+
+/* Result card parts */
+.rc-parts { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
+.rc-part { padding:3px 8px; border-radius:6px; font-size:10px; font-weight:500; background:rgba(184,149,106,0.12); color:var(--accent2); }
+.equip-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.equip-chip { padding:6px 12px; border-radius:8px; font-size:12px; background:var(--bg2); border:1.5px solid var(--border-light); cursor:pointer; transition:0.15s; }
+.equip-chip.sel { background:var(--accent-bg); border-color:var(--accent); color:var(--accent2); font-weight:600; }
+.exercise-entry { background:var(--bg2); border-radius:10px; padding:10px; margin-bottom:8px; }
+.exercise-entry .form-row { gap:6px; }
+.exercise-entry input { font-size:13px; }
+.exercise-remove { background:none; border:none; color:var(--red); cursor:pointer; font-size:16px; padding:4px; }
+.workout-add-btn { padding:3px 10px; border-radius:6px; font-size:11px; background:var(--bg2); border:1px dashed var(--border); color:var(--text3); cursor:pointer; }
+
+/* ========== LONG-TERM GOALS ========== */
+.goal-card {
+  background:var(--surface); border-radius:var(--r); padding:14px;
+  border:1px solid var(--border); margin-bottom:10px;
+  cursor:pointer; transition:0.15s;
+}
+.goal-card:active { transform:scale(0.98); }
+.goal-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+.goal-title { font-size:14px; font-weight:600; }
+.goal-badge { font-size:10px; font-weight:600; padding:2px 8px; border-radius:6px; }
+.goal-badge.active { background:var(--done); color:white; opacity:0.9; }
+.goal-badge.done { background:var(--green); color:white; }
+.goal-badge.expired { background:var(--red-bg); color:var(--red); }
+.goal-desc { font-size:11px; color:var(--text3); margin-bottom:8px; line-height:1.4; }
+.goal-bar { height:8px; background:var(--bg2); border-radius:4px; overflow:hidden; margin-bottom:6px; }
+.goal-bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg, var(--done), var(--accent)); transition:0.4s; }
+.goal-meta { display:flex; justify-content:space-between; font-size:10px; color:var(--text3); }
+.goal-meta strong { color:var(--text); }
+.goal-milestones { margin-top:8px; padding-top:8px; border-top:1px solid var(--border); }
+.goal-ms-row { display:flex; align-items:center; gap:8px; padding:3px 0; font-size:11px; }
+.goal-ms-dot { width:8px; height:8px; border-radius:50%; background:var(--bg2); flex-shrink:0; }
+.goal-ms-dot.reached { background:var(--done); }
+.goal-ms-label { flex:1; color:var(--text2); }
+.goal-ms-val { font-family:'IBM Plex Mono'; font-size:10px; color:var(--text3); }
+.goal-log-btn { margin-top:8px; width:100%; padding:8px; border-radius:8px; border:1px dashed var(--border); background:none; color:var(--accent2); font-size:12px; font-weight:500; cursor:pointer; }
+
+/* ========== INBODY SCAN ========== */
+.inbody-btn {
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  width:100%; padding:10px; border-radius:10px; margin-top:8px;
+  background:linear-gradient(135deg,#0d2137,#2e6b9c); color:white;
+  border:none; font-size:12px; font-weight:600; cursor:pointer;
+  font-family:inherit; transition:0.15s;
+}
+.inbody-btn:active { transform:scale(0.98); opacity:0.9; }
+.inbody-preview { width:100%; border-radius:10px; margin-bottom:12px; max-height:200px; object-fit:contain; background:var(--bg2); }
+.inbody-result { background:var(--bg2); border-radius:12px; padding:12px; margin-bottom:12px; }
+.inbody-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; }
+.inbody-row + .inbody-row { border-top:1px solid var(--border); }
+.inbody-label { color:var(--text2); }
+.inbody-val { font-family:'IBM Plex Mono'; font-weight:600; font-size:14px; }
+.inbody-scanning { text-align:center; padding:24px; color:var(--text3); }
+.inbody-scanning .spin { display:inline-block; animation:spin 1s linear infinite; font-size:24px; }
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+.inbody-error { text-align:center; padding:16px; color:var(--red); font-size:13px; }
+.inbody-date-row { display:flex; gap:10px; margin-bottom:10px; }
+.inbody-date-row .form-group { flex:1; }
+
 </style>
 </head>
 <body>
@@ -1006,33 +1147,23 @@ body::before {
   <!-- ===================== DASHBOARD ===================== -->
   <div class="panel active" id="p-dashboard">
     <div class="page-head">
-      <div class="greeting" id="greetingText"></div>
-      <h1 id="dashTitle">Today</h1>
-      <div class="sub" id="hDate"></div>
+      <div class="dash-greeting" id="greetingText"></div>
+      <div class="dash-date" id="hDate"></div>
     </div>
-
-    <div class="bento" id="bentoDash">
-      <!-- Hero: next event + stats -->
-      <div class="bento-card span2 bento-hero" id="bentoHero"></div>
-
-      <!-- Schedule list -->
-      <div class="bento-card span2" id="bentoSchedule">
-        <div class="b-head"><span>TODAY'S SCHEDULE</span><button class="b-more" onclick="sw('schedule',1)">全部 →</button></div>
-        <div id="dashSchedule"></div>
-      </div>
-
-      <!-- Tasks -->
-      <div class="bento-card" id="bentoTasks">
-        <div class="b-head"><span>TASKS</span><button class="b-more" onclick="sw('todos',2)">→</button></div>
-        <div id="dashTodos"></div>
-        <div class="progress-wrap" id="dashProgress"></div>
-      </div>
-
-      <!-- Notes -->
-      <div class="bento-card" id="bentoNotes">
-        <div class="b-head"><span>NOTES</span><button class="b-more" onclick="sw('notes',3)">→</button></div>
-        <div id="dashNotes"></div>
-      </div>
+    <!-- MIT Focus -->
+    <div id="dashMit"></div>
+    <!-- Schedule -->
+    <div id="dashSchedSection"></div>
+    <!-- Habit ring -->
+    <div id="dashHabitStrip"></div>
+    <!-- Quick note -->
+    <div class="d-sec-head">
+      <div class="d-sec-title">✏️ 快速筆記</div>
+      <button class="d-sec-more" onclick="sw('notes',3)">查看全部 →</button>
+    </div>
+    <div class="d-qnote">
+      <input class="d-qnote-input" id="dashNoteInput" placeholder="記一筆..." onkeydown="if(event.key==='Enter'){dashQuickNote();event.preventDefault();}">
+      <button class="d-qnote-btn" onclick="dashQuickNote()">+</button>
     </div>
   </div>
 
@@ -1079,14 +1210,93 @@ body::before {
       <input type="text" id="quickInput" placeholder="新增待辦事項..." onkeydown="if(event.key==='Enter')quickAdd()">
       <button class="add-btn" onclick="quickAdd()">+</button>
     </div>
-    <div class="kanban-scroll" id="kanbanScroll"></div>
-    <div class="kanban-dots" id="kanbanDots"></div>
+    <!-- MIT Today -->
+    <div id="mitTodayCard"></div>
+    <!-- MIT Tomorrow -->
+    <div id="mitTomorrowCard"></div>
+    <!-- Inbox -->
+    <div class="section-head" style="margin-top:4px;">
+      <div class="section-title" style="font-size:10px;letter-spacing:1.5px;color:var(--text3);font-weight:600;">📥 所有待辦</div>
+      <div id="todoInboxCount" style="font-size:10px;color:var(--text3);"></div>
+    </div>
+    <div class="todo-grid" id="todoGrid"></div>
+    <!-- Done List -->
+    <div id="doneListCard"></div>
   </div>
 
   <!-- ===================== NOTES ===================== -->
   <div class="panel" id="p-notes">
     <div class="page-head"><h1>Notes</h1></div>
-    <div class="notes-grid" id="notesList"></div>
+    <!-- Quick capture -->
+    <div class="capture-bar">
+      <textarea class="capture-input" id="noteQuickInput" placeholder="快速記一筆..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();quickNote();}"></textarea>
+      <button class="capture-voice" id="noteVoiceBtn" onclick="toggleNoteVoice()">🎤</button>
+      <button class="add-btn" onclick="quickNote()">+</button>
+    </div>
+    <div class="voice-indicator" id="noteVoiceIndicator">
+      <div class="voice-dot"></div>
+      <div class="voice-live" id="noteVoiceLive">正在聆聽...</div>
+      <button class="voice-stop" onclick="toggleNoteVoice()">停止</button>
+    </div>
+    <!-- Templates -->
+    <div class="tpl-row">
+      <div class="tpl-chip" onclick="openTemplateNote('訓練反思')">📝 訓練反思</div>
+      <div class="tpl-chip" onclick="openTemplateNote('每週回顧')">📊 每週回顧</div>
+      <div class="tpl-chip" onclick="openTemplateNote('會議記錄')">📋 會議記錄</div>
+      <div class="tpl-chip" onclick="openTemplateNote('靈感記錄')">💡 靈感記錄</div>
+    </div>
+    <!-- Tag filter -->
+    <div class="tag-bar" id="noteTagBar"></div>
+    <!-- Notes list -->
+    <div id="notesPinnedSection"></div>
+    <div id="notesRecentSection"></div>
+  </div>
+
+  <!-- ===================== HABITS ===================== -->
+  <div class="panel" id="p-habits">
+    <div class="page-head"><h1>Habits</h1></div>
+    <!-- Daily hero -->
+    <div class="daily-hero" id="dailyHeroCard"></div>
+    <!-- Date nav -->
+    <div class="habit-date-nav">
+      <button onclick="shiftHabitDate(-1)">‹</button>
+      <div class="habit-date-label" id="habitDateLabel"></div>
+      <button onclick="shiftHabitDate(1)">›</button>
+    </div>
+    <!-- Unified habit list -->
+    <div class="section-head"><div class="habit-section" style="margin:0;">📋 今日待完成</div></div>
+    <div id="habitPendingList"></div>
+    <div class="section-head" id="habitDoneHeader" style="display:none;"><div class="habit-section" style="margin:0;">✅ 已完成</div></div>
+    <div id="habitDoneList"></div>
+    <!-- Long-term goals -->
+    <div class="section-head">
+      <div class="habit-section" style="margin:0;">🎯 長期目標</div>
+      <button onclick="openGoalModal()" style="background:none;border:none;color:var(--accent2);font-size:12px;cursor:pointer;font-weight:600;">+ 新增</button>
+    </div>
+    <div id="goalsList"></div>
+    <!-- InBody upload -->
+    <button class="inbody-btn" onclick="document.getElementById('inbodyFileInput').click()">📷 上傳 InBody 報告自動辨識</button>
+    <!-- Collapsible stats -->
+    <button class="stats-toggle" onclick="toggleStats()">📊 查看統計與成就 <span class="stats-arrow" id="statsArrow">▾</span></button>
+    <div class="stats-panel" id="statsPanel">
+      <div class="habit-stats" style="margin-bottom:10px;">
+        <div class="hstat"><div class="hstat-num fire" id="habBestStreak">0</div><div class="hstat-label">🔥 最長連續</div></div>
+        <div class="hstat"><div class="hstat-num done-c" id="habMonthRate">0%</div><div class="hstat-label">📊 本月完成</div></div>
+        <div class="hstat"><div class="hstat-num purple" id="habTotalDays">0</div><div class="hstat-label">💪 累計天數</div></div>
+      </div>
+      <div class="habit-badges" id="habBadges" style="margin-bottom:10px;"></div>
+      <div class="heat-card">
+        <div class="heat-card-head">
+          <div class="heat-card-title">📊 整體完成度</div>
+          <div class="heat-card-month" id="habHeatMonth"></div>
+        </div>
+        <div class="heat-grid" id="habHeatGrid"></div>
+        <div class="heat-bottom">
+          <div class="heat-legend">少 <div class="hl-box" style="background:var(--bg2);"></div><div class="hl-box" style="background:var(--h1);"></div><div class="hl-box" style="background:var(--h2);"></div><div class="hl-box" style="background:var(--h3);"></div><div class="hl-box" style="background:var(--h4);"></div> 多</div>
+          <div class="heat-stat-text" id="habHeatStat"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ===================== SETTINGS ===================== -->
@@ -1114,6 +1324,11 @@ body::before {
         <label class="form-label">LINE 通知 Webhook</label>
         <input type="text" class="form-input" id="whLine" placeholder="https://hook.us2.make.com/...">
       </div>
+      <div class="form-group">
+        <label class="form-label">資料同步 Webhook（Google Sheets + InBody）</label>
+        <input type="text" class="form-input" id="whDataSync" placeholder="https://hook.us2.make.com/...">
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">action: load / save / bulkSave / inbody</div>
+      </div>
       <button class="settings-btn" onclick="saveSettings()" style="background:var(--text);color:var(--bg);border:none;width:100%;">💾 儲存設定</button>
     </div>
 
@@ -1129,10 +1344,17 @@ body::before {
 
     <div class="settings-card">
       <h4>📊 資料管理</h4>
-      <p>匯出備份或清除資料</p>
+      <p>雲端同步、匯出備份或清除資料</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+        <button class="settings-btn" onclick="cloudSync('push')" id="syncPushBtn">☁️ 上傳到雲端</button>
+        <button class="settings-btn" onclick="cloudSync('pull')" id="syncPullBtn">📥 從雲端下載</button>
+      </div>
+      <div class="g-sync-status" id="cloudSyncStatus" style="margin-bottom:8px;">
+        <span id="cloudSyncDot" style="color:var(--text3);">●</span> <span id="cloudSyncText">未同步</span>
+      </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="settings-btn" onclick="exportData()">📥 匯出</button>
-        <button class="settings-btn" onclick="document.getElementById('importFile').click()">📤 匯入</button>
+        <button class="settings-btn" onclick="exportData()">📥 匯出 JSON</button>
+        <button class="settings-btn" onclick="document.getElementById('importFile').click()">📤 匯入 JSON</button>
         <button class="settings-btn danger" onclick="clearAll()">🗑 清除</button>
       </div>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
@@ -1142,14 +1364,13 @@ body::before {
 
 <!-- FAB -->
 <button class="fab" id="fabBtn" onclick="fabAction()">+</button>
-
-<!-- Bottom Nav -->
 <div class="bottom-nav">
   <button class="nav-btn active" onclick="sw('dashboard',0)"><span class="nav-icon">◐</span>總覽</button>
   <button class="nav-btn" onclick="sw('schedule',1)"><span class="nav-icon">◷</span>行程<span class="badge" id="bSched">0</span></button>
   <button class="nav-btn" onclick="sw('todos',2)"><span class="nav-icon">☑</span>待辦<span class="badge" id="bTodo">0</span></button>
   <button class="nav-btn" onclick="sw('notes',3)"><span class="nav-icon">✎</span>筆記</button>
-  <button class="nav-btn" onclick="sw('settings',4)"><span class="nav-icon">⚙</span>設定</button>
+  <button class="nav-btn" onclick="sw('habits',4)"><span class="nav-icon">🔥</span>習慣</button>
+  <button class="nav-btn" onclick="sw('settings',5)"><span class="nav-icon">⚙</span>設定</button>
 </div>
 
 <!-- ===================== MODALS ===================== -->
@@ -1176,7 +1397,7 @@ body::before {
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label class="form-label">開始時間</label><input type="time" class="form-input" id="smStart"></div>
+        <div class="form-group"><label class="form-label">開始時間</label><input type="time" class="form-input" id="smStart" onchange="autoFillEndTime()"></div>
         <div class="form-group"><label class="form-label">結束時間</label><input type="time" class="form-input" id="smEnd"></div>
       </div>
       <div class="form-group"><label class="form-label">地點（選填）</label><input type="text" class="form-input" id="smLoc" placeholder="辦公室、線上..."></div>
@@ -1231,13 +1452,28 @@ body::before {
     </div>
     <div class="modal-body">
       <input type="hidden" id="nmEditId">
-      <div class="form-group"><label class="form-label">標題</label><input type="text" class="form-input" id="nmName" placeholder="筆記標題..."></div>
-      <div class="form-group"><label class="form-label">內容</label><textarea class="form-textarea" id="nmContent" placeholder="記下想法..." style="min-height:120px;"></textarea></div>
-      <div class="form-group"><label class="form-label">標籤（逗號分隔）</label><input type="text" class="form-input" id="nmTags" placeholder="靈感, 工作..."></div>
+      <div class="form-group"><label class="form-label">標題（選填）</label><input type="text" class="form-input" id="nmName" placeholder="不填也可以，直接寫內容"></div>
+      <div class="form-group"><label class="form-label">內容</label><textarea class="form-textarea" id="nmContent" placeholder="記下想法..." style="min-height:140px;"></textarea></div>
+      <div class="form-group">
+        <label class="form-label">標籤</label>
+        <div class="nm-tag-picks" id="nmTagPicks">
+          <span class="nm-tag-pick" data-t="訓練" onclick="this.classList.toggle('sel')">🏋️ 訓練</span>
+          <span class="nm-tag-pick" data-t="工作" onclick="this.classList.toggle('sel')">📋 工作</span>
+          <span class="nm-tag-pick" data-t="靈感" onclick="this.classList.toggle('sel')">💡 靈感</span>
+          <span class="nm-tag-pick" data-t="學習" onclick="this.classList.toggle('sel')">📖 學習</span>
+          <span class="nm-tag-pick" data-t="身體" onclick="this.classList.toggle('sel')">🫀 身體</span>
+          <span class="nm-tag-pick" data-t="生活" onclick="this.classList.toggle('sel')">🏠 生活</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+        <label style="font-size:12px;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;">
+          <input type="checkbox" id="nmPinned"> 📌 釘選置頂
+        </label>
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('noteModal')">取消</button>
-      <button class="btn btn-primary" onclick="saveNote()">儲存</button>
+      <button class="btn btn-ghost" id="nmDelBtn" onclick="deleteNote(document.getElementById('nmEditId').value)" style="display:none;color:var(--red);">刪除</button>
+      <button class="btn btn-primary" onclick="saveNote()" style="flex:1;">儲存</button>
     </div>
   </div>
 </div>
@@ -1314,12 +1550,228 @@ body::before {
   </div>
 </div>
 
+<!-- Habit Modal -->
+<div class="modal-overlay" id="habitModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="habitModalTitle">新增習慣</h3>
+      <button class="modal-close" onclick="closeModal('habitModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">習慣名稱</label>
+        <input type="text" class="form-input" id="habitName" placeholder="例：喝水 8 杯">
+      </div>
+      <div class="form-group">
+        <label class="form-label">圖示</label>
+        <div class="equip-chips" id="habitIconPicker">
+          <span class="equip-chip sel" data-v="💧">💧</span>
+          <span class="equip-chip" data-v="📖">📖</span>
+          <span class="equip-chip" data-v="🧘">🧘</span>
+          <span class="equip-chip" data-v="💊">💊</span>
+          <span class="equip-chip" data-v="🛌">🛌</span>
+          <span class="equip-chip" data-v="🚶">🚶</span>
+          <span class="equip-chip" data-v="✏️">✏️</span>
+          <span class="equip-chip" data-v="🎯">🎯</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">類型</label>
+        <div class="equip-chips" id="habitTypePicker">
+          <span class="equip-chip sel" data-v="check">✅ 打卡</span>
+          <span class="equip-chip" data-v="strength">🏋️ 重訓</span>
+          <span class="equip-chip" data-v="cardio">🏃 有氧</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">頻率</label>
+        <div class="equip-chips" id="habitFreqPicker">
+          <span class="equip-chip sel" data-v="daily">每天</span>
+          <span class="equip-chip" data-v="weekly">每週指定</span>
+        </div>
+      </div>
+      <div class="form-group" id="habitWeekdaysGroup" style="display:none;">
+        <label class="form-label">哪幾天</label>
+        <div class="equip-chips" id="habitWeekdays">
+          <span class="equip-chip" data-v="1">一</span>
+          <span class="equip-chip" data-v="2">二</span>
+          <span class="equip-chip" data-v="3">三</span>
+          <span class="equip-chip" data-v="4">四</span>
+          <span class="equip-chip" data-v="5">五</span>
+          <span class="equip-chip" data-v="6">六</span>
+          <span class="equip-chip" data-v="0">日</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="habitDelBtn" onclick="deleteHabit()" style="display:none;color:var(--red);">刪除</button>
+      <button class="btn btn-primary" onclick="saveHabit()" style="flex:1;">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Workout Log Modal -->
+<div class="modal-overlay" id="workoutModal">
+  <div class="modal" style="max-height:90vh;">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="workoutModalTitle">紀錄訓練</h3>
+      <button class="modal-close" onclick="closeModal('workoutModal')">✕</button>
+    </div>
+    <div class="modal-body" style="overflow-y:auto;max-height:65vh;">
+      <!-- Step 1: Body parts -->
+      <div class="step-label">今天練哪裡？（可多選）</div>
+      <div class="bp-grid" id="woBpGrid"></div>
+      <!-- Step 2: Exercises -->
+      <div id="woStep2" style="display:none;">
+        <div class="step-label">選動作</div>
+        <div id="woExPicks"></div>
+      </div>
+      <!-- Step 3: Sets -->
+      <div id="woStep3" style="display:none;">
+        <div class="step-label">填重量 / 組數</div>
+        <div id="woSetCards"></div>
+      </div>
+      <!-- Cardio section -->
+      <div id="woCardioStep" style="display:none;">
+        <div class="step-label">有氧紀錄</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;" id="woCardioType">
+          <span class="equip-chip sel" data-v="快走">🚶 快走</span>
+          <span class="equip-chip" data-v="跑步">🏃 跑步</span>
+          <span class="equip-chip" data-v="飛輪">🚴 飛輪</span>
+          <span class="equip-chip" data-v="橢圓機">⭕ 橢圓機</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:1;"><label class="form-label">時間（分鐘）</label><input type="number" class="form-input" id="woCardioDur" placeholder="30"></div>
+          <div class="form-group" style="flex:1;"><label class="form-label">距離 km（選填）</label><input type="number" class="form-input" id="woCardioDist" placeholder="" step="0.1"></div>
+        </div>
+        <div class="form-group"><label class="form-label">備註（選填）</label><input type="text" class="form-input" id="woCardioNote" placeholder="心率、感受..."></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveWorkoutLog()" style="flex:1;">💾 儲存訓練</button>
+    </div>
+  </div>
+</div>
+
+<!-- Goal Modal -->
+<div class="modal-overlay" id="goalModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="goalModalTitle">新增目標</h3>
+      <button class="modal-close" onclick="closeModal('goalModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">目標名稱</label>
+        <input type="text" class="form-input" id="goalName" placeholder="例：3 個月減脂計畫">
+      </div>
+      <div class="form-group">
+        <label class="form-label">說明</label>
+        <input type="text" class="form-input" id="goalDesc" placeholder="例：體脂從 25% 降到 20%">
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex:1;"><label class="form-label">開始日期</label><input type="date" class="form-input" id="goalStart"></div>
+        <div class="form-group" style="flex:1;"><label class="form-label">結束日期</label><input type="date" class="form-input" id="goalEnd"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex:1;"><label class="form-label">起始值</label><input type="number" class="form-input" id="goalStartVal" placeholder="25" step="0.1"></div>
+        <div class="form-group" style="flex:1;"><label class="form-label">目標值</label><input type="number" class="form-input" id="goalTargetVal" placeholder="20" step="0.1"></div>
+        <div class="form-group" style="flex:0.6;"><label class="form-label">單位</label><input type="text" class="form-input" id="goalUnit" placeholder="%" maxlength="8"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">里程碑（選填，一行一個：日期 目標值 備註）</label>
+        <textarea class="form-input" id="goalMilestones" rows="3" placeholder="2026-04-01 23 第一個月&#10;2026-05-01 21 第二個月" style="resize:vertical;font-size:12px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="goalDelBtn" onclick="deleteGoal()" style="display:none;color:var(--red);">刪除</button>
+      <button class="btn btn-primary" onclick="saveGoal()" style="flex:1;">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Goal Log Modal -->
+<div class="modal-overlay" id="goalLogModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="goalLogTitle">紀錄進度</h3>
+      <button class="modal-close" onclick="closeModal('goalLogModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group" style="flex:1;"><label class="form-label">日期</label><input type="date" class="form-input" id="goalLogDate"></div>
+        <div class="form-group" style="flex:1;"><label class="form-label">數值 <span id="goalLogUnit"></span></label><input type="number" class="form-input" id="goalLogVal" step="0.1"></div>
+      </div>
+      <div class="form-group"><label class="form-label">備註</label><input type="text" class="form-input" id="goalLogNote" placeholder="選填"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveGoalLog()" style="flex:1;">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Daily Target Modal -->
+<div class="modal-overlay" id="dailyTargetModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3>每日必達目標</h3>
+      <button class="modal-close" onclick="closeModal('dailyTargetModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">每天至少完成幾個習慣？</label>
+        <input type="number" class="form-input" id="dailyTargetInput" min="1" max="20" placeholder="5" style="font-size:24px;text-align:center;font-weight:700;">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="saveDailyTarget()" style="flex:1;">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- MIT Pick Modal -->
+<div class="modal-overlay" id="mitPickModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3 id="mitPickTitle">挑選焦點任務</h3>
+      <button class="modal-close" onclick="closeModal('mitPickModal')">✕</button>
+    </div>
+    <div class="modal-body" id="mitPickList" style="max-height:60vh;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- Hidden file input for InBody -->
+<input type="file" id="inbodyFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleInbodyFile(event)">
+
+<!-- InBody Result Modal -->
+<div class="modal-overlay" id="inbodyModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <h3>InBody 辨識結果</h3>
+      <button class="modal-close" onclick="closeModal('inbodyModal')">✕</button>
+    </div>
+    <div class="modal-body" id="inbodyModalBody">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-footer" id="inbodyModalFooter" style="display:none;">
+      <button class="btn btn-primary" onclick="saveInbodyResult()" style="flex:1;">💾 儲存到紀錄</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast-container" id="toastBox"></div>
 
 <script>
 // =============== DATA LAYER ===============
-const SK = { schedules:'pa_s', todos:'pa_t', notes:'pa_n', settings:'pa_set', favorites:'pa_f' };
+const SK = { schedules:'pa_s', todos:'pa_t', notes:'pa_n', settings:'pa_set', favorites:'pa_f', habits:'pa_h', habitLogs:'pa_hl', goals:'pa_g', mit:'pa_mit', inbody:'pa_ib' };
 // In-memory cache to survive localStorage quirks in artifact preview
 const _cache = {};
 const get = k => {
@@ -1335,8 +1787,11 @@ const set = (k,v) => {
 };
 const DEFAULTS = {
   whCalendar: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
+  whCalendarRead: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
   whLine: 'https://hook.us2.make.com/8n4u37jnbr495eomnxn04y4iqaxp67rp',
+  whDataSync: '',
   reminderTime: '07:30',
+  dailyHabitTarget: 5,
 };
 const getSett = () => {
   try {
@@ -1377,9 +1832,10 @@ function sw(name, idx) {
   if(name==='schedule') { renderSchedule(); fetchGCalMonthEvents(calYear,calMonth).then(()=>renderSchedule()); }
   if(name==='todos') renderTodos();
   if(name==='notes') renderNotes();
+  if(name==='habits') renderHabits();
   if(name==='settings') loadSettings();
-  // FAB visibility
-  document.getElementById('fabBtn').style.display = name==='settings'?'none':'flex';
+  // FAB & chat bubble visibility
+  document.getElementById('fabBtn').style.display = (name==='settings')?'none':'flex';
 }
 
 // =============== MODAL ===============
@@ -1394,6 +1850,7 @@ function fabAction() {
   if(currentPanel==='schedule') openScheduleModal();
   else if(currentPanel==='todos') openTodoModal();
   else if(currentPanel==='notes') openNoteModal();
+  else if(currentPanel==='habits') openHabitModal();
   else openScheduleModal(); // dashboard default
 }
 
@@ -1568,6 +2025,15 @@ function renderSchedule() {
 }
 
 // --- Schedule Modal ---
+function autoFillEndTime() {
+  const start = document.getElementById('smStart').value;
+  const end = document.getElementById('smEnd').value;
+  if(start && !end) {
+    const [h,m] = start.split(':').map(Number);
+    document.getElementById('smEnd').value = String((h+1)%24).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  }
+}
+
 function openScheduleModal(editId=null) {
   document.getElementById('smEditId').value = editId||'';
   document.getElementById('smTitle').textContent = editId?'編輯行程':'新增行程';
@@ -1603,7 +2069,7 @@ async function saveSchedule() {
     id: editId||uid(), title,
     date: document.getElementById('smDate').value,
     startTime: document.getElementById('smStart').value,
-    endTime: document.getElementById('smEnd').value,
+    endTime: document.getElementById('smEnd').value || (document.getElementById('smStart').value ? (() => { const [h,m]=document.getElementById('smStart').value.split(':').map(Number); return String((h+1)%24).padStart(2,'0')+':'+String(m).padStart(2,'0'); })() : ''),
     category: document.getElementById('smCat').value,
     location: document.getElementById('smLoc').value.trim(),
     note: document.getElementById('smNote').value.trim(),
@@ -1850,11 +2316,11 @@ const PRI_ORDER = {'urgent-important':0,'important':1,'urgent':2,'normal':3};
 const PRI_LABEL = {'urgent-important':'緊急重要','important':'重要','urgent':'緊急','normal':'一般'};
 const PRI_CLASS = {'urgent-important':'pri-ui','important':'pri-i','urgent':'pri-u','normal':'pri-n'};
 
-const KANBAN_COLS = [
-  { key:'urgent-important', cls:'col-ui', icon:'🔥', label:'緊急重要', sub:'立刻做' },
-  { key:'important', cls:'col-i', icon:'⭐', label:'重要', sub:'安排時間做' },
-  { key:'urgent', cls:'col-u', icon:'⚡', label:'緊急', sub:'委派或快速處理' },
-  { key:'normal', cls:'col-n', icon:'📋', label:'一般', sub:'有空再做' },
+const GRID_COLS = [
+  { key:'urgent-important', cls:'tg-ui', icon:'🔥', label:'緊急重要' },
+  { key:'important', cls:'tg-i', icon:'⭐', label:'重要' },
+  { key:'urgent', cls:'tg-u', icon:'⚡', label:'緊急' },
+  { key:'normal', cls:'tg-n', icon:'📋', label:'一般' },
 ];
 
 function quickAdd() {
@@ -1929,217 +2395,644 @@ function fmtDueLabel(t) {
 
 function renderTodos() {
   const all = get('todos');
-  const el = document.getElementById('kanbanScroll');
+  
+  // Inbox count
+  const pending = all.filter(t => !t.completed).length;
+  const overdue = all.filter(t => !t.completed && t.dueDate && t.dueDate < today()).length;
+  document.getElementById('todoInboxCount').textContent = `${pending} 項${overdue ? ' · ' + overdue + ' 過期' : ''}`;
 
-  el.innerHTML = KANBAN_COLS.map(col => {
+  // 2×2 Grid
+  const el = document.getElementById('todoGrid');
+  el.innerHTML = GRID_COLS.map(col => {
     const items = all.filter(t => t.priority === col.key)
       .sort((a,b) => {
         if(a.completed !== b.completed) return a.completed ? 1 : -1;
         if(a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
         return a.dueDate ? -1 : b.dueDate ? 1 : 0;
       });
-    const pending = items.filter(t => !t.completed).length;
-
-    return `
-    <div class="kanban-col ${col.cls}">
-      <div class="k-head">
-        <div class="k-dot"></div>
-        <div class="k-info"><div class="k-label">${col.icon} ${col.label}</div><div class="k-sub">${col.sub}</div></div>
-        <div class="k-count">${pending}</div>
+    const colPending = items.filter(t => !t.completed).length;
+    return `<div class="tg-card ${col.cls}">
+      <div class="tg-head">
+        <div class="tg-label">${col.icon} ${col.label}</div>
+        <div class="tg-count">${colPending}</div>
       </div>
-      <div class="k-items">
+      <div class="tg-items">
         ${items.length ? items.map(t => {
           const dl = fmtDueLabel(t);
-          return `
-          <div class="k-card" onclick="openTodoModal('${t.id}')">
-            <div class="k-check ${t.completed?'done':''}" onclick="toggleTodo('${t.id}',event)">${t.completed?'✓':''}</div>
-            <div class="k-body">
-              <div class="k-title ${t.completed?'done':''}">${esc(t.title)}</div>
-              ${t.note?`<div class="k-note">${esc(t.note)}</div>`:''}
-              <span class="k-due ${dl.od?'overdue':''}">${dl.text}</span>
+          return `<div class="tg-item" onclick="openTodoModal('${t.id}')">
+            <div class="tg-ck ${t.completed?'done':''}" onclick="toggleTodo('${t.id}',event)">${t.completed?'\u2713':''}</div>
+            <div class="tg-body">
+              <div class="tg-title ${t.completed?'done':''}">${esc(t.title)}</div>
+              ${t.dueDate?`<div class="tg-due ${dl.od?'overdue':''}">${dl.text}</div>`:''}
             </div>
           </div>`;
-        }).join('') : '<div class="k-empty">沒有待辦 ✨</div>'}
+        }).join('') : '<div class="tg-empty">✨</div>'}
       </div>
     </div>`;
   }).join('');
 
-  // Scroll indicator dots
-  const dots = document.getElementById('kanbanDots');
-  dots.innerHTML = KANBAN_COLS.map((_,i) => `<div class="kanban-dot ${i===0?'active':''}" data-idx="${i}"></div>`).join('');
-
-  // Track active column on scroll
-  initKanbanDots();
+  // MIT + Done
+  renderMIT();
+  renderDoneList();
 }
 
-function initKanbanDots() {
-  const scroll = document.getElementById('kanbanScroll');
-  const dots = document.querySelectorAll('.kanban-dot');
-  if(!scroll || !dots.length) return;
+// =============== MIT (Most Important Tasks) ===============
+const PRI_ICON = {'urgent-important':'🔥','important':'⭐','urgent':'⚡','normal':'📋'};
+const PRI_SRC_STYLE = {
+  'urgent-important':'background:var(--red-bg);color:var(--red);',
+  'important':'background:var(--orange-bg);color:var(--orange);',
+  'urgent':'background:var(--blue-bg);color:var(--blue);',
+  'normal':'background:var(--green-bg);color:var(--green);',
+};
 
-  scroll.onscroll = () => {
-    const cols = scroll.querySelectorAll('.kanban-col');
-    const scrollLeft = scroll.scrollLeft;
-    const colWidth = cols[0]?.offsetWidth + 12; // gap
-    const idx = Math.round(scrollLeft / colWidth);
-    dots.forEach((d,i) => d.classList.toggle('active', i===idx));
-  };
+function getMitData() {
+  const raw = get('mit');
+  const td = today();
+  const tm = fmtDate(new Date(Date.now() + 864e5));
+  // Auto-rotate: if saved "tomorrow" date is today, promote to today
+  let data = Array.isArray(raw) ? null : raw;
+  if(!data) data = { today:{ date:td, items:[] }, tomorrow:{ date:tm, items:[] } };
+  // Rotation check
+  if(data.tomorrow?.date && data.tomorrow.date <= td) {
+    // Tomorrow has become today (or past)
+    data.today = { date:td, items:data.tomorrow.items.map(i => ({...i, completedAt:null})) };
+    data.tomorrow = { date:tm, items:[] };
+  }
+  if(data.today?.date && data.today.date < td) {
+    // Today is stale, clear it
+    data.today = { date:td, items:[] };
+  }
+  if(!data.tomorrow?.date || data.tomorrow.date <= td) {
+    data.tomorrow = { date:tm, items:[] };
+  }
+  return data;
+}
+
+function saveMitData(data) {
+  _cache.mit = data;
+  try { localStorage.setItem(SK.mit, JSON.stringify(data)); } catch{}
+}
+
+function renderMIT() {
+  const data = getMitData();
+  const todos = get('todos');
+  const td = today();
+
+  // Render today card
+  renderMitCard('mitTodayCard', data.today, 'mit-today', '🎯 今日焦點', 'today');
+  // Render tomorrow card
+  renderMitCard('mitTomorrowCard', data.tomorrow, 'mit-tomorrow', '🌙 明日焦點', 'tomorrow');
+}
+
+function renderMitCard(containerId, mitDay, cls, title, which) {
+  const el = document.getElementById(containerId);
+  const todos = get('todos');
+  const items = mitDay.items || [];
+  const doneCount = items.filter(i => i.completedAt).length;
+  const total = items.length;
+  const pct = total ? Math.round(doneCount / total * 100) : 0;
+
+  // Date label
+  const d = new Date(mitDay.date + 'T00:00:00');
+  const dateLabel = `${d.getMonth()+1}/${d.getDate()} ${DAYS[d.getDay()]}`;
+
+  let html = `<div class="mit-card ${cls}">
+    <div class="mit-header">
+      <div class="mit-title">${title}</div>
+      <div class="mit-date">${dateLabel}</div>
+    </div>
+    <div class="mit-progress">
+      <div class="mit-bar"><div class="mit-bar-fill" style="width:${pct}%"></div></div>
+      <div class="mit-pct">${doneCount}/${total || 3}</div>
+    </div>`;
+
+  items.forEach((item, idx) => {
+    const todo = todos.find(t => t.id === item.todoId);
+    const isDone = !!item.completedAt;
+    const priLabel = todo ? (PRI_ICON[todo.priority] || '📋') + ' ' + (PRI_LABEL[todo.priority] || '') : '';
+    const timeLabel = isDone ? ' · ' + new Date(item.completedAt).toTimeString().slice(0,5) + ' 完成' : '';
+    html += `<div class="mit-item${isDone?' done':''}">
+      <div class="mit-check${isDone?' on':''}" onclick="toggleMit('${which}',${idx})">${isDone?'✓':''}</div>
+      <div class="mit-item-body">
+        <div class="mit-item-title${isDone?' striked':''}">${esc(todo?.title || item.title || '(已刪除)')}</div>
+        <div class="mit-item-tag">${priLabel}${timeLabel}</div>
+      </div>
+      <button class="mit-remove" onclick="removeMit('${which}',${idx})" title="移除">✕</button>
+      <div class="mit-item-order">${idx+1}</div>
+    </div>`;
+  });
+
+  // Empty slots
+  for(let i = items.length; i < 3; i++) {
+    html += `<div class="mit-empty">第 ${i+1} 件還沒選</div>`;
+  }
+
+  if(items.length < 3) {
+    html += `<button class="mit-pick-btn" onclick="openMitPick('${which}')">+ 從待辦清單挑選</button>`;
+  }
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function toggleMit(which, idx) {
+  const data = getMitData();
+  const day = data[which];
+  if(!day?.items[idx]) return;
+  const item = day.items[idx];
+  if(item.completedAt) {
+    item.completedAt = null;
+    // Also uncomplete the todo
+    const todos = get('todos');
+    const t = todos.find(x => x.id === item.todoId);
+    if(t) { t.completed = false; t.completedAt = null; set('todos', todos); }
+  } else {
+    item.completedAt = new Date().toISOString();
+    // Also complete the todo
+    const todos = get('todos');
+    const t = todos.find(x => x.id === item.todoId);
+    if(t) { t.completed = true; t.completedAt = item.completedAt; set('todos', todos); }
+  }
+  saveMitData(data);
+  renderTodos();
+  updateBadges();
+}
+
+function removeMit(which, idx) {
+  const data = getMitData();
+  data[which].items.splice(idx, 1);
+  saveMitData(data);
+  renderTodos();
+}
+
+let mitPickTarget = 'today';
+function openMitPick(which) {
+  mitPickTarget = which;
+  const data = getMitData();
+  const day = data[which];
+  const existingIds = new Set((day.items || []).map(i => i.todoId));
+  const todos = get('todos').filter(t => !t.completed && !existingIds.has(t.id))
+    .sort((a,b) => (PRI_ORDER[a.priority]||9) - (PRI_ORDER[b.priority]||9));
+
+  document.getElementById('mitPickTitle').textContent = which === 'today' ? '挑選今日焦點' : '挑選明日焦點';
+  const list = document.getElementById('mitPickList');
+
+  if(!todos.length) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3);">沒有可選的待辦</div>';
+  } else {
+    const DOT_COLORS = {'urgent-important':'var(--red)','important':'var(--orange)','urgent':'var(--blue)','normal':'var(--green)'};
+    list.innerHTML = todos.map(t => {
+      const dl = fmtDueLabel(t);
+      return `<div class="mit-pick-item" onclick="pickMit('${t.id}')">
+        <div class="mit-pick-dot" style="background:${DOT_COLORS[t.priority]||'var(--text3)'}"></div>
+        <div class="mit-pick-title">${esc(t.title)}</div>
+        ${t.dueDate ? `<div class="mit-pick-due">${dl.text}</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+  openModal('mitPickModal');
+}
+
+function pickMit(todoId) {
+  const data = getMitData();
+  const day = data[mitPickTarget];
+  if(day.items.length >= 3) { toast('最多 3 件焦點任務','error'); return; }
+  const todo = get('todos').find(t => t.id === todoId);
+  day.items.push({ todoId, title: todo?.title || '', completedAt: null });
+  saveMitData(data);
+  closeModal('mitPickModal');
+  renderTodos();
+  toast('已加入焦點 🎯','success');
+}
+
+// =============== DONE LIST ===============
+function renderDoneList() {
+  const todos = get('todos');
+  const td = today();
+  const mitData = getMitData();
+  const mitTodayIds = new Set((mitData.today?.items || []).map(i => i.todoId));
+
+  // Today's completed items
+  const doneToday = todos.filter(t => t.completed && t.completedAt && t.completedAt.slice(0,10) === td)
+    .sort((a,b) => (b.completedAt||'').localeCompare(a.completedAt||''));
+
+  const el = document.getElementById('doneListCard');
+
+  if(!doneToday.length) {
+    el.innerHTML = '';
+    return;
+  }
+
+  // Yesterday's count for motivation
+  const yesterday = fmtDate(new Date(Date.now() - 864e5));
+  const doneYesterday = todos.filter(t => t.completed && t.completedAt && t.completedAt.slice(0,10) === yesterday).length;
+
+  let motivate = '';
+  if(doneToday.length > doneYesterday && doneYesterday > 0) {
+    motivate = `<div class="done-motivate">💪 超過昨天的 ${doneYesterday} 件！保持節奏 🔥</div>`;
+  } else if(doneToday.length >= 3) {
+    motivate = '<div class="done-motivate">🎉 今天很有生產力！</div>';
+  }
+
+  el.innerHTML = `
+    <div style="font-size:10px;letter-spacing:1.5px;color:var(--text3);font-weight:600;margin:16px 0 8px;">✅ 今日完成</div>
+    <div class="done-card">
+      <div class="done-header">
+        <div class="done-title">做得好！今天完成了</div>
+        <div class="done-count">${doneToday.length}</div>
+      </div>
+      ${doneToday.map(t => {
+        const time = t.completedAt ? new Date(t.completedAt).toTimeString().slice(0,5) : '';
+        const isMit = mitTodayIds.has(t.id);
+        const srcStyle = PRI_SRC_STYLE[t.priority] || PRI_SRC_STYLE.normal;
+        const srcLabel = isMit ? '🎯 MIT' : (PRI_ICON[t.priority]||'📋') + ' ' + (PRI_LABEL[t.priority]||'一般');
+        return `<div class="done-item">
+          <div class="done-check">✓</div>
+          <div class="done-item-body">
+            <div class="done-item-title">${esc(t.title)}</div>
+            <div class="done-item-time">${time} 完成</div>
+          </div>
+          <span class="done-item-src" style="${isMit ? 'background:rgba(100,181,246,0.15);color:#2e6b9c;' : srcStyle}">${srcLabel}</span>
+        </div>`;
+      }).join('')}
+      ${motivate}
+    </div>`;
 }
 
 // =============== NOTES ===============
+let noteTagFilter = null; // null = all
+let noteVoiceRecognition = null;
+let noteIsRecording = false;
+
+const NOTE_TEMPLATES = {
+  '訓練反思': {
+    title: '訓練反思 — ' + new Date().toLocaleDateString('zh-TW',{month:'numeric',day:'numeric'}),
+    content: '【今天練了什麼】\n\n\n【感受如何（1-5）】\n體力：\n專注度：\n滿意度：\n\n【做得好的地方】\n\n\n【需要改善】\n\n\n【下次訓練提醒】\n',
+    tags: ['訓練'],
+  },
+  '每週回顧': {
+    title: 'Week 回顧',
+    content: '【🎯 本週目標達成】\n✅ \n❌ \n\n【💪 訓練亮點】\n\n\n【📊 身體數據】\n體重：\n體脂：\n\n【🧠 心得反思】\n\n\n【🎯 下週計畫】\n',
+    tags: ['訓練','學習'],
+  },
+  '會議記錄': {
+    title: '會議記錄 — ',
+    content: '【日期】\n【出席】\n\n【討論事項】\n1. \n2. \n3. \n\n【決議 / 行動項目】\n- \n\n【下次會議】\n',
+    tags: ['工作'],
+  },
+  '靈感記錄': {
+    title: '',
+    content: '',
+    tags: ['靈感'],
+  },
+};
+
+function quickNote() {
+  const inp = document.getElementById('noteQuickInput');
+  const text = inp.value.trim();
+  if(!text) return;
+  const list = get('notes');
+  list.push({
+    id: uid(), title: '', content: text, tags: [],
+    pinned: false, isVoice: noteIsRecording,
+    createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+  });
+  set('notes', list);
+  inp.value = '';
+  toast('已記錄 ✏️', 'success');
+  renderNotes();
+}
+
+function openTemplateNote(tplName) {
+  const tpl = NOTE_TEMPLATES[tplName];
+  if(!tpl) return;
+  openNoteModal();
+  document.getElementById('nmName').value = tpl.title;
+  document.getElementById('nmContent').value = tpl.content;
+  // Set tags
+  document.querySelectorAll('#nmTagPicks .nm-tag-pick').forEach(el => {
+    el.classList.toggle('sel', tpl.tags.includes(el.dataset.t));
+  });
+}
+
 function openNoteModal(editId=null) {
-  document.getElementById('nmEditId').value=editId||'';
-  document.getElementById('nmTitle').textContent=editId?'編輯筆記':'新增筆記';
+  document.getElementById('nmEditId').value = editId || '';
+  document.getElementById('nmTitle').textContent = editId ? '編輯筆記' : '新增筆記';
+  document.getElementById('nmDelBtn').style.display = editId ? 'block' : 'none';
   if(editId) {
-    const n=get('notes').find(x=>x.id===editId);
-    if(n) { document.getElementById('nmName').value=n.title; document.getElementById('nmContent').value=n.content; document.getElementById('nmTags').value=(n.tags||[]).join(', '); }
-  } else { ['nmName','nmContent','nmTags'].forEach(id=>document.getElementById(id).value=''); }
+    const n = get('notes').find(x => x.id === editId);
+    if(n) {
+      document.getElementById('nmName').value = n.title || '';
+      document.getElementById('nmContent').value = n.content || '';
+      document.getElementById('nmPinned').checked = !!n.pinned;
+      document.querySelectorAll('#nmTagPicks .nm-tag-pick').forEach(el => {
+        el.classList.toggle('sel', (n.tags || []).includes(el.dataset.t));
+      });
+    }
+  } else {
+    document.getElementById('nmName').value = '';
+    document.getElementById('nmContent').value = '';
+    document.getElementById('nmPinned').checked = false;
+    document.querySelectorAll('#nmTagPicks .nm-tag-pick').forEach(el => el.classList.remove('sel'));
+  }
   openModal('noteModal');
 }
 
 function saveNote() {
-  const title=document.getElementById('nmName').value.trim();
-  const content=document.getElementById('nmContent').value.trim();
-  if(!title&&!content) { toast('請輸入內容','error'); return; }
-  const editId=document.getElementById('nmEditId').value;
-  const list=get('notes');
-  const tags=document.getElementById('nmTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const content = document.getElementById('nmContent').value.trim();
+  const title = document.getElementById('nmName').value.trim();
+  if(!title && !content) { toast('請輸入內容','error'); return; }
+  const editId = document.getElementById('nmEditId').value;
+  const list = get('notes');
+  const tags = [...document.querySelectorAll('#nmTagPicks .nm-tag-pick.sel')].map(el => el.dataset.t);
+  const pinned = document.getElementById('nmPinned').checked;
   const entry = {
-    id: editId||uid(), title:title||'無標題', content, tags,
-    createdAt: editId?(list.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),
+    id: editId || uid(), title, content, tags, pinned,
+    isVoice: editId ? (list.find(x => x.id === editId)?.isVoice || false) : false,
+    createdAt: editId ? (list.find(x => x.id === editId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
-  if(editId) { const i=list.findIndex(x=>x.id===editId); if(i>=0) list[i]=entry; }
+  if(editId) { const i = list.findIndex(x => x.id === editId); if(i >= 0) list[i] = entry; }
   else list.push(entry);
-  set('notes',list);
+  set('notes', list);
   closeModal('noteModal');
-  toast(editId?'筆記已更新':'筆記已新增','success');
+  toast(editId ? '已更新' : '已新增', 'success');
   renderNotes();
 }
 
 function deleteNote(id) {
-  if(!confirm('刪除此筆記？')) return;
-  set('notes', get('notes').filter(x=>x.id!==id));
-  toast('已刪除','success'); renderNotes();
+  if(!id || !confirm('刪除此筆記？')) return;
+  set('notes', get('notes').filter(x => x.id !== id));
+  closeModal('noteModal');
+  toast('已刪除', 'success');
+  renderNotes();
+}
+
+function toggleNotePin(id, e) {
+  e?.stopPropagation();
+  const list = get('notes');
+  const n = list.find(x => x.id === id);
+  if(n) n.pinned = !n.pinned;
+  set('notes', list);
+  renderNotes();
+}
+
+function setNoteTagFilter(tag, el) {
+  noteTagFilter = (noteTagFilter === tag) ? null : tag;
+  document.querySelectorAll('#noteTagBar .tag-chip').forEach(c => c.classList.remove('active'));
+  if(noteTagFilter === null) {
+    document.querySelector('#noteTagBar .tag-chip')?.classList.add('active'); // "全部"
+  } else {
+    el?.classList.add('active');
+  }
+  renderNotes();
+}
+
+function fmtNoteTime(iso) {
+  const d = new Date(iso);
+  const td = today(), yd = fmtDate(new Date(Date.now() - 864e5));
+  const ds = fmtDate(d);
+  const time = d.toTimeString().slice(0,5);
+  if(ds === td) return `今天 · ${time}`;
+  if(ds === yd) return `昨天 · ${time}`;
+  return `${d.getMonth()+1} 月 ${d.getDate()} 日 ${DAYS[d.getDay()]} · ${time}`;
 }
 
 function renderNotes() {
-  const list=get('notes').sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
-  const el=document.getElementById('notesList');
-  if(!list.length) { el.innerHTML='<div class="empty" style="grid-column:1/-1;"><div class="icon">✎</div><div class="msg">還沒有筆記</div></div>'; return; }
-  el.innerHTML = list.map(n=>`
-    <div class="note-card" onclick="openNoteModal('${n.id}')">
-      <h4>${esc(n.title)}</h4>
-      <p>${esc(n.content)}</p>
-      ${n.tags?.length?`<div class="note-tags">${n.tags.map(t=>`<span class="note-tag">${esc(t)}</span>`).join('')}</div>`:''}
-    </div>`).join('');
+  let list = get('notes').sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+
+  // Tag bar
+  const allTags = {};
+  list.forEach(n => (n.tags || []).forEach(t => { allTags[t] = (allTags[t] || 0) + 1; }));
+  const tagBar = document.getElementById('noteTagBar');
+  let tbHTML = `<div class="tag-chip ${noteTagFilter===null?'active':''}" onclick="setNoteTagFilter(null,this)">全部 <span style="font-size:9px;opacity:0.6;">${list.length}</span></div>`;
+  const TAG_ICONS = {訓練:'🏋️',工作:'📋',靈感:'💡',學習:'📖',身體:'🫀',生活:'🏠'};
+  Object.keys(allTags).forEach(t => {
+    tbHTML += `<div class="tag-chip ${noteTagFilter===t?'active':''}" onclick="setNoteTagFilter('${t}',this)">${TAG_ICONS[t]||'#'} ${t} <span style="font-size:9px;opacity:0.6;">${allTags[t]}</span></div>`;
+  });
+  tagBar.innerHTML = tbHTML;
+
+  // Filter
+  if(noteTagFilter) list = list.filter(n => (n.tags || []).includes(noteTagFilter));
+
+  const pinned = list.filter(n => n.pinned);
+  const recent = list.filter(n => !n.pinned);
+
+  function cardHTML(n) {
+    const tagCls = (t) => 'n-tag n-tag-' + t;
+    return `<div class="n-card${n.pinned?' pinned':''}" onclick="openNoteModal('${n.id}')">
+      ${n.pinned?'<div class="n-pin">📌</div>':''}
+      <div class="n-time">${fmtNoteTime(n.updatedAt)}${n.isVoice?' <span class="n-voice-badge">🎤 語音</span>':''}</div>
+      ${n.title ? `<div class="n-title">${esc(n.title)}</div>` : ''}
+      <div class="n-body">${esc(n.content)}</div>
+      ${(n.tags||[]).length ? '<div class="n-tags">' + n.tags.map(t=>`<span class="${tagCls(t)}">${t}</span>`).join('') + '</div>' : ''}
+    </div>`;
+  }
+
+  const pinnedEl = document.getElementById('notesPinnedSection');
+  pinnedEl.innerHTML = pinned.length ? '<div class="n-section">📌 已釘選</div>' + pinned.map(cardHTML).join('') : '';
+
+  const recentEl = document.getElementById('notesRecentSection');
+  if(recent.length) {
+    recentEl.innerHTML = (pinned.length ? '<div class="n-section">🕐 最近筆記</div>' : '') + recent.map(cardHTML).join('');
+  } else if(!pinned.length) {
+    recentEl.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text3);font-size:13px;">✏️ 還沒有筆記<br><span style="font-size:11px;">在上方輸入框快速記一筆</span></div>';
+  } else {
+    recentEl.innerHTML = '';
+  }
+}
+
+// Voice-to-text
+function toggleNoteVoice() {
+  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    toast('此瀏覽器不支援語音輸入','error');
+    return;
+  }
+  if(noteIsRecording) {
+    noteIsRecording = false;
+    noteVoiceRecognition?.stop();
+    document.getElementById('noteVoiceBtn').classList.remove('recording');
+    document.getElementById('noteVoiceIndicator').classList.remove('active');
+    return;
+  }
+  noteIsRecording = true;
+  document.getElementById('noteVoiceBtn').classList.add('recording');
+  document.getElementById('noteVoiceIndicator').classList.add('active');
+  document.getElementById('noteVoiceLive').textContent = '正在聆聽...';
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  noteVoiceRecognition = new SR();
+  noteVoiceRecognition.lang = 'zh-TW';
+  noteVoiceRecognition.continuous = true;
+  noteVoiceRecognition.interimResults = true;
+
+  let finalTranscript = '';
+  const input = document.getElementById('noteQuickInput');
+
+  noteVoiceRecognition.onresult = (e) => {
+    let interim = '';
+    for(let i = e.resultIndex; i < e.results.length; i++) {
+      if(e.results[i].isFinal) {
+        finalTranscript += e.results[i][0].transcript;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    input.value = finalTranscript + interim;
+    document.getElementById('noteVoiceLive').textContent = interim || finalTranscript.slice(-30) || '正在聆聽...';
+  };
+
+  noteVoiceRecognition.onerror = (e) => {
+    console.error('Voice error:', e.error);
+    if(e.error !== 'no-speech') toast('語音辨識錯誤：' + e.error, 'error');
+    toggleNoteVoice();
+  };
+
+  noteVoiceRecognition.onend = () => {
+    if(noteIsRecording) {
+      // Auto-save when voice stops
+      noteIsRecording = false;
+      document.getElementById('noteVoiceBtn').classList.remove('recording');
+      document.getElementById('noteVoiceIndicator').classList.remove('active');
+      if(finalTranscript.trim()) {
+        // Auto save as voice note
+        const list = get('notes');
+        list.push({
+          id: uid(), title: '', content: finalTranscript.trim(), tags: [],
+          pinned: false, isVoice: true,
+          createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        });
+        set('notes', list);
+        input.value = '';
+        toast('語音筆記已儲存 🎤', 'success');
+        renderNotes();
+        finalTranscript = '';
+      }
+    }
+  };
+
+  noteVoiceRecognition.start();
 }
 
 // =============== DASHBOARD ===============
-function renderDashboard() {
-  const td=today();
-  const scheds=get('schedules');
-  const todos=get('todos');
-  const notes=get('notes');
+function dashQuickNote() {
+  const inp = document.getElementById('dashNoteInput');
+  const text = inp.value.trim();
+  if(!text) return;
+  const list = get('notes');
+  list.push({ id:uid(), title:'', content:text, tags:[], pinned:false, isVoice:false, createdAt:new Date().toISOString(), updatedAt:new Date().toISOString() });
+  set('notes', list); inp.value = '';
+  toast('已記錄 ✏️','success');
+}
 
-  const todayS=scheds.filter(s=>s.date===td);
+function renderDashboard() {
+  const td = today();
+  const now = new Date();
+  const nowHHMM = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  const h = now.getHours();
+
+  // Greeting
+  document.getElementById('greetingText').textContent = h<12?'Good Morning ☀':h<18?'Good Afternoon 🌤':'Good Evening 🌙';
+
+  // === 1. MIT Focus ===
+  const mitData = getMitData();
+  const mitItems = mitData.today?.items || [];
+  const mitDone = mitItems.filter(i => i.completedAt).length;
+  const mitTotal = mitItems.length;
+  const mitPct = mitTotal ? Math.round(mitDone/mitTotal*100) : 0;
+  const todos = get('todos');
+
+  const mitEl = document.getElementById('dashMit');
+  if(mitTotal) {
+    mitEl.innerHTML = `<div class="d-mit" onclick="sw('todos',2)">
+      <div class="d-mit-top"><div class="d-mit-label">🎯 今日焦點</div><div class="d-mit-pct">${mitDone}/${mitTotal}</div></div>
+      <div class="d-mit-bar"><div class="d-mit-fill" style="width:${mitPct}%"></div></div>
+      ${mitItems.map((item,i) => {
+        const todo = todos.find(t=>t.id===item.todoId);
+        const done = !!item.completedAt;
+        return `<div class="d-mit-row">
+          <div class="d-mit-ck${done?' on':''}" onclick="event.stopPropagation();toggleMit('today',${i});renderDashboard();">${done?'✓':''}</div>
+          <div class="d-mit-title${done?' dk':''}">${esc(todo?.title||item.title||'(已刪除)')}</div>
+          <div class="d-mit-num">${i+1}</div>
+        </div>`;
+      }).join('')}
+      <div class="d-mit-go">查看全部待辦 →</div>
+    </div>`;
+  } else {
+    mitEl.innerHTML = `<div class="d-mit" onclick="sw('todos',2)">
+      <div class="d-mit-top"><div class="d-mit-label">🎯 今日焦點</div></div>
+      <div class="d-mit-empty">還沒選今天的焦點任務</div>
+      <div class="d-mit-go">去待辦頁挑選 →</div>
+    </div>`;
+  }
+
+  // === 2. Schedule ===
+  const scheds = get('schedules');
+  const todayS = scheds.filter(s=>s.date===td);
   const gcalToday = getGCalEventsForDate(td).filter(g => !todayS.some(l=>l.calendarEventId && g.gcalId && l.calendarEventId===g.gcalId));
   const allTodayS = [...todayS.map(s=>({...s,isGcal:false})), ...gcalToday.map(g=>({...g,isGcal:true}))].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
 
-  const pending=todos.filter(t=>!t.completed);
-  const doneToday=todos.filter(t=>t.completed&&t.completedAt&&fmtDate(t.completedAt)===td);
-  const overdue=todos.filter(t=>!t.completed&&isOverdue(t.dueDate));
+  const schedEl = document.getElementById('dashSchedSection');
+  // Show upcoming + next 1-2 (max 3)
+  const upcoming = allTodayS.filter(s => (s.endTime||s.startTime||'99:99') > nowHHMM);
+  const display = upcoming.length ? upcoming.slice(0,3) : allTodayS.slice(-2);
 
-  // Greeting
-  const h=new Date().getHours();
-  document.getElementById('greetingText').textContent = h<12?'Good Morning ☀':h<18?'Good Afternoon 🌤':'Good Evening 🌙';
-
-  // Stats row HTML (shared across hero states)
-  const statsHTML = `<div class="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-num">${allTodayS.length}</div><div class="hero-stat-label">📅 行程</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">${pending.length}</div><div class="hero-stat-label">⚡ 待辦</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">${doneToday.length}</div><div class="hero-stat-label">✓ 完成</div></div>
-    <div class="hero-stat"><div class="hero-stat-num">${overdue.length}</div><div class="hero-stat-label">⚠ 過期</div></div>
-  </div>`;
-
-  // === HERO: Next upcoming event + stats ===
-  const heroEl = document.getElementById('bentoHero');
-  const now = new Date();
-  const nowHHMM = String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  const nextEv = allTodayS.find(s => (s.endTime||s.startTime||'99:99') > nowHHMM);
-  if(nextEv) {
-    const isNow = nextEv.startTime && nextEv.startTime <= nowHHMM;
-    const label = isNow ? 'NOW' : 'NEXT UP';
-    const loc = nextEv.location ? `📍 ${esc(nextEv.location)}` : '';
-    const cat = nextEv.isGcal ? '📅 Google' : (CAT_LABEL[nextEv.category]||'');
-    const catIcon = nextEv.isGcal ? '' : ({'work':'💼','personal':'🌿','meeting':'👥','health':'💊','other':'📌'}[nextEv.category]||'📌');
-    let ringText = '';
-    if(isNow) { ringText = 'NOW'; }
-    else if(nextEv.startTime) {
-      const [sh,sm]=nextEv.startTime.split(':').map(Number);
-      const diff = (sh*60+sm) - (now.getHours()*60+now.getMinutes());
-      ringText = diff <= 60 ? diff+'m' : Math.floor(diff/60)+'h';
-    }
-    heroEl.className = 'bento-card span2 bento-hero';
-    heroEl.innerHTML = `
-      <div class="hero-label">${label}</div>
-      <div class="hero-time">${nextEv.startTime||'全天'}${nextEv.endTime?' – '+nextEv.endTime:''}</div>
-      <div class="hero-title">${esc(nextEv.title)}</div>
-      <div class="hero-meta">${catIcon?`<span>${catIcon} ${cat}</span>`:cat?`<span>${cat}</span>`:''}${loc?`<span>${loc}</span>`:''}</div>
-      ${ringText?`<div class="hero-ring"><div class="hero-ring-inner">${ringText}</div></div>`:''}
-      ${statsHTML}`;
-  } else if(allTodayS.length) {
-    heroEl.className = 'bento-card span2 bento-hero';
-    heroEl.innerHTML = `<div class="hero-label">ALL DONE</div><div class="hero-title" style="margin-top:8px;">今天行程已全部結束 🎉</div><div class="hero-meta"><span>${allTodayS.length} 個行程已完成</span></div>${statsHTML}`;
-  } else {
-    heroEl.className = 'bento-card span2 bento-hero-empty';
-    heroEl.innerHTML = `<div style="font-size:24px;margin-bottom:6px;">🌿</div><div>今天沒有行程</div>${statsHTML}`;
-  }
-
-  // === Schedule list (bento) ===
-  const se=document.getElementById('dashSchedule');
-  if(!allTodayS.length) { se.innerHTML='<div style="padding:10px 0;text-align:center;color:var(--text3);font-size:12px;">無行程</div>'; }
-  else {
-    const DOT_MAP = { work:'dot-work', personal:'dot-personal', meeting:'dot-meeting', health:'dot-health', other:'dot-other' };
-    se.innerHTML = allTodayS.slice(0,6).map(s => {
-      const dotCls = s.isGcal ? 'dot-gcal' : (DOT_MAP[s.category]||'dot-other');
-      const time = s.startTime || '全天';
-      return `<div class="b-sched" onclick="sw('schedule',1)"><span class="b-sched-dot ${dotCls}"></span><span class="b-sched-time">${time}</span><span class="b-sched-title ${s.isGcal?'b-sched-gcal':''}">${esc(s.title)}</span></div>`;
+  if(allTodayS.length) {
+    const DOT_COLORS = {work:'var(--blue)',personal:'var(--red)',meeting:'#7986CB',health:'var(--done)',other:'#616161'};
+    let html = `<div class="d-sec-head"><div class="d-sec-title">📅 今日行程</div><button class="d-sec-more" onclick="sw('schedule',1)">全部 ${allTodayS.length} 筆 →</button></div>`;
+    html += display.map(s => {
+      const dotColor = s.isGcal ? '#4285f4' : (DOT_COLORS[s.category]||'#616161');
+      let cd = '';
+      if(s.startTime) {
+        if(s.startTime <= nowHHMM && (!s.endTime || s.endTime > nowHHMM)) cd = '<div class="d-sched-cd d-sched-now">⏱ 進行中</div>';
+        else if(s.startTime > nowHHMM) {
+          const [sh,sm] = s.startTime.split(':').map(Number);
+          const diff = (sh*60+sm)-(now.getHours()*60+now.getMinutes());
+          cd = `<div class="d-sched-cd">${diff<=60?diff+'分鐘後':Math.floor(diff/60)+'小時後'}</div>`;
+        } else {
+          cd = '<div class="d-sched-cd" style="color:var(--green);">✓</div>';
+        }
+      }
+      return `<div class="d-sched" onclick="sw('schedule',1)">
+        <div class="d-sched-time">${s.startTime||'全天'}</div>
+        <div class="d-sched-dot" style="background:${dotColor};"></div>
+        <div class="d-sched-info"><div class="d-sched-title">${esc(s.title)}</div>${s.location?`<div class="d-sched-loc">📍 ${esc(s.location)}</div>`:''}</div>
+        ${cd}
+      </div>`;
     }).join('');
-    if(allTodayS.length>6) se.innerHTML += `<div style="text-align:center;padding:4px 0;font-size:11px;color:var(--accent);cursor:pointer;" onclick="sw('schedule',1)">+${allTodayS.length-6} 更多</div>`;
+    schedEl.innerHTML = html;
+  } else {
+    schedEl.innerHTML = `<div class="d-sec-head"><div class="d-sec-title">📅 今日行程</div><button class="d-sec-more" onclick="sw('schedule',1)">→</button></div>
+      <div style="text-align:center;padding:16px;color:var(--text3);font-size:12px;">今天沒有行程 🌿</div>`;
   }
 
-  // === Tasks (bento) ===
-  const te=document.getElementById('dashTodos');
-  const urgent=pending.sort((a,b)=>(PRI_ORDER[a.priority]??3)-(PRI_ORDER[b.priority]??3)).slice(0,5);
-  if(!urgent.length) { te.innerHTML='<div style="padding:8px 0;text-align:center;color:var(--text3);font-size:11px;">沒有待辦 ✨</div>'; }
-  else {
-    const PRI_DOT = {'urgent-important':'pri-dot-ui','important':'pri-dot-i','urgent':'pri-dot-u','normal':'pri-dot-n'};
-    te.innerHTML = urgent.map(t => `
-      <div class="b-task" onclick="sw('todos',2)">
-        <div class="b-task-check"></div>
-        <div class="b-task-title">${esc(t.title)}</div>
-        <div class="b-task-pri ${PRI_DOT[t.priority]||'pri-dot-n'}"></div>
-      </div>`).join('');
-  }
-  // Progress
-  const totalT = todos.length;
-  const doneT = todos.filter(t=>t.completed).length;
-  const pct = totalT ? Math.round(doneT/totalT*100) : 0;
-  const progEl = document.getElementById('dashProgress');
-  if(totalT) {
-    progEl.innerHTML = `<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><div class="progress-label"><span>已完成 ${doneT}/${totalT}</span><span>${pct}%</span></div>`;
-  } else { progEl.innerHTML = ''; }
+  // === 3. Habit ring ===
+  const habits = get('habits'), logs = get('habitLogs');
+  const dow = now.getDay();
+  const applicable = habits.filter(hb => hb.frequency==='daily'||(hb.weekdays&&hb.weekdays.includes(dow)));
+  const doneHabits = applicable.filter(hb => logs.find(l=>l.habitId===hb.id && l.date===td && l.completed));
+  const pendingHabits = applicable.filter(hb => !logs.find(l=>l.habitId===hb.id && l.date===td && l.completed));
+  const target = getDailyTarget();
+  const hDone = doneHabits.length;
+  const hPct = Math.min(100, target ? Math.round(hDone/target*100) : 0);
+  const circ = 2 * Math.PI * 20;
+  const offset = circ * (1 - Math.min(1, hDone/Math.max(1,target)));
+  const bestStreak = habits.length ? Math.max(0,...habits.map(hb=>calcStreak(hb.id))) : 0;
+  const hMsg = hDone >= target ? '🎉 今日達標！' : `還差 ${Math.max(0,target-hDone)} 個`;
 
-  // === Notes (bento) ===
-  const ne=document.getElementById('dashNotes');
-  const recentN=notes.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).slice(0,4);
-  if(!recentN.length) { ne.innerHTML='<div style="padding:8px 0;text-align:center;color:var(--text3);font-size:11px;">還沒有筆記</div>'; }
-  else { ne.innerHTML = recentN.map(n=>`
-    <div class="b-note" onclick="sw('notes',3)">
-      <div class="b-note-title">${esc(n.title||'無標題')}</div>
-      <div class="b-note-text">${esc(n.content)}</div>
-    </div>`).join(''); }
+  const habitEl = document.getElementById('dashHabitStrip');
+  habitEl.innerHTML = `<div class="d-habit" onclick="sw('habits',4)">
+    <div class="dh-ring">
+      <svg viewBox="0 0 50 50"><circle class="dh-ring-bg" cx="25" cy="25" r="20"/><circle class="dh-ring-fill" cx="25" cy="25" r="20" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}"/></svg>
+      <div class="dh-ring-text">${hDone}/${target}</div>
+    </div>
+    <div class="d-habit-info">
+      <div class="d-habit-title">今日習慣 — ${hMsg}</div>
+      <div class="d-habit-sub">連續達標 ${bestStreak} 天 🔥</div>
+      ${pendingHabits.length ? '<div class="d-habit-chips">' + pendingHabits.slice(0,4).map(hb => `<span class="d-habit-chip">${esc(hb.icon)} ${esc(hb.title)}</span>`).join('') + (pendingHabits.length>4?`<span class="d-habit-chip">+${pendingHabits.length-4}</span>`:'') + '</div>' : ''}
+    </div>
+    <div class="d-habit-go">→</div>
+  </div>`;
 }
 
 // =============== SETTINGS ===============
@@ -2147,11 +3040,17 @@ function loadSettings() {
   const s=getSett();
   document.getElementById('whCalendar').value=s.whCalendar||'';
   document.getElementById('whLine').value=s.whLine||'';
+  document.getElementById('whDataSync').value=s.whDataSync||'';
   document.getElementById('reminderTime').value=s.reminderTime||'07:30';
   const st=document.getElementById('lineStatus');
   if(s.whLine) { st.className='status-dot status-on'; st.textContent='● 已連線'; }
   else { st.className='status-dot status-off'; st.textContent='● 未設定'; }
   updateGCalUI();
+  // Cloud sync status
+  const csDot = document.getElementById('cloudSyncDot');
+  const csText = document.getElementById('cloudSyncText');
+  if(s.whDataSync) { csDot.style.color='var(--green)'; csText.textContent='已設定'; }
+  else { csDot.style.color='var(--text3)'; csText.textContent='未設定 Webhook'; }
 }
 function saveSettings() {
   const prev = getSett();
@@ -2159,6 +3058,7 @@ function saveSettings() {
     ...prev,
     whCalendar:document.getElementById('whCalendar').value.trim(),
     whLine:document.getElementById('whLine').value.trim(),
+    whDataSync:document.getElementById('whDataSync').value.trim(),
     reminderTime:document.getElementById('reminderTime').value,
   };
   _cache.settings = s;
@@ -2333,12 +3233,48 @@ async function syncCal(action, data) {
 async function testLine() {
   const s=getSett(); if(!s.whLine) { toast('未設定 LINE Webhook','error'); return; }
   const td=today();
-  const scheds=get('schedules').filter(x=>x.date===td).sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+
+  // Local schedules
+  const localScheds=get('schedules').filter(x=>x.date===td);
+  // GCal events (already fetched)
+  const gcalEvents=getGCalEventsForDate(td).filter(g => !localScheds.some(l=>l.calendarEventId && g.gcalId && l.calendarEventId===g.gcalId));
+  // Merge and sort
+  const allScheds=[...localScheds, ...gcalEvents].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+
+  // Todos
   const todos=get('todos').filter(t=>!t.completed);
-  let msg=`📋 每日摘要 — ${fmtDateZh(new Date())}\n\n📅 今日行程（${scheds.length}）\n`;
-  scheds.forEach(s=>{ msg+=`  ${s.startTime||'全天'} ${s.title}${s.location?' 📍'+s.location:''}\n`; });
-  msg+=`\n☑ 待辦（${todos.length} 項未完成）\n`;
-  todos.filter(t=>PRI_ORDER[t.priority]<=1).slice(0,5).forEach(t=>{ msg+=`  ${PRI_LABEL[t.priority]} ${t.title}\n`; });
+
+  // Habits
+  const habits=get('habits'), logs=get('habitLogs');
+  const dow=new Date().getDay();
+  const applicable=habits.filter(h=>h.frequency==='daily'||(h.weekdays&&h.weekdays.includes(dow)));
+  const habitDone=applicable.filter(h=>logs.find(l=>l.habitId===h.id&&l.date===td&&l.completed));
+  const habitPending=applicable.filter(h=>!logs.find(l=>l.habitId===h.id&&l.date===td&&l.completed));
+
+  // Build message
+  let msg=`📋 每日摘要 — ${fmtDateZh(new Date())}\n`;
+
+  // Schedules
+  msg+=`\n📅 今日行程（${allScheds.length}）\n`;
+  if(allScheds.length) {
+    allScheds.forEach(s=>{ msg+=`  ${s.startTime||'全天'} ${s.title}${s.location?' 📍'+s.location:''}\n`; });
+  } else { msg+=`  今天沒有行程 🌿\n`; }
+
+  // Todos
+  if(todos.length) {
+    msg+=`\n☑ 待辦（${todos.length} 項未完成）\n`;
+    todos.sort((a,b)=>(PRI_ORDER[a.priority]??3)-(PRI_ORDER[b.priority]??3)).slice(0,8).forEach(t=>{
+      msg+=`  ${PRI_LABEL[t.priority]} ${t.title}\n`;
+    });
+  }
+
+  // Habits
+  if(applicable.length) {
+    msg+=`\n🔥 習慣（${habitDone.length}/${applicable.length}）\n`;
+    habitPending.forEach(h=>{ msg+=`  ⬜ ${h.icon} ${h.title}\n`; });
+    habitDone.forEach(h=>{ msg+=`  ✅ ${h.icon} ${h.title}\n`; });
+  }
+
   try {
     const r=await fetch(s.whLine, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type:'daily_summary', message:msg, date:td}) });
     toast(r.ok?'LINE 測試已發送':'發送失敗', r.ok?'success':'error');
@@ -2373,6 +3309,870 @@ function updateBadges() {
   document.getElementById('bTodo').textContent=get('todos').filter(t=>!t.completed).length;
 }
 
+// =============== HABIT TRACKER ===============
+let habitViewDate = new Date();
+const EQUIPMENTS = ['槓鈴','啞鈴','壺鈴','Cable','機械','自重','彈力帶','TRX'];
+
+// Badge definitions (no XP)
+const BADGE_DEFS = [
+  {id:'s7',icon:'🔥',name:'7天連續',test:s=>s>=7},
+  {id:'s30',icon:'⚡',name:'30天連續',test:s=>s>=30},
+  {id:'s60',icon:'👑',name:'60天連續',test:s=>s>=60},
+  {id:'t100',icon:'💎',name:'100次訓練',test:(_,t)=>t>=100},
+  {id:'t500',icon:'🌟',name:'500次完成',test:(_,t)=>t>=500},
+  {id:'full',icon:'🏆',name:'本月全勤',test:(_,__,r)=>r>=100},
+];
+
+const TYPE_BADGE = {check:'hl-type-check', strength:'hl-type-strength', cardio:'hl-type-cardio'};
+const TYPE_LABEL = {check:'打卡', strength:'重訓', cardio:'有氧'};
+
+function toggleStats() {
+  document.getElementById('statsPanel').classList.toggle('open');
+  document.getElementById('statsArrow').classList.toggle('open');
+}
+
+function toggleHabitCheck(habitId) {
+  const h = get('habits').find(x=>x.id===habitId);
+  const d = fmtDate(habitViewDate), logs = get('habitLogs');
+  const idx = logs.findIndex(l=>l.habitId===habitId && l.date===d);
+  if(idx >= 0) {
+    // Uncomplete
+    logs.splice(idx, 1);
+    set('habitLogs', logs); renderHabits();
+  } else {
+    // Complete - ask duration if applicable
+    const durStr = prompt('完成！花了幾分鐘？（直接按確定跳過）');
+    const duration = parseInt(durStr) || 0;
+    logs.push({id:uid(), habitId, date:d, completed:true, duration:duration||null, createdAt:new Date().toISOString()});
+    set('habitLogs', logs); renderHabits();
+  }
+}
+
+function renderHabits() {
+  const d = fmtDate(habitViewDate), dow = habitViewDate.getDay(), isToday = d===today();
+  document.getElementById('habitDateLabel').textContent = isToday ? '今天' : fmtDateZh(d);
+  const habits = get('habits'), logs = get('habitLogs');
+
+  // Applicable habits for this day
+  function appliesTo(h) { return h.frequency==='daily' || (h.weekdays && h.weekdays.includes(dow)); }
+  const applicable = habits.filter(appliesTo);
+  const pending = applicable.filter(h => !getHabitLog(h.id, d));
+  const done = applicable.filter(h => getHabitLog(h.id, d));
+
+  // Daily hero
+  const target = getDailyTarget();
+  const doneCount = done.length;
+  const pct = Math.min(100, applicable.length ? Math.round(doneCount/target*100) : 0);
+  const circ = 2 * Math.PI * 25;
+  const offset = circ * (1 - Math.min(1, doneCount/target));
+  const msg = doneCount >= target ? '🎉 今日達標！' : `還差 ${Math.max(0, target - doneCount)} 個就達標`;
+  const bestStreak = habits.length ? Math.max(0, ...habits.map(h=>calcStreak(h.id))) : 0;
+
+  document.getElementById('dailyHeroCard').innerHTML = `
+    <div class="dh-ring">
+      <svg viewBox="0 0 60 60"><circle class="dh-ring-bg" cx="30" cy="30" r="25"/><circle class="dh-ring-fill" cx="30" cy="30" r="25" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}"/></svg>
+      <div class="dh-ring-text"><div class="dh-ring-num">${doneCount}/${target}</div><div class="dh-ring-label">完成</div></div>
+    </div>
+    <div class="dh-info">
+      <div class="dh-title">${msg}</div>
+      <div class="dh-sub">連續達標 ${bestStreak} 天 🔥</div>
+    </div>
+    <button class="dh-edit" onclick="openDailyTargetModal()">✏️</button>`;
+
+  // Card builder
+  function weekHTML(hId) {
+    const DL = ['一','二','三','四','五','六','日'];
+    let html = '<div class="mini-week">';
+    for(let i=-6;i<=0;i++) {
+      const dd=new Date(habitViewDate); dd.setDate(dd.getDate()+i);
+      const ds=fmtDate(dd), log=getHabitLog(hId,ds);
+      const dlabel = DL[dd.getDay()===0?6:dd.getDay()-1];
+      html += `<div class="mw${log?' on':''}${i===0?' td':''}">${dlabel}</div>`;
+    }
+    return html+'</div>';
+  }
+
+  function cardHTML(h) {
+    const log = getHabitLog(h.id, d), streak = calcStreak(h.id);
+    const isWorkout = h.type==='strength' || h.type==='cardio';
+    let wo = '';
+    if(log && log.exercises) {
+      const bps = [...new Set(log.exercises.map(e=>e.bodyPart).filter(Boolean))];
+      const bpTags = bps.length ? '<div class="rc-parts">' + bps.map(bp => {
+        const count = log.exercises.filter(e=>e.bodyPart===bp).length;
+        return `<span class="rc-part">${BP_ICONS[bp]||''} ${bp} ×${count}</span>`;
+      }).join('') + '</div>' : '';
+      const rows = log.exercises.map(ex => {
+        const setsStr = Array.isArray(ex.sets) ? ex.sets.map(s=>`${s.weight}kg×${s.reps}`).join(', ') : `${ex.weight||0}kg × ${ex.sets||0} × ${ex.reps||0}`;
+        return `<div class="wo-row"><span class="wo-name">${esc(ex.name)}</span><span class="wo-equip">${esc(ex.equipment||'')}</span><span class="wo-val">${setsStr}</span></div>`;
+      }).join('');
+      wo = bpTags + '<div class="wo-detail">' + rows + '</div>';
+    }
+    if(log && log.cardio) {
+      wo += `<div class="wo-detail" style="margin-top:${log.exercises?'6':'8'}px;"><div class="wo-row"><span class="wo-name">${esc(log.cardio.type)}</span><span class="wo-val">${log.cardio.duration}分${log.cardio.distance?' · '+log.cardio.distance+'km':''}</span></div>${log.cardio.note?`<div class="wo-row"><span class="wo-name">💬</span><span class="wo-val">${esc(log.cardio.note)}</span></div>`:''}</div>`;
+    }
+    // Duration display for check habits
+    const durLabel = (!isWorkout && log && log.duration) ? `<span class="hl-duration">${log.duration} 分鐘</span>` : '';
+
+    const clickAction = isWorkout ? `openWorkoutModal('${h.id}','${h.type}')` : `toggleHabitCheck('${h.id}')`;
+    return `<div class="gcard${log?' done':''}">
+      <div class="gc-row">
+        <button class="gc-check${log?' on':''}" onclick="${clickAction}">${log?'✓':''}</button>
+        <div class="gc-body" onclick="openHabitModal('${h.id}')">
+          <div class="gc-top"><div class="gc-title">${esc(h.icon)} ${esc(h.title)}${durLabel}</div></div>
+          <div class="gc-meta">${streak?`<span class="streak-fire">🔥 ${streak}</span> · `:''}${h.frequency==='daily'?'每天':h.weekdays.map(w=>DAYS[w]).join('、')} <span class="hl-type-badge ${TYPE_BADGE[h.type]||''}">${TYPE_LABEL[h.type]||''}</span></div>
+        </div>
+      </div>
+      ${wo}
+      ${weekHTML(h.id)}
+    </div>`;
+  }
+
+  // Render lists
+  document.getElementById('habitPendingList').innerHTML = pending.length ?
+    pending.map(h=>cardHTML(h)).join('') :
+    (applicable.length ? '<div style="text-align:center;color:var(--done);padding:16px;font-size:13px;">🎉 全部完成！</div>' : '<div style="text-align:center;color:var(--text3);padding:20px;font-size:13px;">按 + 新增習慣</div>');
+  document.getElementById('habitDoneHeader').style.display = done.length ? 'flex' : 'none';
+  document.getElementById('habitDoneList').innerHTML = done.map(h=>cardHTML(h)).join('');
+
+  // Stats (inside collapsible)
+  const allStreaks = habits.map(h=>calcStreak(h.id));
+  document.getElementById('habBestStreak').textContent = Math.max(0,...allStreaks);
+  const totalLogDays = new Set(logs.filter(l=>l.completed).map(l=>l.date)).size;
+  document.getElementById('habTotalDays').textContent = totalLogDays;
+
+  const now = new Date(), mKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const daysInMonth = new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+  const daysSoFar = Math.min(now.getDate(), daysInMonth);
+  let mDone=0, mTotal=0;
+  for(let dd=1;dd<=daysSoFar;dd++) {
+    const ds=`${mKey}-${String(dd).padStart(2,'0')}`, ddow=new Date(now.getFullYear(),now.getMonth(),dd).getDay();
+    habits.forEach(h => {
+      if(h.frequency==='daily' || (h.weekdays&&h.weekdays.includes(ddow))) { mTotal++; if(logs.find(l=>l.habitId===h.id && l.date===ds && l.completed)) mDone++; }
+    });
+  }
+  const mRate = mTotal?Math.round(mDone/mTotal*100):0;
+  document.getElementById('habMonthRate').textContent = mRate + '%';
+
+  // Badges
+  const totalLogs = logs.filter(l=>l.completed).length;
+  document.getElementById('habBadges').innerHTML = BADGE_DEFS.map(b => {
+    const unlocked = b.test(Math.max(0,...allStreaks), totalLogs, mRate);
+    return `<div class="hbdg${unlocked?'':' locked'}"><div class="hbdg-icon">${b.icon}</div><div class="hbdg-name">${b.name}</div></div>`;
+  }).join('');
+
+  // Heat map
+  document.getElementById('habHeatMonth').textContent = `${now.getFullYear()} 年 ${now.getMonth()+1} 月`;
+  let hGrid = '<div class="hd-label">一</div><div class="hd-label">二</div><div class="hd-label">三</div><div class="hd-label">四</div><div class="hd-label">五</div><div class="hd-label">六</div><div class="hd-label">日</div>';
+  const firstDow = (new Date(now.getFullYear(),now.getMonth(),1).getDay()+6)%7;
+  for(let i=0;i<firstDow;i++) hGrid += '<div class="hc"></div>';
+  for(let dd=1;dd<=daysInMonth;dd++) {
+    const ds=`${mKey}-${String(dd).padStart(2,'0')}`, ddow=new Date(now.getFullYear(),now.getMonth(),dd).getDay();
+    let appCount=0, doneN=0;
+    habits.forEach(h => { if(h.frequency==='daily'||(h.weekdays&&h.weekdays.includes(ddow))) { appCount++; if(logs.find(l=>l.habitId===h.id&&l.date===ds&&l.completed)) doneN++; }});
+    const ratio = appCount ? doneN/appCount : 0;
+    let lvl = dd>now.getDate()?' future':ratio>0.9?' l4':ratio>0.6?' l3':ratio>0.3?' l2':ratio>0?' l1':'';
+    hGrid += `<div class="hc${lvl}${dd===now.getDate()?' today-c':''}">${dd}</div>`;
+  }
+  document.getElementById('habHeatGrid').innerHTML = hGrid;
+  const heatDone = new Set(); for(let dd=1;dd<=daysSoFar;dd++) { const ds=`${mKey}-${String(dd).padStart(2,'0')}`; if(logs.find(l=>l.date===ds&&l.completed)) heatDone.add(ds); }
+  document.getElementById('habHeatStat').innerHTML = `完成 <strong>${mRate}%</strong> · <strong>${heatDone.size}</strong>/${daysSoFar} 天`;
+
+  // Goals
+  renderGoals();
+}
+
+
+// =============== WORKOUT MODAL ===============
+let workoutHabitId = null, workoutType = 'strength';
+let woSelectedBPs = new Set(), woSelectedExercises = new Map(); // Map<exName, {bp, equipment, sets:[{weight,reps}]}>
+
+const EXERCISE_DB = {
+  '背': ['滑輪下拉','坐姿划船','啞鈴划船','引體向上','Cable下拉','T-Bar划船'],
+  '肩': ['肩推','側平舉','前平舉','Face Pull','聳肩','Arnold Press'],
+  '胸': ['臥推','上斜臥推','飛鳥','Cable夾胸','伏地挺身','下斜臥推'],
+  '臀': ['臀推','臀橋','Cable後踢','羅馬尼亞硬舉','保加利亞分腿蹲'],
+  '腿': ['深蹲','腿推','腿彎舉','腿伸展','弓步蹲','哈克深蹲'],
+  '核心': ['棒式','捲腹','俄羅斯轉體','Dead Bug','側棒式','懸吊抬腿'],
+  '手臂': ['二頭彎舉','三頭下壓','錘式彎舉','Cable彎舉','法式推舉'],
+};
+const BP_ICONS = {'背':'🔙','肩':'🫁','胸':'💪','臀':'🍑','腿':'🦵','核心':'🎯','手臂':'💪','有氧':'🏃'};
+
+function getLastExerciseLog(exName) {
+  // Search recent logs for this exercise's last data
+  const logs = get('habitLogs').filter(l => l.exercises).sort((a,b) => b.date.localeCompare(a.date));
+  for(const log of logs) {
+    const ex = log.exercises.find(e => e.name === exName);
+    if(ex) return ex;
+  }
+  return null;
+}
+
+function openWorkoutModal(habitId, type) {
+  workoutHabitId = habitId; workoutType = type;
+  woSelectedBPs.clear(); woSelectedExercises.clear();
+  const h = get('habits').find(x => x.id === habitId);
+  document.getElementById('workoutModalTitle').textContent = h ? `紀錄 ${h.title}` : '紀錄訓練';
+
+  // Render body part grid
+  const bpGrid = document.getElementById('woBpGrid');
+  const allBPs = [...Object.keys(EXERCISE_DB), '有氧'];
+  bpGrid.innerHTML = allBPs.map(bp =>
+    `<div class="bp-chip" data-bp="${bp}" onclick="woToggleBP(this)"><div class="bp-icon">${BP_ICONS[bp]||'🏋️'}</div>${bp}</div>`
+  ).join('');
+
+  document.getElementById('woStep2').style.display = 'none';
+  document.getElementById('woStep3').style.display = 'none';
+  document.getElementById('woCardioStep').style.display = 'none';
+  initChipPicker('woCardioType');
+
+  // If existing log, restore
+  const d = fmtDate(habitViewDate), log = getHabitLog(habitId, d);
+  if(log && log.exercises) {
+    // Restore body parts and exercises from log
+    const bps = new Set(log.exercises.map(e => e.bodyPart || ''));
+    bps.forEach(bp => {
+      if(!bp) return;
+      woSelectedBPs.add(bp);
+      const chip = bpGrid.querySelector(`[data-bp="${bp}"]`);
+      if(chip) chip.classList.add('sel');
+    });
+    log.exercises.forEach(ex => {
+      woSelectedExercises.set(ex.name, {
+        bp: ex.bodyPart || '', equipment: ex.equipment || '',
+        sets: ex.sets ? (typeof ex.sets === 'number' ?
+          Array.from({length:ex.sets}, () => ({weight:ex.weight||0, reps:ex.reps||0})) :
+          ex.sets) : [{weight:ex.weight||0, reps:ex.reps||0}]
+      });
+    });
+    woRenderExPicks();
+    woRenderSetCards();
+    document.getElementById('woStep2').style.display = 'block';
+    document.getElementById('woStep3').style.display = woSelectedExercises.size ? 'block' : 'none';
+  }
+  if(log && log.cardio) {
+    woSelectedBPs.add('有氧');
+    const chip = bpGrid.querySelector('[data-bp="有氧"]');
+    if(chip) chip.classList.add('sel');
+    document.getElementById('woCardioStep').style.display = 'block';
+    setChipVal('woCardioType', log.cardio.type);
+    document.getElementById('woCardioDur').value = log.cardio.duration || '';
+    document.getElementById('woCardioDist').value = log.cardio.distance || '';
+    document.getElementById('woCardioNote').value = log.cardio.note || '';
+  }
+
+  openModal('workoutModal');
+}
+
+function woToggleBP(el) {
+  const bp = el.dataset.bp;
+  el.classList.toggle('sel');
+  if(woSelectedBPs.has(bp)) {
+    woSelectedBPs.delete(bp);
+    // Remove exercises of this BP
+    for(const [name, data] of woSelectedExercises) { if(data.bp === bp) woSelectedExercises.delete(name); }
+  } else {
+    woSelectedBPs.add(bp);
+  }
+
+  const hasCardio = woSelectedBPs.has('有氧');
+  const hasStrength = [...woSelectedBPs].some(bp => bp !== '有氧');
+  document.getElementById('woCardioStep').style.display = hasCardio ? 'block' : 'none';
+  if(!hasCardio) { document.getElementById('woCardioDur').value=''; document.getElementById('woCardioDist').value=''; document.getElementById('woCardioNote').value=''; }
+
+  if(hasStrength) {
+    woRenderExPicks();
+    document.getElementById('woStep2').style.display = 'block';
+  } else {
+    document.getElementById('woStep2').style.display = 'none';
+    document.getElementById('woStep3').style.display = 'none';
+    woSelectedExercises.clear();
+  }
+}
+
+function woRenderExPicks() {
+  const container = document.getElementById('woExPicks');
+  let html = '';
+  [...woSelectedBPs].filter(bp => bp !== '有氧').forEach(bp => {
+    const exList = EXERCISE_DB[bp] || [];
+    html += `<div style="font-size:10px;color:var(--text3);font-weight:600;width:100%;margin:4px 0 2px;">${BP_ICONS[bp]||''} ${bp}</div>`;
+    html += exList.map(name => {
+      const sel = woSelectedExercises.has(name) ? ' sel' : '';
+      return `<div class="ex-pick${sel}" onclick="woToggleEx(this,'${name}','${bp}')">${name}</div>`;
+    }).join('');
+    html += `<div class="ex-pick other" onclick="woAddCustomEx('${bp}')">✏️ 其他</div>`;
+  });
+  container.innerHTML = html;
+}
+
+function woToggleEx(el, name, bp) {
+  el.classList.toggle('sel');
+  if(woSelectedExercises.has(name)) {
+    woSelectedExercises.delete(name);
+  } else {
+    // Try to load last log
+    const last = getLastExerciseLog(name);
+    if(last && last.sets && Array.isArray(last.sets)) {
+      woSelectedExercises.set(name, { bp, equipment: last.equipment || '', sets: last.sets.map(s => ({...s})) });
+    } else if(last) {
+      const sets = Array.from({length: last.sets||3}, () => ({weight: last.weight||0, reps: last.reps||0}));
+      woSelectedExercises.set(name, { bp, equipment: last.equipment || '', sets });
+    } else {
+      woSelectedExercises.set(name, { bp, equipment: '', sets: [{weight:0,reps:0},{weight:0,reps:0},{weight:0,reps:0}] });
+    }
+  }
+  if(woSelectedExercises.size) { woRenderSetCards(); document.getElementById('woStep3').style.display = 'block'; }
+  else document.getElementById('woStep3').style.display = 'none';
+}
+
+function woAddCustomEx(bp) {
+  const name = prompt('輸入動作名稱：');
+  if(!name || !name.trim()) return;
+  const trimmed = name.trim();
+  woSelectedExercises.set(trimmed, { bp, equipment: '', sets: [{weight:0,reps:0},{weight:0,reps:0},{weight:0,reps:0}] });
+  woRenderExPicks();
+  // Mark it as selected
+  woRenderSetCards();
+  document.getElementById('woStep3').style.display = 'block';
+}
+
+function woRenderSetCards() {
+  const container = document.getElementById('woSetCards');
+  container.innerHTML = '';
+  const EQUIPS = ['槓鈴','啞鈴','壺鈴','Cable','機械','自重','彈力帶'];
+  woSelectedExercises.forEach((data, name) => {
+    const last = getLastExerciseLog(name);
+    const hasLast = !!last;
+    let html = `<div class="set-card" data-ex="${esc(name)}">
+      <div class="set-header"><div class="set-title-text">${esc(name)}</div>${hasLast?'<div class="set-hint">📋 帶入上次</div>':''}</div>
+      <div class="eq-row">
+        ${EQUIPS.map(e => `<div class="eq-chip${e===data.equipment?' sel':''}" onclick="woSetEquip(this,'${esc(name)}','${e}')">${e}</div>`).join('')}
+      </div>`;
+    data.sets.forEach((s, i) => {
+      html += `<div class="set-row">
+        <div class="set-num">${i+1}</div>
+        <input class="set-input wo-w" type="number" value="${s.weight||''}" placeholder="重量" step="0.5">
+        <div class="set-unit">kg</div>
+        <input class="set-input wo-r" type="number" value="${s.reps||''}" placeholder="次數">
+        <div class="set-unit">次</div>
+      </div>`;
+    });
+    html += `<button class="set-add-btn" onclick="woAddSet('${esc(name)}')">+ 加一組</button></div>`;
+    container.innerHTML += html;
+  });
+}
+
+function woSetEquip(el, exName, equip) {
+  el.closest('.eq-row').querySelectorAll('.eq-chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  const data = woSelectedExercises.get(exName);
+  if(data) data.equipment = equip;
+}
+
+function woAddSet(exName) {
+  const data = woSelectedExercises.get(exName);
+  if(!data) return;
+  data.sets.push({weight:0, reps:0});
+  woRenderSetCards();
+}
+
+function saveWorkoutLog() {
+  const d = fmtDate(habitViewDate), logs = get('habitLogs');
+  const idx = logs.findIndex(l => l.habitId === workoutHabitId && l.date === d);
+  const logEntry = {id: uid(), habitId: workoutHabitId, date: d, completed: true, createdAt: new Date().toISOString()};
+
+  // Collect strength exercises from set cards
+  const exercises = [];
+  document.querySelectorAll('#woSetCards .set-card').forEach(card => {
+    const name = card.dataset.ex;
+    const data = woSelectedExercises.get(name);
+    const equipment = card.querySelector('.eq-chip.sel')?.textContent || '';
+    const sets = [...card.querySelectorAll('.set-row')].map(row => ({
+      weight: parseFloat(row.querySelector('.wo-w').value) || 0,
+      reps: parseInt(row.querySelector('.wo-r').value) || 0,
+    })).filter(s => s.weight > 0 || s.reps > 0);
+    if(sets.length) {
+      exercises.push({ name, bodyPart: data?.bp || '', equipment, sets });
+    }
+  });
+
+  // Collect cardio
+  let cardio = null;
+  if(woSelectedBPs.has('有氧')) {
+    const dur = parseInt(document.getElementById('woCardioDur').value) || 0;
+    if(dur > 0) {
+      cardio = {
+        type: getChipVal('woCardioType') || '快走',
+        duration: dur,
+        distance: parseFloat(document.getElementById('woCardioDist').value) || 0,
+        note: document.getElementById('woCardioNote').value.trim(),
+      };
+    }
+  }
+
+  if(!exercises.length && !cardio) { toast('請至少填寫一項訓練','error'); return; }
+
+  if(exercises.length) logEntry.exercises = exercises;
+  if(cardio) logEntry.cardio = cardio;
+  logEntry.bodyParts = [...woSelectedBPs].filter(bp => bp !== '有氧');
+
+  if(idx >= 0) logs[idx] = logEntry; else logs.push(logEntry);
+  set('habitLogs', logs); closeModal('workoutModal'); renderHabits(); toast('訓練紀錄已儲存 💪','success');
+}
+
+// =============== DAILY TARGET & GOALS ===============
+function getDailyTarget() {
+  const s = getSett();
+  return parseInt(s.dailyHabitTarget) || 5;
+}
+function openDailyTargetModal() {
+  document.getElementById('dailyTargetInput').value = getDailyTarget();
+  openModal('dailyTargetModal');
+}
+function saveDailyTarget() {
+  const v = parseInt(document.getElementById('dailyTargetInput').value) || 5;
+  const s = getSett();
+  s.dailyHabitTarget = v;
+  _cache.settings = s;
+  try { localStorage.setItem(SK.settings, JSON.stringify(s)); } catch{}
+  closeModal('dailyTargetModal');
+  renderHabits();
+  toast('每日目標已更新','success');
+}
+
+// Long-term goals
+let editGoalId = null;
+function openGoalModal(id) {
+  editGoalId = id || null;
+  document.getElementById('goalModalTitle').textContent = id ? '編輯目標' : '新增目標';
+  document.getElementById('goalDelBtn').style.display = id ? 'block' : 'none';
+  if(id) {
+    const g = get('goals').find(x => x.id === id);
+    if(g) {
+      document.getElementById('goalName').value = g.title;
+      document.getElementById('goalDesc').value = g.description || '';
+      document.getElementById('goalStart').value = g.startDate || '';
+      document.getElementById('goalEnd').value = g.endDate || '';
+      document.getElementById('goalStartVal').value = g.startValue ?? '';
+      document.getElementById('goalTargetVal').value = g.targetValue ?? '';
+      document.getElementById('goalUnit').value = g.unit || '';
+      const msText = (g.milestones || []).map(m => `${m.date} ${m.target} ${m.note || ''}`).join('\n');
+      document.getElementById('goalMilestones').value = msText;
+    }
+  } else {
+    ['goalName','goalDesc','goalStartVal','goalTargetVal','goalUnit','goalMilestones'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('goalStart').value = today();
+    document.getElementById('goalEnd').value = '';
+  }
+  openModal('goalModal');
+}
+
+function saveGoal() {
+  const title = document.getElementById('goalName').value.trim();
+  if(!title) { toast('請輸入目標名稱','error'); return; }
+  const startValue = parseFloat(document.getElementById('goalStartVal').value);
+  const targetValue = parseFloat(document.getElementById('goalTargetVal').value);
+  const unit = document.getElementById('goalUnit').value.trim();
+  // Parse milestones
+  const msRaw = document.getElementById('goalMilestones').value.trim();
+  const milestones = msRaw ? msRaw.split('\n').filter(l => l.trim()).map(l => {
+    const parts = l.trim().split(/\s+/);
+    return { date: parts[0] || '', target: parseFloat(parts[1]) || 0, note: parts.slice(2).join(' ') };
+  }) : [];
+
+  const list = get('goals');
+  const entry = {
+    id: editGoalId || uid(),
+    title,
+    description: document.getElementById('goalDesc').value.trim(),
+    startDate: document.getElementById('goalStart').value,
+    endDate: document.getElementById('goalEnd').value,
+    startValue: isNaN(startValue) ? null : startValue,
+    targetValue: isNaN(targetValue) ? null : targetValue,
+    unit,
+    milestones,
+    logs: editGoalId ? (list.find(x => x.id === editGoalId)?.logs || []) : [],
+    createdAt: editGoalId ? (list.find(x => x.id === editGoalId)?.createdAt || new Date().toISOString()) : new Date().toISOString(),
+  };
+  if(editGoalId) { const i = list.findIndex(x => x.id === editGoalId); if(i >= 0) list[i] = entry; }
+  else list.push(entry);
+  set('goals', list);
+  closeModal('goalModal');
+  renderHabits();
+  toast(editGoalId ? '目標已更新' : '目標已新增','success');
+}
+
+function deleteGoal() {
+  if(!editGoalId || !confirm('刪除此目標？')) return;
+  set('goals', get('goals').filter(x => x.id !== editGoalId));
+  closeModal('goalModal');
+  renderHabits();
+  toast('已刪除','success');
+}
+
+let logGoalId = null;
+function openGoalLogModal(id) {
+  logGoalId = id;
+  const g = get('goals').find(x => x.id === id);
+  document.getElementById('goalLogTitle').textContent = g ? `紀錄：${g.title}` : '紀錄進度';
+  document.getElementById('goalLogUnit').textContent = g?.unit ? `(${g.unit})` : '';
+  document.getElementById('goalLogDate').value = today();
+  document.getElementById('goalLogVal').value = '';
+  document.getElementById('goalLogNote').value = '';
+  openModal('goalLogModal');
+}
+
+function saveGoalLog() {
+  const val = parseFloat(document.getElementById('goalLogVal').value);
+  if(isNaN(val)) { toast('請輸入數值','error'); return; }
+  const list = get('goals');
+  const g = list.find(x => x.id === logGoalId);
+  if(!g) return;
+  if(!g.logs) g.logs = [];
+  const date = document.getElementById('goalLogDate').value || today();
+  const note = document.getElementById('goalLogNote').value.trim();
+  // Replace if same date exists
+  const existing = g.logs.findIndex(l => l.date === date);
+  if(existing >= 0) g.logs[existing] = { date, value: val, note };
+  else g.logs.push({ date, value: val, note });
+  g.logs.sort((a, b) => a.date.localeCompare(b.date));
+  set('goals', list);
+  closeModal('goalLogModal');
+  renderHabits();
+  toast('進度已紀錄','success');
+}
+
+function renderGoals() {
+  const goals = get('goals');
+  const el = document.getElementById('goalsList');
+  if(!goals.length) {
+    el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:20px;font-size:13px;">設定長期目標追蹤進度</div>';
+    return;
+  }
+  const td = today();
+  el.innerHTML = goals.map(g => {
+    const hasMetric = g.startValue != null && g.targetValue != null;
+    const lastLog = g.logs?.length ? g.logs[g.logs.length - 1] : null;
+    const currentVal = lastLog ? lastLog.value : g.startValue;
+    const isDecrease = g.startValue > g.targetValue;
+
+    // Progress calculation
+    let pct = 0;
+    if(hasMetric) {
+      const range = Math.abs(g.targetValue - g.startValue);
+      const progress = isDecrease ? (g.startValue - currentVal) : (currentVal - g.startValue);
+      pct = range > 0 ? Math.min(100, Math.max(0, Math.round(progress / range * 100))) : 0;
+    }
+    // Time progress
+    let daysPassed = 0, totalDays = 0, daysLeft = 0;
+    if(g.startDate && g.endDate) {
+      totalDays = Math.max(1, Math.round((new Date(g.endDate) - new Date(g.startDate)) / 864e5));
+      daysPassed = Math.max(0, Math.round((new Date(td) - new Date(g.startDate)) / 864e5));
+      daysLeft = Math.max(0, Math.round((new Date(g.endDate) - new Date(td)) / 864e5));
+    }
+    // Status
+    let badge = '';
+    if(pct >= 100) badge = '<span class="goal-badge done">✓ 達成</span>';
+    else if(g.endDate && td > g.endDate) badge = '<span class="goal-badge expired">已到期</span>';
+    else badge = `<span class="goal-badge active">進行中</span>`;
+
+    // Milestones
+    let msHTML = '';
+    if(g.milestones?.length) {
+      msHTML = '<div class="goal-milestones">' + g.milestones.map(m => {
+        const reached = hasMetric && currentVal != null && (isDecrease ? currentVal <= m.target : currentVal >= m.target);
+        return `<div class="goal-ms-row"><div class="goal-ms-dot${reached ? ' reached' : ''}"></div><div class="goal-ms-label">${esc(m.note || m.date)}</div><div class="goal-ms-val">${m.target}${g.unit || ''}</div></div>`;
+      }).join('') + '</div>';
+    }
+
+    return `<div class="goal-card" onclick="openGoalModal('${g.id}')">
+      <div class="goal-top">
+        <div class="goal-title">${esc(g.title)}</div>
+        ${badge}
+      </div>
+      ${g.description ? `<div class="goal-desc">${esc(g.description)}</div>` : ''}
+      ${hasMetric ? `<div class="goal-bar"><div class="goal-bar-fill" style="width:${pct}%"></div></div>` : ''}
+      <div class="goal-meta">
+        ${hasMetric ? `<span>目前 <strong>${currentVal != null ? currentVal : '?'}${g.unit || ''}</strong> → 目標 <strong>${g.targetValue}${g.unit || ''}</strong></span>` : ''}
+        ${daysLeft > 0 ? `<span>剩 <strong>${daysLeft}</strong> 天</span>` : totalDays ? '<span>已結束</span>' : ''}
+      </div>
+      ${msHTML}
+      <button class="goal-log-btn" onclick="event.stopPropagation();openGoalLogModal('${g.id}')">📝 紀錄進度${lastLog ? `（最近：${lastLog.date.slice(5)} = ${lastLog.value}${g.unit || ''}）` : ''}</button>
+    </div>`;
+  }).join('');
+}
+
+// =============== CLOUD SYNC (Google Sheets via Make.com) ===============
+const SYNC_SHEETS = ['habits','habitLogs','todos','notes','goals','mit','inbody'];
+
+async function cloudSync(direction) {
+  const s = getSett();
+  if(!s.whDataSync) { toast('請先設定資料同步 Webhook','error'); return; }
+
+  const dot = document.getElementById('cloudSyncDot');
+  const txt = document.getElementById('cloudSyncText');
+  dot.style.color = 'var(--orange)';
+  txt.textContent = direction==='push' ? '上傳中...' : '下載中...';
+
+  try {
+    if(direction === 'push') {
+      // Upload all data to Google Sheets
+      for(const sheet of SYNC_SHEETS) {
+        const data = get(sheet);
+        const rows = Array.isArray(data)
+          ? data.map(item => ({ id: item.id || item.date || item.key || uid(), json: JSON.stringify(item) }))
+          : [{ id:'_single', json: JSON.stringify(data) }];
+        if(!rows.length) continue;
+        await fetch(s.whDataSync, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ action:'bulkSave', sheet, rows })
+        });
+      }
+      dot.style.color = 'var(--green)';
+      txt.textContent = '已上傳 · ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+      toast('所有資料已上傳到雲端 ☁️','success');
+
+    } else {
+      // Download from Google Sheets
+      for(const sheet of SYNC_SHEETS) {
+        const r = await fetch(s.whDataSync, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({ action:'load', sheet })
+        });
+        if(!r.ok) continue;
+        const rawText = await r.text();
+        let items;
+        try { items = JSON.parse(rawText); } catch { continue; }
+        if(!Array.isArray(items)) items = items.rows || items.data || [];
+        // Parse json field back to objects
+        const parsed = items.map(row => {
+          try { return JSON.parse(row.json || row.B || '{}'); } catch { return row; }
+        }).filter(x => x && Object.keys(x).length);
+        if(parsed.length) {
+          if(sheet === 'mit' && parsed.length === 1 && parsed[0].today) {
+            // MIT is a single object, not array
+            _cache[sheet] = parsed[0];
+            try { localStorage.setItem(SK[sheet], JSON.stringify(parsed[0])); } catch{}
+          } else {
+            set(sheet, parsed);
+          }
+        }
+      }
+      dot.style.color = 'var(--green)';
+      txt.textContent = '已下載 · ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+      toast('已從雲端下載最新資料 📥','success');
+      // Re-render everything
+      renderDashboard(); renderHabits(); renderTodos(); renderNotes(); updateBadges();
+    }
+  } catch(e) {
+    console.error('Cloud sync error:', e);
+    dot.style.color = 'var(--red)';
+    txt.textContent = '同步失敗';
+    toast('雲端同步失敗：' + e.message,'error');
+  }
+}
+
+// Background sync: after any data change, queue a push (debounced)
+let _syncTimer = null;
+function queueCloudSync() {
+  const s = getSett();
+  if(!s.whDataSync) return;
+  if(_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(() => cloudSync('push'), 30000); // 30 sec after last change
+}
+
+// Patch set() to trigger auto-sync
+const _origSet = set;
+const setWithSync = (k,v) => { _origSet(k,v); queueCloudSync(); };
+// We can't reassign const, so we'll call queueCloudSync in key save functions
+
+// =============== INBODY SCAN ===============
+let inbodyImageData = null;
+let inbodyResult = null;
+
+function handleInbodyFile(event) {
+  const file = event.target.files?.[0];
+  if(!file) return;
+  event.target.value = ''; // Reset so same file can be re-selected
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    inbodyImageData = e.target.result;
+    // Show scanning modal
+    openModal('inbodyModal');
+    document.getElementById('inbodyModalFooter').style.display = 'none';
+    document.getElementById('inbodyModalBody').innerHTML = `
+      <img src="${inbodyImageData}" class="inbody-preview">
+      <div class="inbody-scanning"><div class="spin">⚙️</div><div style="margin-top:8px;">AI 正在辨識 InBody 報告...</div></div>`;
+    // Send to Claude Vision
+    scanInbody(inbodyImageData);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function scanInbody(dataUrl) {
+  const match = dataUrl.match(/^data:(image\/\w+);base64,(.+)$/);
+  if(!match) { showInbodyError('無法讀取圖片格式'); return; }
+  const mediaType = match[1];
+  const base64Data = match[2];
+  const s = getSett();
+
+  const prompt = `這是一份 InBody 身體組成分析報告。請辨識並提取以下數據，以 JSON 格式回傳（只回傳 JSON，不要其他文字）：
+
+{
+  "date": "報告上的日期，格式 YYYY-MM-DD，如果看不到就填 null",
+  "weight": 體重(kg),
+  "bodyFatPercent": 體脂肪率(%),
+  "skeletalMuscleMass": 骨骼肌量(kg),
+  "bmi": BMI,
+  "bodyFatMass": 體脂肪量(kg),
+  "basalMetabolicRate": 基礎代謝率(kcal),
+  "visceralFatLevel": 內臟脂肪等級,
+  "totalBodyWater": 身體總水量(L),
+  "proteinMass": 蛋白質量(kg),
+  "mineralMass": 礦物質量(kg),
+  "bodyScore": InBody 分數
+}
+
+看不到的欄位填 null。數字不要帶單位，只填數值。`;
+
+  try {
+    let responseData;
+
+    if(s.whDataSync) {
+      // Use Make.com proxy (API Key safe on server)
+      const r = await fetch(s.whDataSync, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ action:'inbody', mediaType, imageData: base64Data, prompt })
+      });
+      if(!r.ok) throw new Error('Webhook error ' + r.status);
+      responseData = await r.json();
+    } else {
+      // Direct API (works in claude.ai preview)
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514', max_tokens:1000,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
+            {type:'text',text:prompt}
+          ]}]
+        })
+      });
+      if(!r.ok) { const err=await r.json().catch(()=>({})); throw new Error(err.error?.message||'API error '+r.status); }
+      responseData = await r.json();
+    }
+
+    const text = responseData.content?.map(c => c.text || '').join('') || (typeof responseData === 'string' ? responseData : JSON.stringify(responseData));
+
+    // Parse JSON from response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if(!jsonMatch) throw new Error('AI 未回傳有效數據');
+
+    inbodyResult = JSON.parse(jsonMatch[0]);
+    showInbodyResult();
+
+  } catch(e) {
+    console.error('InBody scan error:', e);
+    showInbodyError('辨識失敗：' + e.message);
+  }
+}
+
+function showInbodyError(msg) {
+  document.getElementById('inbodyModalBody').innerHTML = `
+    <img src="${inbodyImageData}" class="inbody-preview">
+    <div class="inbody-error">⚠️ ${msg}<br><br><button class="btn btn-ghost" onclick="closeModal('inbodyModal')" style="margin-top:8px;">關閉</button></div>`;
+}
+
+const INBODY_FIELDS = [
+  {key:'date', label:'📅 測量日期', unit:''},
+  {key:'weight', label:'⚖️ 體重', unit:' kg'},
+  {key:'bodyFatPercent', label:'📊 體脂肪率', unit:'%'},
+  {key:'skeletalMuscleMass', label:'💪 骨骼肌量', unit:' kg'},
+  {key:'bmi', label:'📐 BMI', unit:''},
+  {key:'bodyFatMass', label:'🔸 體脂肪量', unit:' kg'},
+  {key:'basalMetabolicRate', label:'🔥 基礎代謝率', unit:' kcal'},
+  {key:'visceralFatLevel', label:'🫁 內臟脂肪等級', unit:''},
+  {key:'totalBodyWater', label:'💧 身體總水量', unit:' L'},
+  {key:'proteinMass', label:'🥩 蛋白質量', unit:' kg'},
+  {key:'mineralMass', label:'🦴 礦物質量', unit:' kg'},
+  {key:'bodyScore', label:'⭐ InBody 分數', unit:' 分'},
+];
+
+function showInbodyResult() {
+  const r = inbodyResult;
+  if(!r) return;
+
+  let rows = INBODY_FIELDS
+    .filter(f => r[f.key] != null)
+    .map(f => {
+      const val = f.key === 'date' ? r[f.key] : r[f.key] + f.unit;
+      return `<div class="inbody-row"><span class="inbody-label">${f.label}</span><span class="inbody-val">${val}</span></div>`;
+    }).join('');
+
+  document.getElementById('inbodyModalBody').innerHTML = `
+    <img src="${inbodyImageData}" class="inbody-preview">
+    <div class="inbody-date-row">
+      <div class="form-group">
+        <label class="form-label">測量日期</label>
+        <input type="date" class="form-input" id="inbodySaveDate" value="${r.date || today()}">
+      </div>
+    </div>
+    <div class="inbody-result">${rows || '<div style="padding:12px;text-align:center;color:var(--text3);">未辨識到數據</div>'}</div>
+    <div style="font-size:10px;color:var(--text3);text-align:center;">數據由 AI 自動辨識，請確認無誤後儲存</div>`;
+
+  document.getElementById('inbodyModalFooter').style.display = rows ? 'flex' : 'none';
+}
+
+function saveInbodyResult() {
+  if(!inbodyResult) return;
+
+  const date = document.getElementById('inbodySaveDate')?.value || today();
+  const record = { ...inbodyResult, date, savedAt: new Date().toISOString() };
+
+  // Save to InBody history
+  const history = get('inbody');
+  // Replace if same date exists
+  const existIdx = history.findIndex(r => r.date === date);
+  if(existIdx >= 0) history[existIdx] = record;
+  else history.push(record);
+  history.sort((a,b) => a.date.localeCompare(b.date));
+  set('inbody', history);
+
+  // Auto-update matching goals
+  const goals = get('goals');
+  let updated = 0;
+  goals.forEach(g => {
+    if(!g.unit || !g.targetValue) return;
+    // Match goal unit to InBody field
+    let matchVal = null;
+    if(g.unit === '%' && record.bodyFatPercent != null) matchVal = record.bodyFatPercent;
+    else if(g.unit === 'kg' && g.title.includes('體重') && record.weight != null) matchVal = record.weight;
+    else if(g.unit === 'kg' && (g.title.includes('肌') || g.title.includes('骨骼')) && record.skeletalMuscleMass != null) matchVal = record.skeletalMuscleMass;
+    else if(g.unit === 'kg' && g.title.includes('脂') && record.bodyFatMass != null) matchVal = record.bodyFatMass;
+
+    if(matchVal != null) {
+      if(!g.logs) g.logs = [];
+      const eIdx = g.logs.findIndex(l => l.date === date);
+      if(eIdx >= 0) g.logs[eIdx] = {date, value:matchVal, note:'InBody 自動'};
+      else g.logs.push({date, value:matchVal, note:'InBody 自動'});
+      g.logs.sort((a,b) => a.date.localeCompare(b.date));
+      updated++;
+    }
+  });
+  if(updated) set('goals', goals);
+
+  closeModal('inbodyModal');
+  renderHabits();
+  toast(`InBody 已儲存${updated ? '，' + updated + ' 個目標自動更新' : ''} 🎉`, 'success');
+  inbodyImageData = null;
+  inbodyResult = null;
+}
+
 // =============== PWA ===============
 function initPWA() {
   // Dynamic manifest via blob URL
@@ -2402,7 +4202,7 @@ const CACHE='pa-v1';
 const URLS=['./', self.location.href.replace(/\\/sw\\.js$/,'')];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
-self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c))}return r}).catch(()=>caches.match(e.request)))});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||!e.request.url.startsWith(self.location.origin))return;e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c))}return r}).catch(()=>caches.match(e.request)))});
     `;
     const swBlob = new Blob([swCode], {type:'application/javascript'});
     navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
@@ -2428,9 +4228,9 @@ function init() {
   renderDashboard();
   initPWA();
 
-  // Auto-fetch Google Calendar events via Make.com webhook
+  // Auto-fetch Google Calendar events via Make.com webhook (only when page is visible)
   const s = getSett();
-  if(s.whCalendar) {
+  if(s.whCalendarRead && document.visibilityState === 'visible') {
     fetchGCalMonthEvents(now.getFullYear(), now.getMonth()).then(() => {
       renderDashboard();
       renderSchedule();
