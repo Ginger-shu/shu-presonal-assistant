@@ -2663,6 +2663,7 @@ function renderDoneList() {
 let noteTagFilter = null; // null = all
 let noteVoiceRecognition = null;
 let noteIsRecording = false;
+let noteVoiceUsed = false; // Track if voice was used for current input
 
 const NOTE_TEMPLATES = {
   '訓練反思': {
@@ -2694,11 +2695,12 @@ function quickNote() {
   const list = get('notes');
   list.push({
     id: uid(), title: '', content: text, tags: [],
-    pinned: false, isVoice: noteIsRecording,
+    pinned: false, isVoice: noteVoiceUsed,
     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
   });
   set('notes', list);
   inp.value = '';
+  noteVoiceUsed = false;
   toast('已記錄 ✏️', 'success');
   renderNotes();
 }
@@ -2849,13 +2851,19 @@ function toggleNoteVoice() {
     return;
   }
   if(noteIsRecording) {
+    // Manual stop
     noteIsRecording = false;
-    noteVoiceRecognition?.stop();
+    try { noteVoiceRecognition?.abort(); } catch{}
+    noteVoiceRecognition = null;
     document.getElementById('noteVoiceBtn').classList.remove('recording');
     document.getElementById('noteVoiceIndicator').classList.remove('active');
+    // Don't auto-save on manual stop, text is already in input box
+    const input = document.getElementById('noteQuickInput');
+    if(input.value.trim()) toast('語音已轉為文字，按 + 儲存','success');
     return;
   }
   noteIsRecording = true;
+  noteVoiceUsed = true;
   document.getElementById('noteVoiceBtn').classList.add('recording');
   document.getElementById('noteVoiceIndicator').classList.add('active');
   document.getElementById('noteVoiceLive').textContent = '正在聆聽...';
@@ -2863,10 +2871,10 @@ function toggleNoteVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   noteVoiceRecognition = new SR();
   noteVoiceRecognition.lang = 'zh-TW';
-  noteVoiceRecognition.continuous = true;
+  noteVoiceRecognition.continuous = false; // Single utterance, more reliable on mobile
   noteVoiceRecognition.interimResults = true;
 
-  let finalTranscript = '';
+  let finalTranscript = document.getElementById('noteQuickInput').value; // Keep existing text
   const input = document.getElementById('noteQuickInput');
 
   noteVoiceRecognition.onresult = (e) => {
@@ -2884,30 +2892,22 @@ function toggleNoteVoice() {
 
   noteVoiceRecognition.onerror = (e) => {
     console.error('Voice error:', e.error);
-    if(e.error !== 'no-speech') toast('語音辨識錯誤：' + e.error, 'error');
-    toggleNoteVoice();
+    if(e.error !== 'no-speech' && e.error !== 'aborted') toast('語音辨識錯誤：' + e.error, 'error');
   };
 
   noteVoiceRecognition.onend = () => {
-    if(noteIsRecording) {
-      // Auto-save when voice stops
-      noteIsRecording = false;
-      document.getElementById('noteVoiceBtn').classList.remove('recording');
-      document.getElementById('noteVoiceIndicator').classList.remove('active');
-      if(finalTranscript.trim()) {
-        // Auto save as voice note
-        const list = get('notes');
-        list.push({
-          id: uid(), title: '', content: finalTranscript.trim(), tags: [],
-          pinned: false, isVoice: true,
-          createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
-        });
-        set('notes', list);
-        input.value = '';
-        toast('語音筆記已儲存 🎤', 'success');
-        renderNotes();
-        finalTranscript = '';
-      }
+    if(!noteIsRecording) return; // Manual stop already handled
+    // Auto-ended (user stopped talking) - restart or finish
+    if(finalTranscript.trim()) {
+      input.value = finalTranscript;
+    }
+    // Reset UI
+    noteIsRecording = false;
+    noteVoiceRecognition = null;
+    document.getElementById('noteVoiceBtn').classList.remove('recording');
+    document.getElementById('noteVoiceIndicator').classList.remove('active');
+    if(finalTranscript.trim()) {
+      toast('語音辨識完成，按 + 儲存', 'success');
     }
   };
 
