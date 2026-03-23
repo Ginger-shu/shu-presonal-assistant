@@ -1747,7 +1747,7 @@ body::before {
 </div>
 
 <!-- Hidden file input for InBody -->
-<input type="file" id="inbodyFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleInbodyFile(event)">
+<input type="file" id="inbodyFileInput" accept="image/*" style="display:none;" onchange="handleInbodyFile(event)">
 
 <!-- InBody Result Modal -->
 <div class="modal-overlay" id="inbodyModal">
@@ -3331,6 +3331,75 @@ function toggleStats() {
   document.getElementById('statsArrow').classList.toggle('open');
 }
 
+// Chip picker helpers
+function initChipPicker(containerId, multi=false) {
+  const el = document.getElementById(containerId); if(!el) return;
+  el.querySelectorAll('.equip-chip').forEach(c => {
+    c.onclick = () => {
+      if(multi) c.classList.toggle('sel');
+      else { el.querySelectorAll('.equip-chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); }
+      if(containerId==='habitFreqPicker') document.getElementById('habitWeekdaysGroup').style.display = c.dataset.v==='weekly'?'block':'none';
+    };
+  });
+}
+function getChipVal(id) { return document.getElementById(id)?.querySelector('.equip-chip.sel')?.dataset.v||''; }
+function getChipVals(id) { return [...(document.getElementById(id)?.querySelectorAll('.equip-chip.sel')||[])].map(c=>c.dataset.v); }
+function setChipVal(id,val) { document.getElementById(id)?.querySelectorAll('.equip-chip').forEach(c=>c.classList.toggle('sel',c.dataset.v===val)); }
+function setChipVals(id,vals) { document.getElementById(id)?.querySelectorAll('.equip-chip').forEach(c=>c.classList.toggle('sel',vals.includes(c.dataset.v))); }
+
+// Habit CRUD
+let editHabitId = null;
+function openHabitModal(id) {
+  editHabitId = id||null;
+  document.getElementById('habitModalTitle').textContent = id?'編輯習慣':'新增習慣';
+  document.getElementById('habitDelBtn').style.display = id?'block':'none';
+  initChipPicker('habitIconPicker'); initChipPicker('habitTypePicker'); initChipPicker('habitFreqPicker'); initChipPicker('habitWeekdays',true);
+  if(id) {
+    const h = get('habits').find(x=>x.id===id);
+    if(h) {
+      document.getElementById('habitName').value = h.title;
+      setChipVal('habitIconPicker',h.icon); setChipVal('habitTypePicker',h.type); setChipVal('habitFreqPicker',h.frequency);
+      if(h.weekdays) setChipVals('habitWeekdays',h.weekdays.map(String));
+      document.getElementById('habitWeekdaysGroup').style.display = h.frequency==='weekly'?'block':'none';
+    }
+  } else {
+    document.getElementById('habitName').value=''; setChipVal('habitIconPicker','💧'); setChipVal('habitTypePicker','check'); setChipVal('habitFreqPicker','daily');
+    document.getElementById('habitWeekdaysGroup').style.display='none';
+    document.getElementById('habitWeekdays').querySelectorAll('.equip-chip').forEach(c=>c.classList.remove('sel'));
+  }
+  openModal('habitModal');
+}
+function saveHabit() {
+  const title = document.getElementById('habitName').value.trim();
+  if(!title) { toast('請輸入習慣名稱','error'); return; }
+  const icon=getChipVal('habitIconPicker')||'🎯', type=getChipVal('habitTypePicker')||'check';
+  const frequency=getChipVal('habitFreqPicker')||'daily', weekdays=frequency==='weekly'?getChipVals('habitWeekdays').map(Number):[];
+  const list = get('habits');
+  if(editHabitId) { const i=list.findIndex(x=>x.id===editHabitId); if(i>=0) Object.assign(list[i],{title,icon,type,frequency,weekdays}); }
+  else list.push({id:uid(),title,icon,type,frequency,weekdays,createdAt:new Date().toISOString()});
+  set('habits',list); closeModal('habitModal'); renderHabits(); toast(editHabitId?'習慣已更新':'習慣已新增','success');
+}
+function deleteHabit() {
+  if(!editHabitId) return;
+  set('habits',get('habits').filter(x=>x.id!==editHabitId));
+  set('habitLogs',get('habitLogs').filter(x=>x.habitId!==editHabitId));
+  closeModal('habitModal'); renderHabits(); toast('已刪除','success');
+}
+function shiftHabitDate(d) { habitViewDate.setDate(habitViewDate.getDate()+d); renderHabits(); }
+function getHabitLog(habitId,date) { return get('habitLogs').find(l=>l.habitId===habitId && l.date===date); }
+function calcStreak(habitId) {
+  const logs=get('habitLogs').filter(l=>l.habitId===habitId && l.completed);
+  const dates=new Set(logs.map(l=>l.date)), h=get('habits').find(x=>x.id===habitId);
+  let streak=0; const d=new Date();
+  if(!dates.has(fmtDate(d))) d.setDate(d.getDate()-1);
+  for(let i=0;i<365;i++) {
+    const ds=fmtDate(d), dow=d.getDay();
+    if(h && h.frequency==='weekly' && h.weekdays?.length && !h.weekdays.includes(dow)) { d.setDate(d.getDate()-1); continue; }
+    if(dates.has(ds)) { streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  return streak;
+}
+
 function toggleHabitCheck(habitId) {
   const h = get('habits').find(x=>x.id===habitId);
   const d = fmtDate(habitViewDate), logs = get('habitLogs');
@@ -3916,58 +3985,63 @@ async function cloudSync(direction) {
 
   try {
     if(direction === 'push') {
-      // Upload all data to Google Sheets
+      let totalSent = 0;
       for(const sheet of SYNC_SHEETS) {
         const data = get(sheet);
         const rows = Array.isArray(data)
           ? data.map(item => ({ id: item.id || item.date || item.key || uid(), json: JSON.stringify(item) }))
-          : [{ id:'_single', json: JSON.stringify(data) }];
+          : (data && Object.keys(data).length ? [{ id:'_single', json: JSON.stringify(data) }] : []);
         if(!rows.length) continue;
-        await fetch(s.whDataSync, {
+        console.log(`[CloudSync] Pushing ${sheet}: ${rows.length} rows`);
+        const r = await fetch(s.whDataSync, {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify({ action:'bulkSave', sheet, rows })
         });
+        console.log(`[CloudSync] ${sheet} response:`, r.status);
+        if(!r.ok) { const t = await r.text().catch(()=>''); console.error(`[CloudSync] ${sheet} error:`, t); }
+        else totalSent += rows.length;
       }
       dot.style.color = 'var(--green)';
       txt.textContent = '已上傳 · ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
-      toast('所有資料已上傳到雲端 ☁️','success');
+      toast(`已上傳 ${totalSent} 筆到雲端 ☁️`,'success');
 
     } else {
-      // Download from Google Sheets
+      let totalLoaded = 0;
       for(const sheet of SYNC_SHEETS) {
+        console.log(`[CloudSync] Loading ${sheet}...`);
         const r = await fetch(s.whDataSync, {
           method:'POST',
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify({ action:'load', sheet })
         });
-        if(!r.ok) continue;
+        console.log(`[CloudSync] ${sheet} response:`, r.status);
+        if(!r.ok) { console.error(`[CloudSync] ${sheet} load failed:`, r.status); continue; }
         const rawText = await r.text();
+        console.log(`[CloudSync] ${sheet} raw:`, rawText.slice(0, 200));
         let items;
-        try { items = JSON.parse(rawText); } catch { continue; }
+        try { items = JSON.parse(rawText); } catch { console.error(`[CloudSync] ${sheet} JSON parse failed`); continue; }
         if(!Array.isArray(items)) items = items.rows || items.data || [];
-        // Parse json field back to objects
         const parsed = items.map(row => {
-          try { return JSON.parse(row.json || row.B || '{}'); } catch { return row; }
+          try { return JSON.parse(row.json || row.C || row.B || '{}'); } catch { return row; }
         }).filter(x => x && Object.keys(x).length);
         if(parsed.length) {
           if(sheet === 'mit' && parsed.length === 1 && parsed[0].today) {
-            // MIT is a single object, not array
             _cache[sheet] = parsed[0];
             try { localStorage.setItem(SK[sheet], JSON.stringify(parsed[0])); } catch{}
           } else {
             set(sheet, parsed);
           }
+          totalLoaded += parsed.length;
         }
       }
       dot.style.color = 'var(--green)';
       txt.textContent = '已下載 · ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
-      toast('已從雲端下載最新資料 📥','success');
-      // Re-render everything
+      toast(`已從雲端下載 ${totalLoaded} 筆 📥`,'success');
       renderDashboard(); renderHabits(); renderTodos(); renderNotes(); updateBadges();
     }
   } catch(e) {
-    console.error('Cloud sync error:', e);
+    console.error('[CloudSync] Error:', e);
     dot.style.color = 'var(--red)';
     txt.textContent = '同步失敗';
     toast('雲端同步失敗：' + e.message,'error');
