@@ -1325,9 +1325,14 @@ body::before {
         <input type="text" class="form-input" id="whLine" placeholder="https://hook.us2.make.com/...">
       </div>
       <div class="form-group">
-        <label class="form-label">資料同步 Webhook（Google Sheets + InBody）</label>
+        <label class="form-label">資料同步 Webhook（Google Sheets）</label>
         <input type="text" class="form-input" id="whDataSync" placeholder="https://hook.us2.make.com/...">
-        <div style="font-size:10px;color:var(--text3);margin-top:4px;">action: load / save / bulkSave / inbody</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">action: load / save / bulkSave</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Anthropic API Key（InBody 辨識用）</label>
+        <input type="password" class="form-input" id="apiKeyAnthropic" placeholder="sk-ant-api03-...">
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">直接呼叫 Claude Vision，不經過 Make.com</div>
       </div>
       <button class="settings-btn" onclick="saveSettings()" style="background:var(--text);color:var(--bg);border:none;width:100%;">💾 儲存設定</button>
     </div>
@@ -1790,6 +1795,7 @@ const DEFAULTS = {
   whCalendarRead: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
   whLine: 'https://hook.us2.make.com/8n4u37jnbr495eomnxn04y4iqaxp67rp',
   whDataSync: '',
+  apiKeyAnthropic: '',
   reminderTime: '07:30',
   dailyHabitTarget: 5,
 };
@@ -3041,6 +3047,7 @@ function loadSettings() {
   document.getElementById('whCalendar').value=s.whCalendar||'';
   document.getElementById('whLine').value=s.whLine||'';
   document.getElementById('whDataSync').value=s.whDataSync||'';
+  document.getElementById('apiKeyAnthropic').value=s.apiKeyAnthropic||'';
   document.getElementById('reminderTime').value=s.reminderTime||'07:30';
   const st=document.getElementById('lineStatus');
   if(s.whLine) { st.className='status-dot status-on'; st.textContent='● 已連線'; }
@@ -3059,6 +3066,7 @@ function saveSettings() {
     whCalendar:document.getElementById('whCalendar').value.trim(),
     whLine:document.getElementById('whLine').value.trim(),
     whDataSync:document.getElementById('whDataSync').value.trim(),
+    apiKeyAnthropic:document.getElementById('apiKeyAnthropic').value.trim(),
     reminderTime:document.getElementById('reminderTime').value,
   };
   _cache.settings = s;
@@ -4131,20 +4139,38 @@ async function scanInbody(dataUrl) {
   try {
     let responseData;
 
-    if(s.whDataSync) {
-      // Build complete Anthropic API request body on App side
-      // Make.com just forwards it — avoids base64 corruption from variable substitution
-      const apiBody = JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:1000,
-        messages:[{role:'user',content:[
-          {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
-          {type:'text',text:prompt}
-        ]}]
+    if(s.apiKeyAnthropic) {
+      // Direct API call with user's API key
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key': s.apiKeyAnthropic,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514', max_tokens:1000,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
+            {type:'text',text:prompt}
+          ]}]
+        })
       });
+      if(!r.ok) { const err=await r.json().catch(()=>({})); throw new Error(err.error?.message||'API error '+r.status); }
+      responseData = await r.json();
+    } else if(s.whDataSync) {
+      // Fallback: Make.com proxy
       const r = await fetch(s.whDataSync, {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ action:'inbody', apiBody })
+        body:JSON.stringify({ action:'inbody', apiBody: JSON.stringify({
+          model:'claude-sonnet-4-20250514', max_tokens:1000,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
+            {type:'text',text:prompt}
+          ]}]
+        })})
       });
       if(!r.ok) throw new Error('Webhook error ' + r.status);
       responseData = await r.json();
