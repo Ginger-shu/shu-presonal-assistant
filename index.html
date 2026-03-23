@@ -3218,9 +3218,6 @@ function saveSettings() {
   const s = {
     ...prev,
     whBackend:document.getElementById('whBackend').value.trim(),
-    
-    
-    reminderTime:document.getElementById('reminderTime').value,
   };
   _cache.settings = s;
   try { localStorage.setItem(SK.settings, JSON.stringify(s)); } catch{}
