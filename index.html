@@ -4132,11 +4132,19 @@ async function scanInbody(dataUrl) {
     let responseData;
 
     if(s.whDataSync) {
-      // Use Make.com proxy (API Key safe on server)
+      // Build complete Anthropic API request body on App side
+      // Make.com just forwards it — avoids base64 corruption from variable substitution
+      const apiBody = JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1000,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
+          {type:'text',text:prompt}
+        ]}]
+      });
       const r = await fetch(s.whDataSync, {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ action:'inbody', mediaType, imageData: base64Data, prompt })
+        body:JSON.stringify({ action:'inbody', apiBody })
       });
       if(!r.ok) throw new Error('Webhook error ' + r.status);
       responseData = await r.json();
