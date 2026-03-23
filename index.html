@@ -403,6 +403,22 @@ body::before {
 .tg-n .tg-count { background:var(--green-bg); color:var(--green); }
 .tg-n .tg-ck.done { border-color:var(--green); background:var(--green); }
 
+/* Swipe to delete wrapper */
+.swipe-wrap { position:relative; overflow:hidden; border-radius:8px; }
+.swipe-inner { position:relative; z-index:1; background:var(--surface); transition:transform 0.2s; }
+.swipe-inner.swiping { transition:none; }
+.swipe-delete { position:absolute; right:0; top:0; bottom:0; width:72px; background:var(--red); display:flex; align-items:center; justify-content:center; color:white; font-size:12px; font-weight:600; cursor:pointer; }
+/* Completed todos section */
+.completed-section { margin-top:12px; }
+.completed-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.completed-title { font-size:10px; letter-spacing:1.5px; color:var(--text3); font-weight:600; }
+.completed-clear { background:none; border:none; font-size:11px; color:var(--red); cursor:pointer; font-family:inherit; }
+.completed-item { display:flex; align-items:center; gap:8px; padding:8px 12px; background:var(--surface); border:1px solid var(--border-light); border-radius:10px; margin-bottom:6px; opacity:0.6; }
+.completed-item .ci-check { width:18px; height:18px; border-radius:5px; background:var(--done); display:flex; align-items:center; justify-content:center; color:white; font-size:9px; flex-shrink:0; cursor:pointer; }
+.completed-item .ci-title { flex:1; font-size:12px; text-decoration:line-through; color:var(--text3); }
+.completed-item .ci-time { font-size:9px; color:var(--text3); font-family:'IBM Plex Mono'; }
+.completed-item .ci-del { background:none; border:none; font-size:14px; cursor:pointer; color:var(--text3); padding:4px; }
+
 /* ========== QUICK ADD ========== */
 .quick-add { display:flex; gap:8px; margin-bottom:14px; }
 .quick-add input {
@@ -1117,6 +1133,57 @@ body::before {
 .goal-ms-val { font-family:'IBM Plex Mono'; font-size:10px; color:var(--text3); }
 .goal-log-btn { margin-top:8px; width:100%; padding:8px; border-radius:8px; border:1px dashed var(--border); background:none; color:var(--accent2); font-size:12px; font-weight:500; cursor:pointer; }
 
+/* ========== AI ASSISTANT ========== */
+.ai-greet { background:var(--surface); border-radius:var(--r); padding:14px 16px; border:1px solid var(--border); margin-bottom:14px; }
+.ai-greet-row { display:flex; gap:12px; align-items:flex-start; }
+.ai-avatar { width:36px; height:36px; border-radius:10px; flex-shrink:0; background:linear-gradient(135deg,#e8ddd0,#d4c4b0); display:flex; align-items:center; justify-content:center; font-size:18px; }
+.ai-greet-body { flex:1; }
+.ai-greet-text { font-size:12px; line-height:1.6; color:var(--text2); }
+.ai-greet-text strong { color:var(--text); }
+.ai-greet-detail { font-size:11px; color:var(--text3); margin-top:4px; padding:6px 10px; background:var(--bg2); border-radius:8px; line-height:1.5; }
+.ai-actions { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.ai-action { padding:6px 12px; border-radius:16px; font-size:10px; font-weight:500; background:var(--bg2); border:none; cursor:pointer; color:var(--text2); font-family:inherit; transition:0.15s; white-space:nowrap; }
+.ai-action:active { transform:scale(0.95); }
+.ai-action-primary { background:var(--text); color:var(--bg); }
+.ai-fab-ai { position:fixed; bottom:calc(88px + var(--safe-bottom)); right:76px; width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,#e8ddd0,#d4c4b0); border:none; font-size:20px; cursor:pointer; box-shadow:0 4px 12px rgba(44,37,24,0.15); display:flex; align-items:center; justify-content:center; z-index:50; transition:0.2s; }
+.ai-fab-ai:active { transform:scale(0.9); }
+/* Chat overlay */
+.ai-chat-overlay { position:fixed; inset:0; z-index:200; background:var(--bg); display:flex; flex-direction:column; transform:translateY(100%); transition:transform 0.3s ease; }
+.ai-chat-overlay.open { transform:translateY(0); }
+.ai-chat-header { display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid var(--border); background:var(--surface); padding-top:max(12px, env(safe-area-inset-top)); }
+.ai-chat-avatar { width:32px; height:32px; border-radius:10px; background:linear-gradient(135deg,#e8ddd0,#d4c4b0); display:flex; align-items:center; justify-content:center; font-size:16px; }
+.ai-chat-name { font-size:14px; font-weight:600; }
+.ai-chat-status { font-size:10px; color:var(--green); }
+.ai-chat-close { background:none; border:none; font-size:20px; cursor:pointer; color:var(--text3); padding:8px; margin-left:auto; }
+.ai-msgs { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+.ai-msg { max-width:85%; display:flex; gap:8px; }
+.ai-msg-ai { align-self:flex-start; }
+.ai-msg-user { align-self:flex-end; flex-direction:row-reverse; }
+.ai-msg-ava { width:26px; height:26px; border-radius:8px; background:linear-gradient(135deg,#e8ddd0,#d4c4b0); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:2px; }
+.ai-msg-user .ai-msg-ava { background:var(--text); color:var(--bg); font-size:10px; }
+.ai-bubble { padding:10px 14px; border-radius:16px; font-size:13px; line-height:1.6; }
+.ai-msg-ai .ai-bubble { background:var(--surface); border:1px solid var(--border); border-top-left-radius:4px; }
+.ai-msg-user .ai-bubble { background:var(--text); color:var(--bg); border-top-right-radius:4px; }
+.ai-confirm { background:rgba(212,160,62,0.08); border:1px solid rgba(212,160,62,0.2); border-radius:12px; padding:10px 14px; margin-top:8px; }
+.ai-confirm-title { font-size:11px; color:var(--done); font-weight:600; margin-bottom:6px; }
+.ai-confirm-detail { font-size:12px; margin-bottom:8px; line-height:1.5; }
+.ai-confirm-btns { display:flex; gap:6px; }
+.ai-confirm-btn { padding:6px 14px; border-radius:8px; font-size:11px; font-weight:600; border:none; cursor:pointer; font-family:inherit; }
+.ai-confirm-yes { background:var(--done); color:white; }
+.ai-confirm-no { background:var(--bg2); color:var(--text2); }
+.ai-typing { display:flex; gap:4px; padding:8px 14px; }
+.ai-typing-dot { width:6px; height:6px; border-radius:50%; background:var(--text3); animation:aiTyping 1.2s infinite; }
+.ai-typing-dot:nth-child(2) { animation-delay:0.2s; }
+.ai-typing-dot:nth-child(3) { animation-delay:0.4s; }
+@keyframes aiTyping { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+.ai-sugs { display:flex; gap:6px; flex-wrap:wrap; padding:4px 16px 8px; }
+.ai-sug { padding:6px 12px; border-radius:16px; font-size:10px; background:var(--surface); border:1px solid var(--border); cursor:pointer; color:var(--text2); font-family:inherit; }
+.ai-sug:active { background:var(--bg2); }
+.ai-chat-bar { display:flex; gap:8px; padding:10px 16px; border-top:1px solid var(--border); background:var(--surface); padding-bottom:max(10px, env(safe-area-inset-bottom)); }
+.ai-chat-bar input { flex:1; padding:10px 14px; border-radius:20px; border:1px solid var(--border); background:var(--bg); font-family:inherit; font-size:13px; color:var(--text); outline:none; }
+.ai-chat-bar input:focus { border-color:var(--accent); }
+.ai-send-btn { width:36px; height:36px; border-radius:50%; background:var(--text); color:var(--bg); border:none; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
 /* ========== INBODY SCAN ========== */
 .inbody-btn {
   display:flex; align-items:center; justify-content:center; gap:6px;
@@ -1150,6 +1217,8 @@ body::before {
       <div class="dash-greeting" id="greetingText"></div>
       <div class="dash-date" id="hDate"></div>
     </div>
+    <!-- AI Greeting -->
+    <div class="ai-greet" id="aiGreetCard"></div>
     <!-- MIT Focus -->
     <div id="dashMit"></div>
     <!-- Schedule -->
@@ -1220,6 +1289,8 @@ body::before {
       <div id="todoInboxCount" style="font-size:10px;color:var(--text3);"></div>
     </div>
     <div class="todo-grid" id="todoGrid"></div>
+    <!-- Completed todos -->
+    <div id="completedTodosSection"></div>
     <!-- Done List -->
     <div id="doneListCard"></div>
   </div>
@@ -1325,14 +1396,9 @@ body::before {
         <input type="text" class="form-input" id="whLine" placeholder="https://hook.us2.make.com/...">
       </div>
       <div class="form-group">
-        <label class="form-label">資料同步 Webhook（Google Sheets）</label>
-        <input type="text" class="form-input" id="whDataSync" placeholder="https://hook.us2.make.com/...">
-        <div style="font-size:10px;color:var(--text3);margin-top:4px;">action: load / save / bulkSave</div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Anthropic API Key（InBody 辨識用）</label>
-        <input type="password" class="form-input" id="apiKeyAnthropic" placeholder="sk-ant-api03-...">
-        <div style="font-size:10px;color:var(--text3);margin-top:4px;">直接呼叫 Claude Vision，不經過 Make.com</div>
+        <label class="form-label">資料同步 Webhook（Apps Script）</label>
+        <input type="text" class="form-input" id="whDataSync" placeholder="https://script.google.com/macros/s/.../exec">
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">資料同步 + InBody 辨識，全部走 Apps Script</div>
       </div>
       <button class="settings-btn" onclick="saveSettings()" style="background:var(--text);color:var(--bg);border:none;width:100%;">💾 儲存設定</button>
     </div>
@@ -1369,6 +1435,7 @@ body::before {
 
 <!-- FAB -->
 <button class="fab" id="fabBtn" onclick="fabAction()">+</button>
+<button class="ai-fab-ai" id="aiFab" onclick="openAiChat()">🤖</button>
 <div class="bottom-nav">
   <button class="nav-btn active" onclick="sw('dashboard',0)"><span class="nav-icon">◐</span>總覽</button>
   <button class="nav-btn" onclick="sw('schedule',1)"><span class="nav-icon">◷</span>行程<span class="badge" id="bSched">0</span></button>
@@ -1771,6 +1838,24 @@ body::before {
   </div>
 </div>
 
+<!-- AI Chat Overlay -->
+<div class="ai-chat-overlay" id="aiChatOverlay">
+  <div class="ai-chat-header">
+    <div class="ai-chat-avatar">🤖</div>
+    <div>
+      <div class="ai-chat-name">AI 助理</div>
+      <div class="ai-chat-status" id="aiStatus">● 線上</div>
+    </div>
+    <button class="ai-chat-close" onclick="closeAiChat()">✕</button>
+  </div>
+  <div class="ai-msgs" id="aiMsgs"></div>
+  <div class="ai-sugs" id="aiSugs"></div>
+  <div class="ai-chat-bar">
+    <input type="text" id="aiInput" placeholder="輸入訊息..." onkeydown="if(event.key==='Enter')sendAiMsg()">
+    <button class="ai-send-btn" onclick="sendAiMsg()">↑</button>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast-container" id="toastBox"></div>
 
@@ -1794,8 +1879,7 @@ const DEFAULTS = {
   whCalendar: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
   whCalendarRead: 'https://hook.us2.make.com/2qgv19uqdk9iof6rmtbjf6rese3vqn1w',
   whLine: 'https://hook.us2.make.com/8n4u37jnbr495eomnxn04y4iqaxp67rp',
-  whDataSync: '',
-  apiKeyAnthropic: '',
+  whDataSync: 'https://script.google.com/macros/s/AKfycbzTw4u9j-dxXCC_ElqP-Q-kxqPKroAuwzZthfUhYGp0r_XdnanasLDbHmJumRvQGkRe/exec',
   reminderTime: '07:30',
   dailyHabitTarget: 5,
 };
@@ -2407,29 +2491,32 @@ function renderTodos() {
   const overdue = all.filter(t => !t.completed && t.dueDate && t.dueDate < today()).length;
   document.getElementById('todoInboxCount').textContent = `${pending} 項${overdue ? ' · ' + overdue + ' 過期' : ''}`;
 
-  // 2×2 Grid
+  // 2×2 Grid — only pending
   const el = document.getElementById('todoGrid');
   el.innerHTML = GRID_COLS.map(col => {
-    const items = all.filter(t => t.priority === col.key)
+    const items = all.filter(t => !t.completed && t.priority === col.key)
       .sort((a,b) => {
-        if(a.completed !== b.completed) return a.completed ? 1 : -1;
         if(a.dueDate && b.dueDate) return a.dueDate.localeCompare(b.dueDate);
         return a.dueDate ? -1 : b.dueDate ? 1 : 0;
       });
-    const colPending = items.filter(t => !t.completed).length;
     return `<div class="tg-card ${col.cls}">
       <div class="tg-head">
         <div class="tg-label">${col.icon} ${col.label}</div>
-        <div class="tg-count">${colPending}</div>
+        <div class="tg-count">${items.length}</div>
       </div>
       <div class="tg-items">
         ${items.length ? items.map(t => {
           const dl = fmtDueLabel(t);
-          return `<div class="tg-item" onclick="openTodoModal('${t.id}')">
-            <div class="tg-ck ${t.completed?'done':''}" onclick="toggleTodo('${t.id}',event)">${t.completed?'\u2713':''}</div>
-            <div class="tg-body">
-              <div class="tg-title ${t.completed?'done':''}">${esc(t.title)}</div>
-              ${t.dueDate?`<div class="tg-due ${dl.od?'overdue':''}">${dl.text}</div>`:''}
+          return `<div class="swipe-wrap" data-id="${t.id}">
+            <div class="swipe-delete" onclick="deleteTodoSwipe('${t.id}')">🗑 刪除</div>
+            <div class="swipe-inner">
+              <div class="tg-item" onclick="openTodoModal('${t.id}')">
+                <div class="tg-ck" onclick="toggleTodo('${t.id}',event)"></div>
+                <div class="tg-body">
+                  <div class="tg-title">${esc(t.title)}</div>
+                  ${t.dueDate?`<div class="tg-due ${dl.od?'overdue':''}">${dl.text}</div>`:''}
+                </div>
+              </div>
             </div>
           </div>`;
         }).join('') : '<div class="tg-empty">✨</div>'}
@@ -2437,9 +2524,93 @@ function renderTodos() {
     </div>`;
   }).join('');
 
+  // Init swipe on new elements
+  initSwipeDelete();
+
+  // Completed section
+  const completed = all.filter(t => t.completed).sort((a,b) => (b.completedAt||'').localeCompare(a.completedAt||''));
+  const compEl = document.getElementById('completedTodosSection');
+  if(completed.length) {
+    compEl.innerHTML = `
+      <div class="completed-header">
+        <div class="completed-title">✅ 已完成（${completed.length}）</div>
+        <button class="completed-clear" onclick="clearCompleted()">清空已完成</button>
+      </div>
+      ${completed.map(t => {
+        const time = t.completedAt ? new Date(t.completedAt).toLocaleDateString('zh-TW',{month:'numeric',day:'numeric'}) : '';
+        return `<div class="completed-item">
+          <div class="ci-check" onclick="toggleTodo('${t.id}',event)">✓</div>
+          <div class="ci-title">${esc(t.title)}</div>
+          <div class="ci-time">${time}</div>
+          <button class="ci-del" onclick="deleteTodoQuiet('${t.id}')">✕</button>
+        </div>`;
+      }).join('')}`;
+  } else {
+    compEl.innerHTML = '';
+  }
+
   // MIT + Done
   renderMIT();
   renderDoneList();
+}
+
+function deleteTodoSwipe(id) {
+  set('todos', get('todos').filter(x=>x.id!==id));
+  toast('已刪除','success'); renderTodos(); updateBadges();
+}
+
+function deleteTodoQuiet(id) {
+  set('todos', get('todos').filter(x=>x.id!==id));
+  renderTodos(); updateBadges();
+}
+
+function clearCompleted() {
+  if(!confirm('清空所有已完成的待辦？')) return;
+  set('todos', get('todos').filter(t => !t.completed));
+  toast('已清空','success'); renderTodos(); updateBadges();
+}
+
+// Swipe-to-delete touch handler
+function initSwipeDelete() {
+  document.querySelectorAll('.swipe-wrap').forEach(wrap => {
+    if(wrap._swipeInit) return;
+    wrap._swipeInit = true;
+    const inner = wrap.querySelector('.swipe-inner');
+    let startX=0, currentX=0, swiping=false;
+
+    wrap.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      currentX = 0;
+      inner.classList.add('swiping');
+    }, {passive:true});
+
+    wrap.addEventListener('touchmove', e => {
+      const dx = e.touches[0].clientX - startX;
+      if(dx < 0) { // Only left swipe
+        currentX = Math.max(dx, -80);
+        inner.style.transform = `translateX(${currentX}px)`;
+        swiping = true;
+      }
+    }, {passive:true});
+
+    wrap.addEventListener('touchend', () => {
+      inner.classList.remove('swiping');
+      if(currentX < -40) {
+        inner.style.transform = 'translateX(-72px)'; // Snap open
+      } else {
+        inner.style.transform = 'translateX(0)';
+      }
+      setTimeout(() => swiping = false, 100);
+    });
+
+    // Close on tap elsewhere
+    inner.addEventListener('click', e => {
+      if(parseFloat(inner.style.transform?.match(/-?\d+/)?.[0] || 0) < -10) {
+        e.stopPropagation(); e.preventDefault();
+        inner.style.transform = 'translateX(0)';
+      }
+    }, true);
+  });
 }
 
 // =============== MIT (Most Important Tasks) ===============
@@ -3039,6 +3210,9 @@ function renderDashboard() {
     </div>
     <div class="d-habit-go">→</div>
   </div>`;
+
+  // AI Greeting
+  renderAiGreeting();
 }
 
 // =============== SETTINGS ===============
@@ -3047,7 +3221,6 @@ function loadSettings() {
   document.getElementById('whCalendar').value=s.whCalendar||'';
   document.getElementById('whLine').value=s.whLine||'';
   document.getElementById('whDataSync').value=s.whDataSync||'';
-  document.getElementById('apiKeyAnthropic').value=s.apiKeyAnthropic||'';
   document.getElementById('reminderTime').value=s.reminderTime||'07:30';
   const st=document.getElementById('lineStatus');
   if(s.whLine) { st.className='status-dot status-on'; st.textContent='● 已連線'; }
@@ -3066,7 +3239,6 @@ function saveSettings() {
     whCalendar:document.getElementById('whCalendar').value.trim(),
     whLine:document.getElementById('whLine').value.trim(),
     whDataSync:document.getElementById('whDataSync').value.trim(),
-    apiKeyAnthropic:document.getElementById('apiKeyAnthropic').value.trim(),
     reminderTime:document.getElementById('reminderTime').value,
   };
   _cache.settings = s;
@@ -3979,6 +4151,452 @@ function renderGoals() {
   }).join('');
 }
 
+// =============== AI ASSISTANT ===============
+let aiHistory = []; // Chat history for context
+let aiPendingAction = null; // Action waiting for confirmation
+
+// --- Smart Greeting Card (no API) ---
+function renderAiGreeting() {
+  const el = document.getElementById('aiGreetCard');
+  const h = new Date().getHours();
+  const dow = new Date().getDay();
+  const td = today();
+  const habits = get('habits'), logs = get('habitLogs'), todos = get('todos');
+  const scheds = get('schedules').filter(s => s.date === td);
+  const gcalToday = getGCalEventsForDate(td);
+  const allScheds = [...scheds, ...gcalToday].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+
+  // Habit analysis
+  const applicable = habits.filter(hb => hb.frequency==='daily'||(hb.weekdays&&hb.weekdays.includes(dow)));
+  const habitDone = applicable.filter(hb => logs.find(l=>l.habitId===hb.id && l.date===td && l.completed));
+  const habitPending = applicable.filter(hb => !logs.find(l=>l.habitId===hb.id && l.date===td && l.completed));
+
+  // Last week same day pattern
+  const lastWeek = new Date(); lastWeek.setDate(lastWeek.getDate() - 7);
+  const lwDate = fmtDate(lastWeek);
+  const lwLogs = logs.filter(l => l.date === lwDate && l.completed);
+  const lwWorkouts = lwLogs.filter(l => { const hb = habits.find(x=>x.id===l.habitId); return hb && (hb.type==='strength'||hb.type==='cardio'); });
+  const lwExercises = lwWorkouts.filter(l => l.exercises && l.exercises.length);
+
+  // Streak warning
+  const streakWarnings = [];
+  habits.forEach(hb => {
+    let missed = 0;
+    for(let i = 1; i <= 3; i++) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const ds = fmtDate(d), ddow = d.getDay();
+      if(hb.frequency==='daily'||(hb.weekdays&&hb.weekdays.includes(ddow))) {
+        if(!logs.find(l=>l.habitId===hb.id && l.date===ds && l.completed)) missed++;
+      }
+    }
+    if(missed >= 3) streakWarnings.push(hb);
+  });
+
+  // Pending todos
+  const pendingTodos = todos.filter(t => !t.completed);
+  const overdue = pendingTodos.filter(t => t.dueDate && t.dueDate < td);
+
+  // Build greeting
+  const greeting = h < 12 ? '早安' : h < 18 ? '下午好' : '晚上好';
+  let text = `${greeting}！`;
+  let detail = '';
+  let actions = [];
+
+  // Morning: focus on day ahead
+  if(h < 12) {
+    if(allScheds.length) {
+      text += `今天有 <strong>${allScheds.length} 個行程</strong>`;
+      const first = allScheds[0];
+      if(first.startTime) text += `，${first.startTime} 開始`;
+      text += '。';
+    } else {
+      text += '今天沒有行程，自由安排 🌿';
+    }
+    if(habitPending.length && habitPending.length < applicable.length) {
+      text += `<br>習慣完成 ${habitDone.length}/${applicable.length}`;
+    }
+    actions.push({label:'📝 規劃今天', mode:'plan', primary:true});
+  }
+  // Afternoon
+  else if(h < 18) {
+    const upcoming = allScheds.filter(s => (s.startTime||'99') > String(h).padStart(2,'0')+':'+String(new Date().getMinutes()).padStart(2,'0'));
+    if(upcoming.length) {
+      text += `接下來還有 <strong>${upcoming.length} 個行程</strong>。`;
+    }
+    if(habitPending.length) {
+      text += `<br>還有 <strong>${habitPending.length} 個習慣</strong>沒完成`;
+    }
+    actions.push({label:'📋 回顧今天', mode:'review', primary:true});
+  }
+  // Evening
+  else {
+    const todayWorkouts = logs.filter(l => l.date===td && l.completed && l.exercises?.length);
+    if(todayWorkouts.length) {
+      const bps = new Set();
+      todayWorkouts.forEach(l => (l.bodyParts||[]).forEach(bp => bps.add(bp)));
+      text += `今天練了 <strong>${[...bps].join('+')}</strong>，辛苦了！`;
+    }
+    text += ` 習慣完成 <strong>${habitDone.length}/${applicable.length}</strong>`;
+    if(habitDone.length >= applicable.length) text += ' 🎉';
+    actions.push({label:'📝 記錄感受', mode:'feel', primary:true});
+    actions.push({label:'🎯 規劃明天', mode:'tomorrow'});
+  }
+
+  // Last week same day workout suggestion
+  if(lwExercises.length && h < 18) {
+    const lwHabit = habits.find(x => x.id === lwExercises[0].habitId);
+    const exNames = lwExercises[0].exercises.map(e => `${e.name} ${Array.isArray(e.sets)?e.sets[0]?.weight+'kg':''}`.trim()).join(' · ');
+    detail = `上週${DAYS[dow]}你練了：${exNames}`;
+    actions.unshift({label:'✅ 安排一樣的', mode:'copyWorkout', primary:true, data:lwExercises[0]});
+  }
+
+  // Streak warnings
+  if(streakWarnings.length) {
+    const names = streakWarnings.slice(0,2).map(h => h.icon+' '+h.title).join('、');
+    text += `<br>💡 ${names} 已經好幾天沒做了`;
+  }
+
+  // Overdue
+  if(overdue.length) {
+    text += `<br>⚠️ 有 <strong>${overdue.length} 個過期待辦</strong>`;
+  }
+
+  // Monday: weekly summary
+  if(dow === 1 && h < 12) {
+    const lastWeekStart = new Date(); lastWeekStart.setDate(lastWeekStart.getDate() - 7);
+    const lastWeekEnd = new Date(); lastWeekEnd.setDate(lastWeekEnd.getDate() - 1);
+    let weekDone = 0, weekTotal = 0;
+    for(let i = 0; i < 7; i++) {
+      const d = new Date(lastWeekStart); d.setDate(d.getDate() + i);
+      const ds = fmtDate(d), ddow = d.getDay();
+      habits.forEach(hb => {
+        if(hb.frequency==='daily'||(hb.weekdays&&hb.weekdays.includes(ddow))) {
+          weekTotal++; if(logs.find(l=>l.habitId===hb.id&&l.date===ds&&l.completed)) weekDone++;
+        }
+      });
+    }
+    const rate = weekTotal ? Math.round(weekDone/weekTotal*100) : 0;
+    text = `新的一週！上週習慣完成率 <strong>${rate}%</strong> 💪`;
+    actions = [{label:'🎯 設定本週目標', mode:'weekGoal', primary:true},{label:'📊 上週報告', mode:'weekReport'}];
+    detail = '';
+  }
+
+  // Always add free chat
+  actions.push({label:'💬 問 AI', mode:'free'});
+
+  el.innerHTML = `<div class="ai-greet-row">
+    <div class="ai-avatar">🤖</div>
+    <div class="ai-greet-body">
+      <div class="ai-greet-text">${text}</div>
+      ${detail ? `<div class="ai-greet-detail">${detail}</div>` : ''}
+      <div class="ai-actions">${actions.map(a =>
+        `<button class="ai-action${a.primary?' ai-action-primary':''}" onclick="${a.mode==='copyWorkout'?`copyLastWorkout()`:`openAiChat('${a.mode}')`}">${a.label}</button>`
+      ).join('')}</div>
+    </div>
+  </div>`;
+}
+
+function copyLastWorkout() {
+  // Find last week same day workout log and copy it
+  const dow = new Date().getDay(), td = today();
+  const lastWeek = new Date(); lastWeek.setDate(lastWeek.getDate() - 7);
+  const lwDate = fmtDate(lastWeek);
+  const logs = get('habitLogs');
+  const habits = get('habits');
+  const lwLog = logs.find(l => l.date === lwDate && l.completed && l.exercises?.length);
+  if(!lwLog) { toast('找不到上週紀錄','error'); return; }
+
+  // Copy to today
+  const newLog = {
+    ...JSON.parse(JSON.stringify(lwLog)),
+    id: uid(), date: td, createdAt: new Date().toISOString()
+  };
+  const allLogs = get('habitLogs');
+  // Remove existing log for same habit+date if any
+  const idx = allLogs.findIndex(l => l.habitId === lwLog.habitId && l.date === td);
+  if(idx >= 0) allLogs[idx] = newLog;
+  else allLogs.push(newLog);
+  set('habitLogs', allLogs);
+  toast('已複製上週訓練 💪','success');
+  renderHabits(); renderDashboard();
+}
+
+// --- AI Chat ---
+function openAiChat(mode) {
+  document.getElementById('aiChatOverlay').classList.add('open');
+  const msgs = document.getElementById('aiMsgs');
+
+  // If fresh chat, add context-aware opening
+  if(!aiHistory.length) {
+    let sysContext = buildAiContext();
+    let openingPrompt = '';
+
+    switch(mode) {
+      case 'plan': openingPrompt = '幫我規劃今天的優先順序'; break;
+      case 'review': openingPrompt = '幫我回顧今天做了什麼'; break;
+      case 'feel': openingPrompt = '我想記錄今天的訓練感受'; break;
+      case 'tomorrow': openingPrompt = '幫我規劃明天'; break;
+      case 'weekGoal': openingPrompt = '幫我設定本週目標'; break;
+      case 'weekReport': openingPrompt = '分析我上週的表現'; break;
+      case 'train': openingPrompt = '分析我最近的訓練紀錄'; break;
+      default: openingPrompt = '';
+    }
+
+    // Show AI is thinking
+    msgs.innerHTML = '';
+    if(openingPrompt) {
+      addAiMsg('user', openingPrompt);
+      showAiTyping();
+      callAiApi(sysContext, openingPrompt);
+    } else {
+      addAiMsg('ai', '有什麼可以幫你的嗎？你可以問我關於訓練、待辦、習慣等任何問題 😊');
+      updateAiSuggestions(['分析本週訓練量','幫我加一個待辦','InBody 趨勢分析','規劃今天']);
+    }
+  }
+}
+
+function closeAiChat() {
+  document.getElementById('aiChatOverlay').classList.remove('open');
+}
+
+function buildAiContext() {
+  const td = today();
+  const habits = get('habits'), logs = get('habitLogs'), todos = get('todos');
+  const notes = get('notes'), goals = get('goals'), inbody = get('inbody');
+  const scheds = get('schedules').filter(s=>s.date===td);
+  const gcal = getGCalEventsForDate(td);
+  const dow = new Date().getDay();
+
+  const applicable = habits.filter(h=>h.frequency==='daily'||(h.weekdays&&h.weekdays.includes(dow)));
+  const habitDone = applicable.filter(h=>logs.find(l=>l.habitId===h.id&&l.date===td&&l.completed));
+  const pendingTodos = todos.filter(t=>!t.completed);
+
+  // Recent workout logs (last 7 days)
+  const recentLogs = [];
+  for(let i=0;i<7;i++) {
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const ds=fmtDate(d);
+    logs.filter(l=>l.date===ds&&l.completed&&l.exercises?.length).forEach(l=>{
+      const h=habits.find(x=>x.id===l.habitId);
+      recentLogs.push({date:ds, habit:h?.title, exercises:l.exercises?.map(e=>({name:e.name,sets:e.sets}))});
+    });
+  }
+
+  // Latest InBody
+  const latestIB = inbody.length ? inbody[inbody.length-1] : null;
+
+  return `你是一個個人助理 AI。用戶的資料如下（僅供分析，不要洩漏原始資料）：
+
+今天：${td}（${DAYS[dow]}）
+
+📅 今日行程（${scheds.length + gcal.length}）：
+${[...scheds,...gcal].map(s=>`  ${s.startTime||'全天'} ${s.title}`).join('\n')||'  無'}
+
+☑ 待辦事項（${pendingTodos.length} 項未完成）：
+${pendingTodos.slice(0,10).map(t=>`  [${PRI_LABEL[t.priority]}] ${t.title}${t.dueDate?' ('+t.dueDate+')':''}`).join('\n')||'  無'}
+
+🔥 今日習慣（${habitDone.length}/${applicable.length}）：
+${applicable.map(h=>`  ${logs.find(l=>l.habitId===h.id&&l.date===td&&l.completed)?'✅':'⬜'} ${h.icon} ${h.title}`).join('\n')||'  無'}
+
+🏋️ 近 7 天訓練紀錄：
+${recentLogs.length?recentLogs.map(l=>`  ${l.date} ${l.habit}: ${l.exercises?.map(e=>e.name+' '+e.sets?.map(s=>s.weight+'kg×'+s.reps).join(',')).join('; ')}`).join('\n'):'  無紀錄'}
+
+🎯 長期目標：
+${goals.map(g=>`  ${g.title}: ${g.logs?.length?g.logs[g.logs.length-1].value:'?'} → ${g.targetValue} ${g.unit}`).join('\n')||'  無'}
+
+${latestIB?`📊 最近 InBody（${latestIB.date}）：體重${latestIB.weight}kg 體脂${latestIB.bodyFatPercent}% 骨骼肌${latestIB.skeletalMuscleMass}kg`:''}
+
+規則：
+1. 用繁體中文回覆，語氣親切專業
+2. 回覆簡短精準，不超過 200 字
+3. 如果用戶要求新增/修改資料，在回覆最後加上 [ACTION:類型:JSON資料]
+   例如：[ACTION:addTodo:{"title":"買蛋白粉","priority":"important"}]
+   支援的 action：addTodo, addNote, addHabit
+4. 不要自己執行 action，只建議，等用戶確認`;
+}
+
+function addAiMsg(role, text) {
+  const msgs = document.getElementById('aiMsgs');
+  const isAi = role === 'ai';
+  const div = document.createElement('div');
+  div.className = `ai-msg ai-msg-${isAi?'ai':'user'}`;
+  div.innerHTML = `
+    <div class="ai-msg-ava">${isAi?'🤖':'S'}</div>
+    <div class="ai-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  aiHistory.push({role: isAi?'assistant':'user', content: text});
+}
+
+function showAiTyping() {
+  const msgs = document.getElementById('aiMsgs');
+  const div = document.createElement('div');
+  div.className = 'ai-msg ai-msg-ai';
+  div.id = 'aiTypingIndicator';
+  div.innerHTML = `<div class="ai-msg-ava">🤖</div><div class="ai-bubble"><div class="ai-typing"><div class="ai-typing-dot"></div><div class="ai-typing-dot"></div><div class="ai-typing-dot"></div></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  document.getElementById('aiStatus').textContent = '● 思考中...';
+  document.getElementById('aiStatus').style.color = 'var(--orange)';
+}
+
+function hideAiTyping() {
+  document.getElementById('aiTypingIndicator')?.remove();
+  document.getElementById('aiStatus').textContent = '● 線上';
+  document.getElementById('aiStatus').style.color = 'var(--green)';
+}
+
+function updateAiSuggestions(items) {
+  document.getElementById('aiSugs').innerHTML = items.map(t =>
+    `<button class="ai-sug" onclick="sendAiMsgText('${t}')">${t}</button>`
+  ).join('');
+}
+
+function sendAiMsgText(text) {
+  document.getElementById('aiInput').value = text;
+  sendAiMsg();
+}
+
+async function sendAiMsg() {
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+
+  addAiMsg('user', text);
+  showAiTyping();
+
+  const sysContext = aiHistory.length <= 2 ? buildAiContext() : '';
+  await callAiApi(sysContext, text);
+}
+
+async function callAiApi(systemPrompt, userMsg) {
+  const s = getSett();
+
+  // Build messages for API
+  const messages = [];
+  if(systemPrompt) {
+    messages.push({role:'user', content: systemPrompt + '\n\n用戶說：' + userMsg});
+  } else {
+    // Continue conversation
+    aiHistory.forEach(m => messages.push({role:m.role, content:m.content}));
+  }
+
+  try {
+    let responseText = '';
+
+    if(s.whDataSync) {
+      // Via Apps Script
+      const r = await fetch(s.whDataSync, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          action:'chat',
+          messages: messages,
+        })
+      });
+      if(!r.ok) throw new Error('GAS error ' + r.status);
+      const data = await r.json();
+      if(data.error) throw new Error(data.error);
+      responseText = data.content?.map(c=>c.text||'').join('') || JSON.stringify(data);
+    } else {
+      // Direct (claude.ai preview)
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514', max_tokens:500,
+          messages: messages,
+        })
+      });
+      if(!r.ok) throw new Error('API error ' + r.status);
+      const data = await r.json();
+      responseText = data.content?.map(c=>c.text||'').join('') || '';
+    }
+
+    hideAiTyping();
+
+    // Check for action tags
+    const actionMatch = responseText.match(/\[ACTION:(\w+):(\{.*\})\]/);
+    if(actionMatch) {
+      const actionType = actionMatch[1];
+      const actionData = JSON.parse(actionMatch[2]);
+      const cleanText = responseText.replace(/\[ACTION:.*\]/, '').trim();
+      addAiMsg('ai', cleanText);
+      showAiConfirm(actionType, actionData);
+    } else {
+      addAiMsg('ai', responseText);
+    }
+
+    updateAiSuggestions(['繼續分析','幫我加待辦','還有什麼建議？']);
+
+  } catch(e) {
+    hideAiTyping();
+    addAiMsg('ai', '抱歉，發生錯誤：' + e.message);
+  }
+}
+
+function showAiConfirm(actionType, actionData) {
+  aiPendingAction = {type: actionType, data: actionData};
+  const msgs = document.getElementById('aiMsgs');
+  const labels = {addTodo:'新增待辦', addNote:'新增筆記', addHabit:'新增習慣'};
+  const details = {
+    addTodo: `📋 ${actionData.title}${actionData.priority?' ('+PRI_LABEL[actionData.priority]+')':''}`,
+    addNote: `📝 ${actionData.title||actionData.content?.slice(0,30)}`,
+    addHabit: `🔥 ${actionData.icon||'🎯'} ${actionData.title}`,
+  };
+  const div = document.createElement('div');
+  div.className = 'ai-confirm';
+  div.innerHTML = `
+    <div class="ai-confirm-title">⚡ 確認操作：${labels[actionType]||actionType}</div>
+    <div class="ai-confirm-detail">${details[actionType]||JSON.stringify(actionData)}</div>
+    <div class="ai-confirm-btns">
+      <button class="ai-confirm-btn ai-confirm-yes" onclick="execAiAction()">✓ 確認執行</button>
+      <button class="ai-confirm-btn ai-confirm-no" onclick="cancelAiAction()">✕ 取消</button>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function execAiAction() {
+  if(!aiPendingAction) return;
+  const {type, data} = aiPendingAction;
+  aiPendingAction = null;
+
+  switch(type) {
+    case 'addTodo': {
+      const list = get('todos');
+      list.push({id:uid(), title:data.title, priority:data.priority||'normal', dueDate:data.dueDate||'', note:data.note||'', completed:false, createdAt:new Date().toISOString()});
+      set('todos', list); renderTodos(); updateBadges();
+      addAiMsg('ai', '✅ 已新增待辦：' + data.title);
+      break;
+    }
+    case 'addNote': {
+      const list = get('notes');
+      list.push({id:uid(), title:data.title||'', content:data.content||'', tags:data.tags||[], pinned:false, isVoice:false, createdAt:new Date().toISOString(), updatedAt:new Date().toISOString()});
+      set('notes', list); renderNotes();
+      addAiMsg('ai', '✅ 已新增筆記');
+      break;
+    }
+    case 'addHabit': {
+      const list = get('habits');
+      list.push({id:uid(), title:data.title, icon:data.icon||'🎯', type:data.type||'check', frequency:data.frequency||'daily', weekdays:data.weekdays||[], createdAt:new Date().toISOString()});
+      set('habits', list); renderHabits();
+      addAiMsg('ai', '✅ 已新增習慣：' + data.title);
+      break;
+    }
+  }
+  // Remove confirm card
+  document.querySelectorAll('.ai-confirm').forEach(el => el.remove());
+}
+
+function cancelAiAction() {
+  aiPendingAction = null;
+  document.querySelectorAll('.ai-confirm').forEach(el => el.remove());
+  addAiMsg('ai', '好的，已取消 👌');
+}
+
 // =============== CLOUD SYNC (Google Sheets via Make.com) ===============
 const SYNC_SHEETS = ['habits','habitLogs','todos','notes','goals','mit','inbody'];
 
@@ -4139,41 +4757,16 @@ async function scanInbody(dataUrl) {
   try {
     let responseData;
 
-    if(s.apiKeyAnthropic) {
-      // Direct API call with user's API key
-      const r = await fetch('https://api.anthropic.com/v1/messages', {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'x-api-key': s.apiKeyAnthropic,
-          'anthropic-version':'2023-06-01',
-          'anthropic-dangerous-direct-browser-access':'true'
-        },
-        body:JSON.stringify({
-          model:'claude-sonnet-4-20250514', max_tokens:1000,
-          messages:[{role:'user',content:[
-            {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
-            {type:'text',text:prompt}
-          ]}]
-        })
-      });
-      if(!r.ok) { const err=await r.json().catch(()=>({})); throw new Error(err.error?.message||'API error '+r.status); }
-      responseData = await r.json();
-    } else if(s.whDataSync) {
-      // Fallback: Make.com proxy
+    if(s.whDataSync) {
+      // Apps Script backend — sends mediaType/imageData/prompt, GAS calls Anthropic server-side
       const r = await fetch(s.whDataSync, {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ action:'inbody', apiBody: JSON.stringify({
-          model:'claude-sonnet-4-20250514', max_tokens:1000,
-          messages:[{role:'user',content:[
-            {type:'image',source:{type:'base64',media_type:mediaType,data:base64Data}},
-            {type:'text',text:prompt}
-          ]}]
-        })})
+        body:JSON.stringify({ action:'inbody', mediaType, imageData: base64Data, prompt })
       });
-      if(!r.ok) throw new Error('Webhook error ' + r.status);
+      if(!r.ok) { const t=await r.text().catch(()=>''); throw new Error('GAS error '+r.status+': '+t.slice(0,100)); }
       responseData = await r.json();
+      if(responseData.error) throw new Error(responseData.error);
     } else {
       // Direct API (works in claude.ai preview)
       const r = await fetch('https://api.anthropic.com/v1/messages', {
