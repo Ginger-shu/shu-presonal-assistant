@@ -3267,7 +3267,7 @@ async function fetchGCalMonthEvents(year, month) {
   try {
     const r = await fetch(s.whBackend, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type':'text/plain'},
       body: JSON.stringify({ action:'calList', timeMin, timeMax })
     });
     if(!r.ok) throw new Error('Webhook error ' + r.status);
@@ -3374,7 +3374,7 @@ async function syncCal(action, data) {
 
   try {
     const r = await fetch(s.whBackend, {
-      method:'POST', headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'text/plain'},
       body: JSON.stringify(payload)
     });
     if(r.ok) {
@@ -3436,7 +3436,7 @@ async function testLine() {
   }
 
   try {
-    const r=await fetch(s.whBackend, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:'lineNotify', message:msg}) });
+    const r=await fetch(s.whBackend, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({action:'lineNotify', message:msg}) });
     toast(r.ok?'LINE 測試已發送':'發送失敗', r.ok?'success':'error');
   } catch{ toast('連線失敗','error'); }
 }
@@ -4470,7 +4470,7 @@ async function callAiApi(systemPrompt, userMsg) {
       // Via Apps Script
       const r = await fetch(s.whBackend, {
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        headers:{'Content-Type':'text/plain'},
         body:JSON.stringify({
           action:'chat',
           messages: messages,
@@ -4601,7 +4601,7 @@ async function cloudSync(direction) {
         console.log(`[CloudSync] Pushing ${sheet}: ${rows.length} rows`);
         const r = await fetch(s.whBackend, {
           method:'POST',
-          headers:{'Content-Type':'application/json'},
+          headers:{'Content-Type':'text/plain'},
           body:JSON.stringify({ action:'bulkSave', sheet, rows })
         });
         console.log(`[CloudSync] ${sheet} response:`, r.status);
@@ -4618,7 +4618,7 @@ async function cloudSync(direction) {
         console.log(`[CloudSync] Loading ${sheet}...`);
         const r = await fetch(s.whBackend, {
           method:'POST',
-          headers:{'Content-Type':'application/json'},
+          headers:{'Content-Type':'text/plain'},
           body:JSON.stringify({ action:'load', sheet })
         });
         console.log(`[CloudSync] ${sheet} response:`, r.status);
@@ -4741,7 +4741,7 @@ async function scanInbody(dataUrl) {
       // Apps Script backend — sends mediaType/imageData/prompt, GAS calls Anthropic server-side
       const r = await fetch(s.whBackend, {
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        headers:{'Content-Type':'text/plain'},
         body:JSON.stringify({ action:'inbody', mediaType, imageData: base64Data, prompt })
       });
       if(!r.ok) { const t=await r.text().catch(()=>''); throw new Error('GAS error '+r.status+': '+t.slice(0,100)); }
