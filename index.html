@@ -2068,20 +2068,11 @@ function renderCalendar() {
   const todayStr = today();
   const selectedStr = fmtDate(viewDate);
 
-  // Build event map: date -> [{title, startTime, category, isGcal}]
-  const scheds = get('schedules');
+  // Build event map from GCal only
   const eventMap = {};
-  scheds.forEach(s => {
-    if(!eventMap[s.date]) eventMap[s.date] = [];
-    eventMap[s.date].push({ title:s.title, startTime:s.startTime, category:s.category||'other', isGcal:false });
-  });
-  // Merge Google Calendar events
   Object.values(gcalEventsCache).flat().forEach(g => {
     if(!eventMap[g.date]) eventMap[g.date] = [];
-    // Deduplicate
-    if(!eventMap[g.date].some(e => !e.isGcal && e.title === g.title && e.startTime === g.startTime)) {
-      eventMap[g.date].push({ title:g.title, startTime:g.startTime, category:null, isGcal:true, colorId:g.colorId });
-    }
+    eventMap[g.date].push({ title:g.title, startTime:g.startTime, isGcal:true, colorId:g.colorId });
   });
   // Sort each day's events by time
   Object.keys(eventMap).forEach(k => {
@@ -2139,19 +2130,9 @@ function renderDaySchedule() {
   const ds = fmtDate(viewDate);
   document.getElementById('dayListTitle').innerHTML = `<span class="line"></span> ${fmtDateZh(viewDate)}`;
 
-  // Local events
-  const localItems = get('schedules').filter(s=>s.date===ds);
-  // Google Calendar events (exclude those already synced from this app)
-  const gcalItems = getGCalEventsForDate(ds).filter(g => {
-    // Skip if a local event has the same calendarEventId
-    return !localItems.some(l => l.calendarEventId && g.gcalId && l.calendarEventId === g.gcalId);
-  });
-
-  // Merge and sort
-  const allItems = [
-    ...localItems.map(s => ({...s, isGcal: false})),
-    ...gcalItems.map(g => ({...g, isGcal: true})),
-  ].sort((a,b) => (a.startTime||'99').localeCompare(b.startTime||'99'));
+  // Only show Google Calendar events
+  const allItems = getGCalEventsForDate(ds)
+    .sort((a,b) => (a.startTime||'99').localeCompare(b.startTime||'99'));
 
   const el = document.getElementById('scheduleList');
   if(!allItems.length) {
@@ -2159,44 +2140,22 @@ function renderDaySchedule() {
     return;
   }
   el.innerHTML = allItems.map(s => {
-    if(s.isGcal) {
-      // Google Calendar event (read-only, open in new tab)
-      const accentCls = s.colorId ? `gcal-c${s.colorId}` : 'gcal-accent';
-      return `
-      <div class="card-item gcal-item" ${s.htmlLink?`onclick="window.open('${s.htmlLink}','_blank')"`:''}">
-        <div class="sched-accent ${accentCls}"></div>
-        <div class="card-body">
-          <div class="card-title">${esc(s.title)}</div>
-          <div class="card-meta">
-            <span class="gcal-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/></svg> Google</span>
-            ${s.location?`<span>📍 ${esc(s.location)}</span>`:''}
-          </div>
+    const accentCls = s.colorId ? `gcal-c${s.colorId}` : 'gcal-accent';
+    return `
+    <div class="card-item gcal-item" ${s.htmlLink?`onclick="window.open('${s.htmlLink}','_blank')"`:''}">
+      <div class="sched-accent ${accentCls}"></div>
+      <div class="card-body">
+        <div class="card-title">${esc(s.title)}</div>
+        <div class="card-meta">
+          <span class="gcal-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/></svg> Google</span>
+          ${s.location?`<span>📍 ${esc(s.location)}</span>`:''}
         </div>
-        <div class="time-block">
-          <div class="time-main">${s.startTime||'全天'}</div>
-          ${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}
-        </div>
-      </div>`;
-    } else {
-      // Local event
-      return `
-      <div class="card-item" onclick="openScheduleModal('${s.id}')">
-        <div class="sched-accent ${CAT_MAP[s.category]||'acc-other'}"></div>
-        <div class="card-body">
-          <div class="card-title">${esc(s.title)}</div>
-          <div class="card-meta">
-            <span class="sched-cat ${CAT_CHIP[s.category]||'cat-other'}">${CAT_LABEL[s.category]||'📌 其他'}</span>
-            ${s.location?`<span>📍 ${esc(s.location)}</span>`:''}
-            ${s.syncCal?'<span style="color:var(--green)">● 已同步</span>':''}
-          </div>
-        </div>
-        <div class="time-block">
-          <div class="time-main">${s.startTime||'全天'}</div>
-          ${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}
-        </div>
-        <span class="chevron">›</span>
-      </div>`;
-    }
+      </div>
+      <div class="time-block">
+        <div class="time-main">${s.startTime||'全天'}</div>
+        ${s.endTime?`<div class="time-end">${s.endTime}</div>`:''}
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -3279,22 +3238,17 @@ function renderDashboard() {
     </div>`;
   }
 
-  // === 2. Schedule ===
-  const scheds = get('schedules');
-  const todayS = scheds.filter(s=>s.date===td);
-  const gcalToday = getGCalEventsForDate(td).filter(g => !todayS.some(l=>l.calendarEventId && g.gcalId && l.calendarEventId===g.gcalId));
-  const allTodayS = [...todayS.map(s=>({...s,isGcal:false})), ...gcalToday.map(g=>({...g,isGcal:true}))].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+  // === 2. Schedule (GCal only) ===
+  const allTodayS = getGCalEventsForDate(td).sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
 
   const schedEl = document.getElementById('dashSchedSection');
-  // Show upcoming + next 1-2 (max 3)
   const upcoming = allTodayS.filter(s => (s.endTime||s.startTime||'99:99') > nowHHMM);
   const display = upcoming.length ? upcoming.slice(0,3) : allTodayS.slice(-2);
 
   if(allTodayS.length) {
-    const DOT_COLORS = {work:'var(--blue)',personal:'var(--red)',meeting:'#7986CB',health:'var(--done)',other:'#616161'};
     let html = `<div class="d-sec-head"><div class="d-sec-title">📅 今日行程</div><button class="d-sec-more" onclick="sw('schedule',1)">全部 ${allTodayS.length} 筆 →</button></div>`;
     html += display.map(s => {
-      const dotColor = s.isGcal ? '#4285f4' : (DOT_COLORS[s.category]||'#616161');
+      const dotColor = '#4285f4';
       let cd = '';
       if(s.startTime) {
         if(s.startTime <= nowHHMM && (!s.endTime || s.endTime > nowHHMM)) cd = '<div class="d-sched-cd d-sched-now">⏱ 進行中</div>';
@@ -3539,6 +3493,10 @@ async function syncCal(action, data) {
       }
       const msg = {created:'已新增至 Google Calendar', updated:'已更新 Google Calendar', deleted:'已從 Google Calendar 刪除'};
       toast(msg[res.status||action]||'Google Calendar 同步成功','success');
+      // Refresh GCal to show updated data
+      gcalEventsCache = {};
+      await fetchGCalMonthEvents(calYear, calMonth);
+      renderSchedule(); renderDashboard();
     } else toast('同步失敗','error');
   } catch{ toast('後端連線失敗','error'); }
 }
@@ -3547,12 +3505,8 @@ async function testLine() {
   const s=getSett(); if(!s.whBackend) { toast('未設定後端 URL','error'); return; }
   const td=today();
 
-  // Local schedules
-  const localScheds=get('schedules').filter(x=>x.date===td);
-  // GCal events (already fetched)
-  const gcalEvents=getGCalEventsForDate(td).filter(g => !localScheds.some(l=>l.calendarEventId && g.gcalId && l.calendarEventId===g.gcalId));
-  // Merge and sort
-  const allScheds=[...localScheds, ...gcalEvents].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+  // GCal events only
+  const allScheds=getGCalEventsForDate(td).sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
 
   // Todos
   const todos=get('todos').filter(t=>!t.completed);
@@ -3618,7 +3572,7 @@ function clearAll() {
 function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 function updateBadges() {
   const td=today();
-  document.getElementById('bSched').textContent=get('schedules').filter(s=>s.date===td).length;
+  document.getElementById('bSched').textContent=getGCalEventsForDate(td).length;
   document.getElementById('bTodo').textContent=get('todos').filter(t=>!t.completed).length;
 }
 
@@ -4297,9 +4251,8 @@ function renderAiGreeting() {
   const dow = new Date().getDay();
   const td = today();
   const habits = get('habits'), logs = get('habitLogs'), todos = get('todos');
-  const scheds = get('schedules').filter(s => s.date === td);
-  const gcalToday = getGCalEventsForDate(td);
-  const allScheds = [...scheds, ...gcalToday].sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
+  const scheds = getGCalEventsForDate(td);
+  const allScheds = scheds.sort((a,b)=>(a.startTime||'99').localeCompare(b.startTime||'99'));
 
   // Habit analysis
   const applicable = habits.filter(hb => hb.frequency==='daily'||(hb.weekdays&&hb.weekdays.includes(dow)));
@@ -4498,8 +4451,7 @@ function buildAiContext() {
   const td = today();
   const habits = get('habits'), logs = get('habitLogs'), todos = get('todos');
   const notes = get('notes'), goals = get('goals'), inbody = get('inbody');
-  const scheds = get('schedules').filter(s=>s.date===td);
-  const gcal = getGCalEventsForDate(td);
+  const scheds = getGCalEventsForDate(td);
   const dow = new Date().getDay();
 
   const applicable = habits.filter(h=>h.frequency==='daily'||(h.weekdays&&h.weekdays.includes(dow)));
@@ -4524,8 +4476,8 @@ function buildAiContext() {
 
 今天：${td}（${DAYS[dow]}）
 
-📅 今日行程（${scheds.length + gcal.length}）：
-${[...scheds,...gcal].map(s=>`  ${s.startTime||'全天'} ${s.title}`).join('\n')||'  無'}
+📅 今日行程（${scheds.length}）：
+${scheds.map(s=>`  ${s.startTime||'全天'} ${s.title}`).join('\n')||'  無'}
 
 ☑ 待辦事項（${pendingTodos.length} 項未完成）：
 ${pendingTodos.slice(0,10).map(t=>`  [${PRI_LABEL[t.priority]}] ${t.title}${t.dueDate?' ('+t.dueDate+')':''}`).join('\n')||'  無'}
