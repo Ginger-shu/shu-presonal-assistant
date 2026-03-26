@@ -70,10 +70,10 @@ body::before {
 }
 .nav-btn {
   display:flex; flex-direction:column; align-items:center;
-  padding:4px 10px; border:none; background:transparent;
-  color:var(--text3); font-family:inherit; font-size:10px;
+  padding:4px 4px; border:none; background:transparent;
+  color:var(--text3); font-family:inherit; font-size:9px;
   font-weight:500; cursor:pointer; transition:0.2s;
-  position:relative;
+  position:relative; flex:1;
 }
 .nav-btn .nav-icon {
   width:52px; height:28px; border-radius:14px;
@@ -1184,6 +1184,99 @@ body::before {
 .ai-chat-bar input:focus { border-color:var(--accent); }
 .ai-send-btn { width:36px; height:36px; border-radius:50%; background:var(--text); color:var(--bg); border:none; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 
+/* ========== SYSTEMS PAGE ========== */
+.galaxy { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); padding:8px; margin-bottom:12px; }
+.galaxy svg { width:100%; }
+.galaxy svg .node { cursor:pointer; }
+.galaxy svg .node-ring { display:none; }
+.galaxy svg .node.selected .node-ring { display:block; animation:nodePulse 1.5s infinite; }
+@keyframes nodePulse { 0%,100%{opacity:0.3} 50%{opacity:0} }
+.galaxy-hint { text-align:center; font-size:10px; color:var(--text3); padding:4px 0; }
+.galaxy-hint.hidden { display:none; }
+.sys-detail { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); overflow:hidden; max-height:0; opacity:0; transition:max-height 0.35s ease, opacity 0.25s ease, margin 0.3s ease; margin-bottom:0; }
+.sys-detail.open { max-height:900px; opacity:1; margin-bottom:12px; }
+.sd-header { padding:12px 14px; display:flex; align-items:center; gap:10px; border-bottom:1px solid var(--border); }
+.sd-icon { width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.sd-name { font-size:14px; font-weight:600; }
+.sd-status { font-size:10px; margin-top:2px; }
+.sd-close { background:none; border:none; font-size:18px; cursor:pointer; color:var(--text3); padding:6px; margin-left:auto; }
+.sd-body { padding:12px 14px; }
+.sd-section { margin-bottom:12px; }
+.sd-section:last-child { margin-bottom:0; }
+.sd-label { font-size:9px; letter-spacing:1.5px; color:var(--text3); font-weight:600; margin-bottom:5px; }
+.sd-techs { display:flex; flex-wrap:wrap; gap:4px; }
+.sd-tech { padding:2px 7px; border-radius:5px; font-size:9px; font-weight:500; }
+.sd-tech-fe { background:rgba(26,115,232,0.08); color:var(--blue); }
+.sd-tech-mw { background:rgba(232,113,10,0.08); color:var(--orange); }
+.sd-tech-db { background:rgba(108,92,231,0.08); color:var(--purple); }
+.sd-tech-ext { background:rgba(52,168,83,0.08); color:var(--green); }
+.sd-flow { display:flex; align-items:center; gap:4px; flex-wrap:wrap; padding:5px 8px; background:var(--bg); border-radius:8px; font-size:9px; }
+.sd-flow-node { padding:3px 7px; border-radius:5px; font-weight:500; }
+.sd-flow-arrow { color:var(--text3); }
+.sd-trow { display:flex; align-items:center; gap:5px; padding:4px 0; font-size:10px; }
+.sd-trow + .sd-trow { border-top:1px solid rgba(0,0,0,0.04); }
+.sd-tname { font-family:'IBM Plex Mono'; font-weight:600; color:var(--accent2); min-width:78px; font-size:9px; }
+.sd-tdesc { flex:1; color:var(--text2); font-size:9px; }
+.sd-trw { font-size:7px; padding:1px 5px; border-radius:3px; flex-shrink:0; }
+.sd-rw-w { background:rgba(217,48,37,0.1); color:var(--red); }
+.sd-rw-r { background:rgba(52,168,83,0.1); color:var(--green); }
+.sd-rw-rw { background:rgba(26,115,232,0.1); color:var(--blue); }
+.sd-conn { display:flex; align-items:center; gap:6px; padding:3px 0; font-size:10px; }
+.sd-conn + .sd-conn { border-top:1px solid rgba(0,0,0,0.04); }
+.sd-conn-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.sd-conn-reason { font-size:9px; color:var(--text3); }
+.sd-prog { display:flex; align-items:flex-start; gap:5px; padding:3px 0; font-size:10px; }
+.sd-prog + .sd-prog { border-top:1px solid rgba(0,0,0,0.04); }
+.sd-prog-dot { width:5px; height:5px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+.sd-note { background:var(--bg); border-radius:7px; padding:7px 10px; font-size:10px; color:var(--text2); line-height:1.5; }
+.sd-note strong { color:var(--text); }
+.sd-core-stats { display:flex; gap:5px; margin-bottom:8px; }
+.sd-core-stat { flex:1; background:var(--bg); border-radius:7px; padding:7px 5px; text-align:center; }
+.sd-core-num { font-family:'Crimson Pro'; font-size:17px; font-weight:700; }
+.sd-core-label { font-size:7px; color:var(--text3); margin-top:2px; }
+.sys-view-btns { display:flex; gap:4px; margin-bottom:12px; background:var(--bg2); border-radius:10px; padding:3px; }
+.sys-view-btn { flex:1; padding:7px; border:none; border-radius:8px; font-size:10px; font-weight:500; cursor:pointer; font-family:inherit; background:none; color:var(--text3); transition:0.15s; }
+.sys-view-btn.active { background:var(--surface); color:var(--text); box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+.sys-list-view { display:none; }
+.sys-list-view.active { display:block; }
+
+/* InBody history timeline */
+.ib-timeline { margin:10px 0 14px; }
+.ib-timeline-title { font-size:10px; letter-spacing:1.5px; color:var(--text3); font-weight:600; margin-bottom:8px; }
+.ib-card { background:var(--surface); border-radius:12px; border:1px solid var(--border); padding:10px 12px; margin-bottom:6px; cursor:pointer; }
+.ib-card:active { background:var(--bg); }
+.ib-card-head { display:flex; justify-content:space-between; align-items:center; }
+.ib-card-date { font-family:'IBM Plex Mono'; font-size:11px; font-weight:600; }
+.ib-card-arrow { color:var(--text3); font-size:12px; transition:0.2s; }
+.ib-card-arrow.open { transform:rotate(90deg); }
+.ib-card-summary { display:flex; gap:10px; margin-top:4px; font-size:10px; color:var(--text2); }
+.ib-card-summary span { display:flex; align-items:center; gap:3px; }
+.ib-card-detail { display:none; margin-top:8px; padding-top:8px; border-top:1px solid var(--border); }
+.ib-card-detail.open { display:block; }
+.ib-detail-row { display:flex; justify-content:space-between; padding:3px 0; font-size:11px; }
+.ib-detail-label { color:var(--text2); }
+.ib-detail-val { font-family:'IBM Plex Mono'; font-weight:600; font-size:11px; }
+.ib-trend { font-size:9px; margin-left:4px; }
+.ib-trend-up { color:var(--red); }
+.ib-trend-down { color:var(--green); }
+.ib-empty { text-align:center; padding:12px; font-size:11px; color:var(--text3); }
+
+.sd-edit-btn { background:none; border:none; font-size:10px; color:var(--accent2); cursor:pointer; font-family:inherit; float:right; }
+.sd-edit-btn:active { opacity:0.6; }
+.sd-textarea { width:100%; min-height:150px; border:1px solid var(--border); border-radius:8px; padding:10px; font-family:'IBM Plex Mono','Noto Sans TC',sans-serif; font-size:11px; background:var(--bg); color:var(--text); resize:vertical; outline:none; line-height:1.6; }
+.sd-textarea:focus { border-color:var(--accent); }
+.sd-save-row { display:flex; gap:6px; margin-top:8px; }
+.sd-save-btn { padding:7px 16px; border-radius:8px; font-size:11px; font-weight:600; border:none; cursor:pointer; font-family:inherit; }
+.sd-save-yes { background:var(--text); color:var(--bg); }
+.sd-save-no { background:var(--bg2); color:var(--text2); }
+.sd-add-prog { display:flex; gap:6px; margin-top:8px; }
+.sd-add-prog input { flex:1; padding:6px 10px; border:1px solid var(--border); border-radius:6px; font-size:10px; font-family:inherit; background:var(--bg); outline:none; }
+.sd-add-prog select { padding:6px; border:1px solid var(--border); border-radius:6px; font-size:10px; font-family:inherit; background:var(--bg); }
+.sd-add-prog button { padding:6px 10px; border:none; border-radius:6px; font-size:10px; font-weight:600; background:var(--text); color:var(--bg); cursor:pointer; }
+.sd-prog-del { background:none; border:none; font-size:12px; cursor:pointer; color:var(--text3); padding:2px; margin-left:auto; flex-shrink:0; }
+.sd-new-sys-btn { display:block; width:100%; padding:12px; border:2px dashed var(--border); border-radius:var(--r); background:none; font-size:12px; color:var(--text3); cursor:pointer; font-family:inherit; margin-top:10px; transition:0.15s; }
+.sd-new-sys-btn:active { border-color:var(--accent); color:var(--accent2); }
+
 /* ========== INBODY SCAN ========== */
 .inbody-btn {
   display:flex; align-items:center; justify-content:center; gap:6px;
@@ -1347,6 +1440,8 @@ body::before {
     <div id="goalsList"></div>
     <!-- InBody upload -->
     <button class="inbody-btn" onclick="document.getElementById('inbodyFileInput').click()">📷 上傳 InBody 報告自動辨識</button>
+    <!-- InBody history -->
+    <div id="inbodyHistory"></div>
     <!-- Collapsible stats -->
     <button class="stats-toggle" onclick="toggleStats()">📊 查看統計與成就 <span class="stats-arrow" id="statsArrow">▾</span></button>
     <div class="stats-panel" id="statsPanel">
@@ -1368,6 +1463,18 @@ body::before {
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ===================== SYSTEMS ===================== -->
+  <div class="panel" id="p-systems">
+    <div class="page-head"><h1>Systems</h1></div>
+    <div class="sys-view-btns">
+      <button class="sys-view-btn active" onclick="showSysView('galaxy')">星系圖</button>
+      <button class="sys-view-btn" onclick="showSysView('dataflow')">資料流</button>
+      <button class="sys-view-btn" onclick="showSysView('lineview')">LINE</button>
+      <button class="sys-view-btn" onclick="showSysView('makeview')">Make.com</button>
+    </div>
+    <div id="sysViewContent"></div>
   </div>
 
   <!-- ===================== SETTINGS ===================== -->
@@ -1428,7 +1535,8 @@ body::before {
   <button class="nav-btn" onclick="sw('todos',2)"><span class="nav-icon">☑</span>待辦<span class="badge" id="bTodo">0</span></button>
   <button class="nav-btn" onclick="sw('notes',3)"><span class="nav-icon">✎</span>筆記</button>
   <button class="nav-btn" onclick="sw('habits',4)"><span class="nav-icon">🔥</span>習慣</button>
-  <button class="nav-btn" onclick="sw('settings',5)"><span class="nav-icon">⚙</span>設定</button>
+  <button class="nav-btn" onclick="sw('systems',5)"><span class="nav-icon">⬡</span>系統</button>
+  <button class="nav-btn" onclick="sw('settings',6)"><span class="nav-icon">⚙</span>設定</button>
 </div>
 
 <!-- ===================== MODALS ===================== -->
@@ -1847,7 +1955,7 @@ body::before {
 
 <script>
 // =============== DATA LAYER ===============
-const SK = { schedules:'pa_s', todos:'pa_t', notes:'pa_n', settings:'pa_set', favorites:'pa_f', habits:'pa_h', habitLogs:'pa_hl', goals:'pa_g', mit:'pa_mit', inbody:'pa_ib' };
+const SK = { schedules:'pa_s', todos:'pa_t', notes:'pa_n', settings:'pa_set', favorites:'pa_f', habits:'pa_h', habitLogs:'pa_hl', goals:'pa_g', mit:'pa_mit', inbody:'pa_ib', sysdocs:'pa_sysdocs' };
 // In-memory cache to survive localStorage quirks in artifact preview
 const _cache = {};
 const get = k => {
@@ -1907,8 +2015,9 @@ function sw(name, idx) {
   if(name==='notes') renderNotes();
   if(name==='habits') renderHabits();
   if(name==='settings') loadSettings();
+  if(name==='systems') renderSystems();
   // FAB & chat bubble visibility
-  document.getElementById('fabBtn').style.display = (name==='settings')?'none':'flex';
+  document.getElementById('fabBtn').style.display = (name==='settings'||name==='systems')?'none':'flex';
 }
 
 // =============== MODAL ===============
@@ -2098,6 +2207,7 @@ function renderSchedule() {
 }
 
 // --- Schedule Modal ---
+let _autoFillInterval = null;
 function autoFillEndTime() {
   const start = document.getElementById('smStart').value;
   const end = document.getElementById('smEnd').value;
@@ -2105,6 +2215,24 @@ function autoFillEndTime() {
     const [h,m] = start.split(':').map(Number);
     document.getElementById('smEnd').value = String((h+1)%24).padStart(2,'0')+':'+String(m).padStart(2,'0');
   }
+}
+// Mobile polling: check every 500ms while schedule modal is open
+function startAutoFillWatch() {
+  let lastStart = '';
+  clearInterval(_autoFillInterval);
+  _autoFillInterval = setInterval(() => {
+    const modal = document.getElementById('scheduleModal');
+    if(!modal || !modal.classList.contains('active')) { clearInterval(_autoFillInterval); return; }
+    const start = document.getElementById('smStart').value;
+    if(start && start !== lastStart) {
+      lastStart = start;
+      const end = document.getElementById('smEnd').value;
+      if(!end) {
+        const [h,m] = start.split(':').map(Number);
+        document.getElementById('smEnd').value = String((h+1)%24).padStart(2,'0')+':'+String(m).padStart(2,'0');
+      }
+    }
+  }, 500);
 }
 
 function openScheduleModal(editId=null) {
@@ -2131,6 +2259,7 @@ function openScheduleModal(editId=null) {
     document.getElementById('smSync').checked=true;
   }
   openModal('scheduleModal');
+  startAutoFillWatch();
 }
 
 async function saveSchedule() {
@@ -3011,15 +3140,11 @@ function toggleNoteVoice() {
     return;
   }
   if(noteIsRecording) {
-    // Manual stop
+    // Stop recording - use stop() not abort() to keep results
     noteIsRecording = false;
-    try { noteVoiceRecognition?.abort(); } catch{}
-    noteVoiceRecognition = null;
+    try { noteVoiceRecognition?.stop(); } catch{}
     document.getElementById('noteVoiceBtn').classList.remove('recording');
     document.getElementById('noteVoiceIndicator').classList.remove('active');
-    // Don't auto-save on manual stop, text is already in input box
-    const input = document.getElementById('noteQuickInput');
-    if(input.value.trim()) toast('語音已轉為文字，按 + 儲存','success');
     return;
   }
   noteIsRecording = true;
@@ -3031,47 +3156,75 @@ function toggleNoteVoice() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   noteVoiceRecognition = new SR();
   noteVoiceRecognition.lang = 'zh-TW';
-  noteVoiceRecognition.continuous = false; // Single utterance, more reliable on mobile
+  noteVoiceRecognition.continuous = true;
   noteVoiceRecognition.interimResults = true;
 
-  let finalTranscript = document.getElementById('noteQuickInput').value; // Keep existing text
   const input = document.getElementById('noteQuickInput');
+  const existingText = input.value;
+  let allFinal = existingText;
 
   noteVoiceRecognition.onresult = (e) => {
     let interim = '';
-    for(let i = e.resultIndex; i < e.results.length; i++) {
+    let sessionFinal = existingText;
+    for(let i = 0; i < e.results.length; i++) {
       if(e.results[i].isFinal) {
-        finalTranscript += e.results[i][0].transcript;
+        sessionFinal += e.results[i][0].transcript;
       } else {
         interim += e.results[i][0].transcript;
       }
     }
-    input.value = finalTranscript + interim;
-    document.getElementById('noteVoiceLive').textContent = interim || finalTranscript.slice(-30) || '正在聆聽...';
+    allFinal = sessionFinal;
+    input.value = sessionFinal + interim;
+    input.style.height = 'auto';
+    input.style.height = input.scrollHeight + 'px';
+    const display = interim || sessionFinal.slice(-20) || '正在聆聽...';
+    document.getElementById('noteVoiceLive').textContent = display;
   };
 
   noteVoiceRecognition.onerror = (e) => {
     console.error('Voice error:', e.error);
-    if(e.error !== 'no-speech' && e.error !== 'aborted') toast('語音辨識錯誤：' + e.error, 'error');
+    if(e.error === 'not-allowed') {
+      toast('請允許麥克風權限','error');
+      noteIsRecording = false;
+      noteVoiceRecognition = null;
+      document.getElementById('noteVoiceBtn').classList.remove('recording');
+      document.getElementById('noteVoiceIndicator').classList.remove('active');
+    } else if(e.error !== 'no-speech' && e.error !== 'aborted') {
+      toast('語音辨識錯誤：' + e.error, 'error');
+    }
   };
 
   noteVoiceRecognition.onend = () => {
-    if(!noteIsRecording) return; // Manual stop already handled
-    // Auto-ended (user stopped talking) - restart or finish
-    if(finalTranscript.trim()) {
-      input.value = finalTranscript;
+    // Ensure final text is saved
+    if(allFinal.trim()) {
+      input.value = allFinal;
     }
-    // Reset UI
-    noteIsRecording = false;
+    // If still recording flag on, browser auto-stopped → restart
+    if(noteIsRecording) {
+      try { noteVoiceRecognition.start(); } catch {
+        noteIsRecording = false;
+        noteVoiceRecognition = null;
+        document.getElementById('noteVoiceBtn').classList.remove('recording');
+        document.getElementById('noteVoiceIndicator').classList.remove('active');
+        if(allFinal.trim()) toast('語音辨識完成，按 + 儲存','success');
+      }
+      return;
+    }
+    // Manual stop
     noteVoiceRecognition = null;
     document.getElementById('noteVoiceBtn').classList.remove('recording');
     document.getElementById('noteVoiceIndicator').classList.remove('active');
-    if(finalTranscript.trim()) {
-      toast('語音辨識完成，按 + 儲存', 'success');
-    }
+    if(allFinal.trim()) toast('語音辨識完成，按 + 儲存','success');
   };
 
-  noteVoiceRecognition.start();
+  try {
+    noteVoiceRecognition.start();
+  } catch(e) {
+    toast('無法啟動語音辨識','error');
+    noteIsRecording = false;
+    document.getElementById('noteVoiceBtn').classList.remove('recording');
+    document.getElementById('noteVoiceIndicator').classList.remove('active');
+  }
 }
 
 // =============== DASHBOARD ===============
@@ -3709,6 +3862,8 @@ function renderHabits() {
 
   // Goals
   renderGoals();
+  // InBody history
+  renderInbodyHistory();
 }
 
 
@@ -4391,7 +4546,10 @@ ${latestIB?`📊 最近 InBody（${latestIB.date}）：體重${latestIB.weight}k
 2. 回覆簡短精準，不超過 200 字
 3. 如果用戶要求新增/修改資料，在回覆最後加上 [ACTION:類型:JSON資料]
    例如：[ACTION:addTodo:{"title":"買蛋白粉","priority":"important"}]
-   支援的 action：addTodo, addNote, addHabit
+   支援的 action：addTodo, addNote, addHabit, updateSystem, addProgress
+   updateSystem 範例：[ACTION:updateSystem:{"sysId":"schedule","field":"techDoc","value":"## 技術文件\\n更新內容..."}]
+   addProgress 範例：[ACTION:addProgress:{"sysId":"sub","text":"即時聊天功能完成","status":"done"}]
+   status 可選：done, bug, wip, plan
 4. 不要自己執行 action，只建議，等用戶確認`;
 }
 
@@ -4520,11 +4678,13 @@ async function callAiApi(systemPrompt, userMsg) {
 function showAiConfirm(actionType, actionData) {
   aiPendingAction = {type: actionType, data: actionData};
   const msgs = document.getElementById('aiMsgs');
-  const labels = {addTodo:'新增待辦', addNote:'新增筆記', addHabit:'新增習慣'};
+  const labels = {addTodo:'新增待辦', addNote:'新增筆記', addHabit:'新增習慣', updateSystem:'更新系統文件', addProgress:'新增進度'};
   const details = {
     addTodo: `📋 ${actionData.title}${actionData.priority?' ('+PRI_LABEL[actionData.priority]+')':''}`,
     addNote: `📝 ${actionData.title||actionData.content?.slice(0,30)}`,
     addHabit: `🔥 ${actionData.icon||'🎯'} ${actionData.title}`,
+    updateSystem: `⬡ ${DEFAULT_SYS[actionData.sysId]?.name||actionData.sysId} → ${actionData.field==='userGuide'?'📖 使用說明':actionData.field==='techDoc'?'🔧 技術文件':'🔗 API 文件'}`,
+    addProgress: `⬡ ${DEFAULT_SYS[actionData.sysId]?.name||actionData.sysId} → ${actionData.text}`,
   };
   const div = document.createElement('div');
   div.className = 'ai-confirm';
@@ -4566,6 +4726,16 @@ function execAiAction() {
       addAiMsg('ai', '✅ 已新增習慣：' + data.title);
       break;
     }
+    case 'updateSystem': {
+      updateSystemDoc(data.sysId, data.field, data.value);
+      addAiMsg('ai', `✅ 已更新 ${DEFAULT_SYS[data.sysId]?.name||data.sysId} 的${data.field==='userGuide'?'使用說明':data.field==='techDoc'?'技術文件':data.field==='apiDoc'?'API 文件':data.field}`);
+      break;
+    }
+    case 'addProgress': {
+      addSystemProgress(data.sysId, data.text, data.status||'done');
+      addAiMsg('ai', `✅ 已新增進度：${data.text}`);
+      break;
+    }
   }
   // Remove confirm card
   document.querySelectorAll('.ai-confirm').forEach(el => el.remove());
@@ -4577,8 +4747,526 @@ function cancelAiAction() {
   addAiMsg('ai', '好的，已取消 👌');
 }
 
+// =============== SYSTEMS PAGE ===============
+let sysCurrentView = 'galaxy';
+let sysCurrentDetail = null;
+
+// Storage key for system docs
+const SK_SYSDOCS = 'pa_sysdocs';
+
+// Default system data (architecture info - hardcoded)
+const DEFAULT_SYS = {
+  core:{icon:'🗄',name:'MySQL 資料庫',color:'#2c2420',statusLabel:'主資料庫',statusCls:'st-run'},
+  schedule:{icon:'📅',name:'教練排班系統',color:'var(--blue)',statusLabel:'運行中',statusCls:'st-run'},
+  sub:{icon:'🔄',name:'代課協調系統',color:'var(--orange)',statusLabel:'開發中',statusCls:'st-dev'},
+  member:{icon:'👤',name:'會員管理系統',color:'var(--green)',statusLabel:'運行中',statusCls:'st-run'},
+  trial:{icon:'🎯',name:'試堂預約系統',color:'var(--purple)',statusLabel:'運行中',statusCls:'st-run'},
+  assess:{icon:'📊',name:'身體評估系統',color:'var(--red)',statusLabel:'開發中',statusCls:'st-dev'},
+  line:{icon:'📲',name:'LINE 通知系統',color:'var(--done)',statusLabel:'運行中',statusCls:'st-run'},
+};
+
+// Get editable system docs from localStorage
+function getSysDocs() {
+  try { const v=localStorage.getItem(SK_SYSDOCS); if(v) return JSON.parse(v); } catch{}
+  return getDefaultDocs();
+}
+
+function saveSysDocs(docs) {
+  try { localStorage.setItem(SK_SYSDOCS, JSON.stringify(docs)); } catch{}
+}
+
+function getDefaultDocs() {
+  return {
+    core: {
+      techStack: ['MySQL (Zeabur)','Supabase','Google Sheets','Google Calendar'],
+      tables: [
+        {name:'members',desc:'會員資料、LINE UID',rw:'rw',count:'~200'},
+        {name:'coaches',desc:'教練、三組 LINE ID',rw:'rw',count:'8'},
+        {name:'schedules',desc:'排班（10 週）',rw:'rw',count:'~500'},
+        {name:'class_sessions',desc:'課堂紀錄',rw:'rw',count:'~2000'},
+        {name:'inbody_records',desc:'InBody 測量',rw:'w',count:'~300'},
+        {name:'trial_bookings',desc:'試堂預約',rw:'rw',count:'~150'},
+        {name:'sub_requests',desc:'代課請求',rw:'rw',count:'~50'},
+      ],
+      progress: [{text:'27 資料表',status:'done'},{text:'Supabase 副本同步',status:'done'},{text:'Google Sheets 報表',status:'done'}],
+      userGuide: '## MySQL 資料庫\n\n衡點健康的核心資料庫，託管在 Zeabur。\n\n### 連線資訊\n- Host: zeabur.app\n- 27 個資料表\n- 副本：Supabase（代課 Realtime）、Google Sheets（報表）',
+      techDoc: '## 技術架構\n\n- **主資料庫**: MySQL 8.0 on Zeabur\n- **副本同步**: Supabase Edge Functions → MySQL\n- **報表**: Google Sheets + Apps Script\n\n### 重要注意事項\n- schedules 表有複合索引 (coach_id, week_number)\n- class_sessions 與 members 和 coaches 都有 FK\n- inbody_records 用 member_id 關聯',
+      apiDoc: '',
+    },
+    schedule: {
+      techStack: ['LINE LIFF','Make.com Router','MySQL','LINE Push (花生教務)'],
+      dataFlow: ['LINE LIFF','Make.com','MySQL','LINE 通知'],
+      tables: [
+        {name:'coaches',desc:'教練名單',rw:'r'},
+        {name:'schedules',desc:'10 週排班',rw:'rw'},
+        {name:'class_sessions',desc:'產生課堂',rw:'w'},
+      ],
+      connections: [{sys:'🔄 代課',reason:'coaches + schedules'},{sys:'👤 會員',reason:'class_sessions'},{sys:'📲 LINE',reason:'花生教務推播'}],
+      progress: [{text:'重複寫入 Bug',status:'bug'},{text:'8→10 週排班',status:'done'},{text:'LINE 合併通知',status:'done'}],
+      userGuide: '## 教練排班系統\n\n### 功能說明\n1. **建立排班**: Admin Portal → 選教練 → 選時段 → 儲存\n2. **排班範圍**: 10 週，15 分鐘為最小單位\n3. **通知**: 排班異動自動推播到花生教務 LINE\n\n### 常見操作\n- 新增排班：選教練 → 選週次 → 點選時段\n- 修改排班：點現有排班 → 編輯 → 儲存\n- 請假：教練在 LIFF 送出請假申請',
+      techDoc: '## 技術文件\n\n### 資料流\nLINE LIFF → Make.com Webhook → Router\n- create: INSERT schedules\n- update: UPDATE schedules\n- delete: DELETE schedules\n\n### Make.com 場景\n- Webhook 收到 action 欄位分流\n- Text Aggregator 合併多筆排班為一則 LINE 通知\n\n### 已知 Bug\n- 排班重複寫入：同一時段偶爾會產生兩筆',
+      apiDoc: '## API 文件\n\n### Webhook\n`POST https://hook.us2.make.com/...`\n\n#### 建立排班\n```json\n{\n  "action": "create",\n  "coach_id": 1,\n  "week": 10,\n  "day": 3,\n  "start_time": "09:00",\n  "end_time": "10:00"\n}\n```',
+    },
+    sub: {
+      techStack: ['LINE LIFF 聊天','Supabase Realtime','Edge Functions','MySQL'],
+      dataFlow: ['LIFF 聊天','Supabase RT','Edge Fn','MySQL'],
+      tables: [
+        {name:'coaches',desc:'可代課教練',rw:'r'},
+        {name:'schedules',desc:'修改排班',rw:'rw'},
+        {name:'sub_requests',desc:'代課請求',rw:'rw'},
+      ],
+      connections: [{sys:'📅 排班',reason:'coaches + schedules'},{sys:'📲 LINE',reason:'花生教務推播'}],
+      progress: [{text:'即時聊天開發中',status:'wip'},{text:'Supabase ↔ MySQL 同步',status:'wip'}],
+      userGuide: '## 代課協調系統\n\n### 功能說明\n1. 教練請假時，系統自動發送代課請求\n2. 可代課教練在 LIFF 聊天介面回覆\n3. 確認代課後自動更新排班\n\n### 狀態：開發中',
+      techDoc: '## 技術文件\n\n### 架構\n- Supabase Realtime 做即時聊天\n- Edge Functions 同步回 MySQL\n- RLS 政策限制教練只能看自己的請求',
+      apiDoc: '',
+    },
+    member: {
+      techStack: ['Admin Portal','LINE LIFF','Make.com','GAS','MySQL'],
+      dataFlow: ['Admin / LIFF','Make.com / GAS','MySQL'],
+      tables: [
+        {name:'members',desc:'~200 筆，LINE UID',rw:'rw'},
+        {name:'class_sessions',desc:'課堂出席',rw:'rw'},
+      ],
+      connections: [{sys:'🎯 試堂',reason:'轉正寫入 members'},{sys:'📊 評估',reason:'綁定 member_id'},{sys:'📅 排班',reason:'class_sessions'}],
+      progress: [{text:'LINE LIFF 綁定表單',status:'done'},{text:'Admin 會員 CRUD',status:'done'}],
+      userGuide: '## 會員管理系統\n\n### 功能說明\n- **新增會員**: LINE 綁定表單 或 Admin 手動建立\n- **查看會員**: Admin Portal 搜尋 + 篩選\n- **出席紀錄**: 自動從課堂紀錄彙總\n\n### 權限\n- Admin: 全部 CRUD\n- 教練: 查看自己學生\n- 會員: 查看自己資料',
+      techDoc: '## 技術文件\n\n### 會員綁定流程\n1. 會員加 LINE OA 好友\n2. Rich Menu 開啟 LIFF\n3. LIFF 表單填寫基本資料 + 病史\n4. Webhook → Make.com → MySQL INSERT\n5. 確認 Modal → LINE 推播歡迎訊息',
+      apiDoc: '',
+    },
+    trial: {
+      techStack: ['預約表單','Make.com','Google Calendar','Google Sheets','LINE'],
+      dataFlow: ['預約表單','Make.com','GCal + Sheets','LINE 確認'],
+      tables: [
+        {name:'trial_bookings',desc:'預約紀錄',rw:'rw'},
+        {name:'members',desc:'轉正寫入',rw:'w'},
+      ],
+      connections: [{sys:'👤 會員',reason:'轉正寫入 members'},{sys:'📲 LINE',reason:'確認通知'}],
+      progress: [{text:'多狀態預約流程',status:'done'},{text:'回饋表 + LINE 推播',status:'done'}],
+      userGuide: '## 試堂預約系統\n\n### 預約流程\n1. 客戶填寫預約表單\n2. 系統自動建立 GCal 事件\n3. LINE 推播確認通知\n4. 試堂完成後推送回饋表\n5. 回饋結果存入 Sheets\n\n### 轉正\n試堂滿意 → Admin 操作轉正 → 寫入 members 表',
+      techDoc: '## 技術文件\n\n### Make.com 場景\nWebhook → Google Sheets (記錄) → Google Calendar (建立事件) → LINE Push (確認)',
+      apiDoc: '',
+    },
+    assess: {
+      techStack: ['Admin Portal','GAS / OCR','MySQL','Member App','Anthropic API'],
+      dataFlow: ['Admin 輸入','GAS / OCR','MySQL','Member App'],
+      tables: [
+        {name:'inbody_records',desc:'InBody 測量',rw:'rw'},
+        {name:'moti_assessments',desc:'MOTI 評估',rw:'rw'},
+      ],
+      connections: [{sys:'👤 會員',reason:'綁定 member_id'}],
+      progress: [{text:'InBody 手動 + GAS 同步',status:'done'},{text:'InBody OCR（PA App）',status:'wip'},{text:'健康旅程報告 V1',status:'wip'},{text:'心理 check-in',status:'plan'}],
+      userGuide: '## 身體評估系統\n\n### InBody 測量\n1. 會員到店進行 InBody 測量\n2. Admin 手動輸入數據 或 拍照 OCR\n3. 數據存入 MySQL\n4. 會員在 App 查看趨勢報告\n\n### MOTI 動作評估\n教練進行動作評估 → 評分 → 記錄',
+      techDoc: '## 技術文件\n\n### InBody OCR\n- PA App 拍照 → base64 → Apps Script → Anthropic Claude Vision\n- 辨識結果自動填入表單\n\n### 健康旅程報告（規劃中）\n- 8 層資料：InBody + MOTI + 心理 + 訓練紀錄等\n- AI 生成 + 教練審核',
+      apiDoc: '',
+    },
+    line: {
+      techStack: ['LINE Messaging API','LINE OA','LINE LIFF'],
+      tables: [],
+      connections: [{sys:'👤 會員',reason:'主帳號推播'},{sys:'📅 排班',reason:'花生教務'},{sys:'🔄 代課',reason:'花生教務'}],
+      progress: [{text:'三帳號架構',status:'done'},{text:'LIFF 表單入口',status:'done'}],
+      accounts: [
+        {name:'衡點健康（主帳號）',type:'Messaging API · OA',usage:'會員綁定 LIFF · 試堂確認 · 回饋推播',systems:['會員管理','試堂預約','回饋系統']},
+        {name:'花生教務',type:'Messaging API',usage:'教練排班通知 · 代課請求 · 課堂異動',systems:['教練排班','代課系統']},
+        {name:'行政帳號',type:'Messaging API',usage:'排班通知 · 請假審核 · 系統警報',systems:['排班管理','請假系統']},
+      ],
+      dbNote:'coaches 表有 line_uid · line_uid_edu · line_uid_admin 三欄',
+      userGuide: '## LINE 通知系統\n\n### 三個帳號\n1. **衡點健康**: 會員端所有通知\n2. **花生教務**: 教練端排班和代課\n3. **行政帳號**: 內部行政通知\n\n### DB 對應\ncoaches 表有三個 LINE UID 欄位，分別對應三個帳號',
+      techDoc: '## 技術文件\n\n### LINE Messaging API\n- Push Message: 主動推播\n- Reply Message: 回覆用戶訊息\n- LIFF: 嵌入式網頁\n\n### Channel Token\n存在 Apps Script 的 Script Properties',
+      apiDoc: '',
+    },
+  };
+}
+
+// Render system detail from structured data
+function buildSysBody(id, docs) {
+  const d = docs[id];
+  if(!d) return '<div style="padding:16px;text-align:center;color:var(--text3);">無資料</div>';
+
+  const rwCls = {w:'sd-rw-w',r:'sd-rw-r',rw:'sd-rw-rw'};
+  const rwLabel = {w:'寫',r:'讀',rw:'讀寫'};
+  const statusIcon = {done:'✅',bug:'🔴',wip:'🟡',plan:'🔵'};
+  const statusDot = {done:'var(--green)',bug:'var(--red)',wip:'var(--orange)',plan:'var(--blue)'};
+
+  let html = '';
+
+  // Core special
+  if(id === 'core' && d.tables) {
+    html += `<div class="sd-core-stats"><div class="sd-core-stat"><div class="sd-core-num">${d.tables.length}</div><div class="sd-core-label">核心表</div></div><div class="sd-core-stat"><div class="sd-core-num">6</div><div class="sd-core-label">子系統</div></div><div class="sd-core-stat"><div class="sd-core-num">3k+</div><div class="sd-core-label">總筆數</div></div></div>`;
+  }
+
+  // Data flow
+  if(d.dataFlow?.length) {
+    html += `<div class="sd-section"><div class="sd-label">🏗 資料流</div><div class="sd-flow">${d.dataFlow.map((n,i)=>`${i?'<span class="sd-flow-arrow">→</span>':''}<span class="sd-flow-node sd-tech-${i===0?'fe':i===d.dataFlow.length-1?'ext':'mw'}">${n}</span>`).join('')}</div></div>`;
+  }
+
+  // Tech stack
+  if(d.techStack?.length) {
+    html += `<div class="sd-section"><div class="sd-label">🔧 技術</div><div class="sd-techs">${d.techStack.map(t=>`<span class="sd-tech sd-tech-mw">${t}</span>`).join('')}</div></div>`;
+  }
+
+  // Tables
+  if(d.tables?.length) {
+    html += `<div class="sd-section"><div class="sd-label">🗄 資料表</div>${d.tables.map(t=>`<div class="sd-trow"><div class="sd-tname">${t.name}</div><div class="sd-tdesc">${t.desc}</div>${t.rw?`<div class="sd-trw ${rwCls[t.rw]}">${rwLabel[t.rw]}</div>`:''}</div>`).join('')}</div>`;
+  }
+
+  // LINE accounts special
+  if(d.accounts?.length) {
+    html += d.accounts.map(a => `<div class="sd-section"><div class="sd-label">${a.name}</div><div class="sd-note">${a.usage}<br><strong>對應：</strong>${a.systems.join('、')}</div></div>`).join('');
+    if(d.dbNote) html += `<div class="sd-section"><div class="sd-label">🗄 DB 對應</div><div class="sd-note">${d.dbNote}</div></div>`;
+  }
+
+  // Connections
+  if(d.connections?.length) {
+    html += `<div class="sd-section"><div class="sd-label">🔗 共用</div>${d.connections.map(c=>`<div class="sd-conn"><div class="sd-conn-dot" style="background:var(--accent);"></div>${c.sys}<span class="sd-conn-reason">— ${c.reason}</span></div>`).join('')}</div>`;
+  }
+
+  // Progress
+  if(d.progress?.length) {
+    html += `<div class="sd-section"><div class="sd-label">📋 狀態</div>${d.progress.map(p=>`<div class="sd-prog"><div class="sd-prog-dot" style="background:${statusDot[p.status]||'var(--text3)'};"></div>${statusIcon[p.status]||''} ${p.text}</div>`).join('')}</div>`;
+  }
+
+  return html;
+}
+
+function buildDocTab(markdown) {
+  if(!markdown) return '<div style="padding:16px;text-align:center;color:var(--text3);font-size:11px;">尚無內容，可透過 AI 助理新增</div>';
+  // Simple markdown to HTML
+  return '<div class="sd-note" style="white-space:pre-wrap;line-height:1.7;">' +
+    markdown.replace(/\n/g,'\n')
+      .replace(/^## (.+)$/gm,'</div><div style="font-size:13px;font-weight:600;margin:10px 0 6px;">$1</div><div class="sd-note" style="white-space:pre-wrap;line-height:1.7;">')
+      .replace(/^### (.+)$/gm,'<div style="font-size:11px;font-weight:600;margin:8px 0 4px;color:var(--accent2);">$1</div>')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/`([^`]+)`/g,'<code style="font-family:IBM Plex Mono;font-size:9px;background:var(--bg2);padding:1px 4px;border-radius:3px;">$1</code>')
+    + '</div>';
+}
+
+function renderSystems() { showSysView(sysCurrentView); }
+
+function showSysView(viewId) {
+  sysCurrentView = viewId;
+  document.querySelectorAll('.sys-view-btn').forEach((b,i)=>{
+    const views=['galaxy','dataflow','lineview','makeview'];
+    b.classList.toggle('active', views[i]===viewId);
+  });
+  const el = document.getElementById('sysViewContent');
+  if(viewId==='galaxy') renderGalaxyView(el);
+  else if(viewId==='dataflow') renderDataFlowView(el);
+  else if(viewId==='lineview') renderLineView(el);
+  else if(viewId==='makeview') renderMakeView(el);
+}
+
+function renderGalaxyView(el) {
+  el.innerHTML = `<div class="galaxy"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="glow2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="var(--done)" stop-opacity="0.08"/><stop offset="100%" stop-color="var(--done)" stop-opacity="0"/></radialGradient></defs>
+  <rect width="400" height="400" fill="#faf7f2"/>
+  <circle cx="200" cy="200" r="180" fill="url(#glow2)"/>
+  <circle cx="200" cy="200" r="110" fill="none" stroke="var(--bg2)" stroke-width="1" stroke-dasharray="4,6"/>
+  <circle cx="200" cy="200" r="160" fill="none" stroke="var(--bg2)" stroke-width="0.5" stroke-dasharray="3,6"/>
+  <line x1="200" y1="200" x2="120" y2="70" stroke="var(--blue)" stroke-width="2.5" opacity="0.15"/>
+  <line x1="200" y1="200" x2="310" y2="75" stroke="var(--orange)" stroke-width="2" opacity="0.15"/>
+  <line x1="200" y1="200" x2="55" y2="210" stroke="var(--green)" stroke-width="3.5" opacity="0.15"/>
+  <line x1="200" y1="200" x2="345" y2="200" stroke="var(--purple)" stroke-width="2" opacity="0.15"/>
+  <line x1="200" y1="200" x2="105" y2="325" stroke="var(--red)" stroke-width="2" opacity="0.15"/>
+  <line x1="200" y1="200" x2="315" y2="315" stroke="var(--done)" stroke-width="1.5" opacity="0.15"/>
+  <path d="M120,70 Q 215,40 310,75" stroke="var(--done)" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.25"/>
+  <text x="215" y="48" text-anchor="middle" font-size="6" fill="var(--done)" font-family="IBM Plex Mono" opacity="0.7">coaches</text>
+  <path d="M55,210 Q 60,280 105,325" stroke="var(--done)" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.25"/>
+  <text x="60" y="275" text-anchor="middle" font-size="6" fill="var(--done)" font-family="IBM Plex Mono" opacity="0.7">member_id</text>
+  <path d="M55,210 Q 200,245 345,200" stroke="var(--done)" stroke-width="1" fill="none" stroke-dasharray="3,3" opacity="0.25"/>
+  <text x="200" y="240" text-anchor="middle" font-size="6" fill="var(--done)" font-family="IBM Plex Mono" opacity="0.7">members</text>
+  <g class="node" onclick="showSysDetail('core')"><circle class="node-ring" cx="200" cy="200" r="34" fill="none" stroke="var(--done)" stroke-width="1.5"/><circle cx="200" cy="200" r="42" fill="#2c2420" stroke="var(--done)" stroke-width="2"/><text x="200" y="194" text-anchor="middle" font-size="13" fill="white" font-weight="700" font-family="Crimson Pro">MySQL</text><text x="200" y="210" text-anchor="middle" font-size="7" fill="white" opacity="0.5" font-family="IBM Plex Mono">27 tables</text></g>
+  <g class="node" onclick="showSysDetail('schedule')"><circle class="node-ring" cx="120" cy="70" r="28" fill="none" stroke="var(--blue)" stroke-width="1.5"/><circle cx="120" cy="70" r="30" fill="white" stroke="var(--blue)" stroke-width="2"/><text x="120" y="65" text-anchor="middle" font-size="14">📅</text><text x="120" y="80" text-anchor="middle" font-size="8" fill="var(--text)" font-weight="600">排班</text></g>
+  <g class="node" onclick="showSysDetail('sub')"><circle class="node-ring" cx="310" cy="75" r="26" fill="none" stroke="var(--orange)" stroke-width="1.5"/><circle cx="310" cy="75" r="28" fill="white" stroke="var(--orange)" stroke-width="2"/><text x="310" y="70" text-anchor="middle" font-size="14">🔄</text><text x="310" y="85" text-anchor="middle" font-size="8" fill="var(--text)" font-weight="600">代課</text></g>
+  <g class="node" onclick="showSysDetail('member')"><circle class="node-ring" cx="55" cy="210" r="30" fill="none" stroke="var(--green)" stroke-width="1.5"/><circle cx="55" cy="210" r="34" fill="white" stroke="var(--green)" stroke-width="2.5"/><text x="55" y="205" text-anchor="middle" font-size="14">👤</text><text x="55" y="220" text-anchor="middle" font-size="8" fill="var(--text)" font-weight="600">會員</text></g>
+  <g class="node" onclick="showSysDetail('trial')"><circle class="node-ring" cx="345" cy="200" r="24" fill="none" stroke="var(--purple)" stroke-width="1.5"/><circle cx="345" cy="200" r="26" fill="white" stroke="var(--purple)" stroke-width="2"/><text x="345" y="195" text-anchor="middle" font-size="14">🎯</text><text x="345" y="210" text-anchor="middle" font-size="8" fill="var(--text)" font-weight="600">試堂</text></g>
+  <g class="node" onclick="showSysDetail('assess')"><circle class="node-ring" cx="105" cy="325" r="26" fill="none" stroke="var(--red)" stroke-width="1.5"/><circle cx="105" cy="325" r="28" fill="white" stroke="var(--red)" stroke-width="2"/><text x="105" y="320" text-anchor="middle" font-size="14">📊</text><text x="105" y="335" text-anchor="middle" font-size="8" fill="var(--text)" font-weight="600">評估</text></g>
+  <g class="node" onclick="showSysDetail('line')"><circle class="node-ring" cx="315" cy="315" r="24" fill="none" stroke="var(--done)" stroke-width="1.5"/><circle cx="315" cy="315" r="26" fill="white" stroke="var(--done)" stroke-width="2"/><text x="315" y="310" text-anchor="middle" font-size="14">📲</text><text x="315" y="325" text-anchor="middle" font-size="8" fill="var(--text)" font-weight="600">LINE</text></g>
+  <text x="10" y="392" font-size="6" fill="#a89888" font-family="IBM Plex Mono"><tspan fill="var(--green)">●</tspan> 運行中 <tspan fill="var(--orange)">●</tspan> 開發中 虛線=共用表</text>
+  </svg></div>
+  <div class="galaxy-hint" id="galaxyHint">👆 點擊節點查看詳情</div>
+  <div class="sys-detail" id="sysDetailPanel"><div class="sd-header" id="sdHeader"></div><div class="sd-body" id="sdBody"></div></div>
+  <button class="sd-new-sys-btn" onclick="openNewSysModal()">+ 新增系統</button>`;
+}
+
+function renderDataFlowView(el) {
+  const docs = getSysDocs();
+  const allTables = {};
+  Object.entries(docs).forEach(([sysId, d]) => {
+    (d.tables||[]).forEach(t => {
+      if(!allTables[t.name]) allTables[t.name] = {desc:t.desc,flows:[]};
+      allTables[t.name].flows.push({from:DEFAULT_SYS[sysId]?.name||sysId, rw:t.rw});
+    });
+  });
+  const rwCls={w:'sd-rw-w',r:'sd-rw-r',rw:'sd-rw-rw'};
+  const rwLabel={w:'寫入',r:'讀取',rw:'讀寫'};
+  el.innerHTML = '<div style="font-size:10px;letter-spacing:1.5px;color:var(--text3);font-weight:600;margin-bottom:8px;">📊 資料流向</div>' +
+    Object.entries(allTables).map(([name,t])=>`<div style="background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:12px;margin-bottom:8px;">
+      <div style="font-size:12px;font-weight:600;margin-bottom:6px;">${name} <span style="font-size:10px;color:var(--text3);font-weight:400;">${t.desc}</span></div>
+      ${t.flows.map(f=>`<div class="sd-trow"><div class="sd-tname" style="min-width:80px;">${f.from}</div><div style="color:var(--text3);font-size:9px;">→</div><div class="sd-tdesc">${name}</div><div class="sd-trw ${rwCls[f.rw]||''}">${rwLabel[f.rw]||f.rw}</div></div>`).join('')}
+    </div>`).join('');
+}
+
+function renderLineView(el) {
+  const docs = getSysDocs();
+  const d = docs.line;
+  if(!d?.accounts?.length) { el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);">無 LINE 資料</div>'; return; }
+  el.innerHTML = '<div style="font-size:10px;letter-spacing:1.5px;color:var(--text3);font-weight:600;margin-bottom:8px;">💬 LINE 帳號架構</div>' +
+    d.accounts.map(a=>`<div style="background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:12px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="width:32px;height:32px;border-radius:8px;background:#06C755;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">💚</div><div><div style="font-size:12px;font-weight:600;">${a.name}</div><div style="font-size:9px;color:var(--text3);">${a.type}</div></div></div>
+      <div class="sd-note">${a.usage}</div>
+      <div style="display:flex;gap:3px;margin-top:6px;flex-wrap:wrap;">${a.systems.map(s=>`<span class="sd-tech sd-tech-fe">${s}</span>`).join('')}</div>
+    </div>`).join('') +
+    (d.dbNote?`<div class="sd-note" style="margin-top:4px;"><strong>DB：</strong>${d.dbNote}</div>`:'');
+}
+
+function renderMakeView(el) {
+  const scenes = [
+    {num:1,name:'教練排班寫入',sub:'Router · 4 路徑',flow:['Webhook','Router','MySQL INSERT'],sys:'📅 排班'},
+    {num:2,name:'排班 LINE 通知',sub:'Text Aggregator',flow:['Schedule','MySQL Search','Aggregator','LINE Push'],sys:'📅 排班 · 📲 LINE'},
+    {num:3,name:'試堂預約流程',sub:'GCal + Sheets + LINE',flow:['Webhook','G Sheets','G Calendar','LINE'],sys:'🎯 試堂'},
+    {num:4,name:'MySQL 管理工具',sub:'ER Diagram · CRUD',flow:['Webhook','MySQL Query','Response'],sys:'全系統'},
+    {num:5,name:'回饋表通知',sub:'課後推播',flow:['Webhook','MySQL','LINE Push'],sys:'👤 會員 · 📲 LINE'},
+  ];
+  el.innerHTML = '<div style="font-size:10px;letter-spacing:1.5px;color:var(--text3);font-weight:600;margin-bottom:8px;">⚡ Make.com 場景</div>' +
+    scenes.map(s=>`<div style="background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:12px;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><div style="width:28px;height:28px;border-radius:7px;background:var(--purple);display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;">${s.num}</div><div><div style="font-size:11px;font-weight:600;">${s.name}</div><div style="font-size:9px;color:var(--text3);">${s.sub}</div></div></div>
+      <div class="sd-flow">${s.flow.map((n,i)=>`${i?'<span class="sd-flow-arrow">→</span>':''}<span class="sd-flow-node sd-tech-${i===0?'mw':i===s.flow.length-1?'ext':'db'}">${n}</span>`).join('')}</div>
+      <div style="font-size:9px;color:var(--text3);margin-top:4px;">對應：${s.sys}</div>
+    </div>`).join('') +
+    '<div class="sd-note" style="margin-top:4px;"><strong>💡</strong> PA App 已改用 Apps Script</div>';
+}
+
+function showSysDetail(id) {
+  const sys = DEFAULT_SYS[id];
+  if(!sys) return;
+  if(sysCurrentDetail === id) { closeSysDetail(); return; }
+  sysCurrentDetail = id;
+  document.querySelectorAll('.node').forEach(n=>n.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  const hint = document.getElementById('galaxyHint');
+  if(hint) hint.classList.add('hidden');
+
+  const docs = getSysDocs();
+  const d = docs[id] || {};
+
+  // Header
+  document.getElementById('sdHeader').innerHTML = `
+    <div class="sd-icon" style="background:${sys.color};"><span style="color:white;">${sys.icon}</span></div>
+    <div style="flex:1;"><div class="sd-name">${sys.name}</div><div class="sd-status"><span class="st ${sys.statusCls}">${sys.statusLabel}</span></div></div>
+    <button class="sd-close" onclick="closeSysDetail()">✕</button>`;
+
+  // Tabs with edit buttons
+  const tabs = ['架構','📖 使用','🔧 技術','🔗 API'];
+  const docFields = [null, 'userGuide', 'techDoc', 'apiDoc'];
+  const bodies = [
+    buildSysBody(id, docs) + buildProgressEditor(id, d),
+    buildEditableDoc(id, 'userGuide', d.userGuide),
+    buildEditableDoc(id, 'techDoc', d.techDoc),
+    buildEditableDoc(id, 'apiDoc', d.apiDoc),
+  ];
+
+  document.getElementById('sdBody').innerHTML = `
+    <div style="display:flex;border-bottom:1px solid var(--border);margin:-12px -14px 12px;padding:0 14px;">
+      ${tabs.map((t,i)=>`<div style="flex:1;text-align:center;padding:8px 2px;font-size:10px;font-weight:500;cursor:pointer;border-bottom:2px solid ${i===0?'var(--accent)':'transparent'};color:${i===0?'var(--text)':'var(--text3)'};" onclick="switchSysTab(this,${i})">${t}</div>`).join('')}
+    </div>
+    ${bodies.map((b,i)=>`<div class="sys-tab-pane" style="${i>0?'display:none;':''}">${b}</div>`).join('')}`;
+
+  const panel = document.getElementById('sysDetailPanel');
+  panel.classList.add('open');
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+function buildEditableDoc(sysId, field, content) {
+  const rendered = buildDocTab(content);
+  return `<div id="sysDoc_${sysId}_${field}_view">
+    <button class="sd-edit-btn" onclick="startEditDoc('${sysId}','${field}')">✏️ 編輯</button>
+    ${rendered}
+  </div>
+  <div id="sysDoc_${sysId}_${field}_edit" style="display:none;">
+    <textarea class="sd-textarea" id="sysDocTA_${sysId}_${field}">${(content||'').replace(/</g,'&lt;')}</textarea>
+    <div style="font-size:9px;color:var(--text3);margin-top:4px;">支援 Markdown：## 標題、### 副標題、**粗體**、\`code\`</div>
+    <div class="sd-save-row">
+      <button class="sd-save-btn sd-save-yes" onclick="saveEditDoc('${sysId}','${field}')">💾 儲存</button>
+      <button class="sd-save-btn sd-save-no" onclick="cancelEditDoc('${sysId}','${field}')">取消</button>
+    </div>
+  </div>`;
+}
+
+function startEditDoc(sysId, field) {
+  document.getElementById(`sysDoc_${sysId}_${field}_view`).style.display = 'none';
+  document.getElementById(`sysDoc_${sysId}_${field}_edit`).style.display = 'block';
+  const ta = document.getElementById(`sysDocTA_${sysId}_${field}`);
+  ta.focus();
+  ta.style.height = Math.max(150, ta.scrollHeight) + 'px';
+}
+
+function saveEditDoc(sysId, field) {
+  const ta = document.getElementById(`sysDocTA_${sysId}_${field}`);
+  const value = ta.value;
+  updateSystemDoc(sysId, field, value);
+  toast('文件已儲存','success');
+  // Re-render the detail panel
+  const el = event.target.closest('.sd-body');
+  if(el) {
+    const docs = getSysDocs();
+    const d = docs[sysId]||{};
+    document.getElementById(`sysDoc_${sysId}_${field}_view`).innerHTML =
+      `<button class="sd-edit-btn" onclick="startEditDoc('${sysId}','${field}')">✏️ 編輯</button>` + buildDocTab(d[field]);
+    document.getElementById(`sysDoc_${sysId}_${field}_view`).style.display = 'block';
+    document.getElementById(`sysDoc_${sysId}_${field}_edit`).style.display = 'none';
+  }
+}
+
+function cancelEditDoc(sysId, field) {
+  document.getElementById(`sysDoc_${sysId}_${field}_view`).style.display = 'block';
+  document.getElementById(`sysDoc_${sysId}_${field}_edit`).style.display = 'none';
+}
+
+function buildProgressEditor(sysId, d) {
+  const statusIcon = {done:'✅',bug:'🔴',wip:'🟡',plan:'🔵'};
+  const statusDot = {done:'var(--green)',bug:'var(--red)',wip:'var(--orange)',plan:'var(--blue)'};
+  if(!d?.progress?.length && !sysId) return '';
+
+  let html = '<div class="sd-section"><div class="sd-label">📋 進度 <button class="sd-edit-btn" onclick="document.getElementById(\'progAdd_'+sysId+'\').style.display=\'flex\'">+ 新增</button></div>';
+
+  if(d?.progress?.length) {
+    html += d.progress.map((p,i) => `<div class="sd-prog" style="align-items:center;">
+      <div class="sd-prog-dot" style="background:${statusDot[p.status]||'var(--text3)'};"></div>
+      <div style="flex:1;font-size:10px;">${statusIcon[p.status]||''} ${p.text}</div>
+      <button class="sd-prog-del" onclick="deleteProgress('${sysId}',${i})">✕</button>
+    </div>`).join('');
+  }
+
+  html += `<div class="sd-add-prog" id="progAdd_${sysId}" style="display:none;">
+    <input type="text" id="progText_${sysId}" placeholder="進度內容...">
+    <select id="progStatus_${sysId}">
+      <option value="done">✅ 完成</option>
+      <option value="wip">🟡 進行中</option>
+      <option value="bug">🔴 Bug</option>
+      <option value="plan">🔵 計畫</option>
+    </select>
+    <button onclick="addProgressManual('${sysId}')">加</button>
+  </div></div>`;
+  return html;
+}
+
+function addProgressManual(sysId) {
+  const text = document.getElementById('progText_'+sysId).value.trim();
+  if(!text) return;
+  const status = document.getElementById('progStatus_'+sysId).value;
+  addSystemProgress(sysId, text, status);
+  document.getElementById('progText_'+sysId).value = '';
+  toast('已新增進度','success');
+  // Re-render
+  if(sysCurrentDetail === sysId) { closeSysDetail(); /* small hack - reopen needs click */ }
+}
+
+function deleteProgress(sysId, idx) {
+  const docs = getSysDocs();
+  if(docs[sysId]?.progress) {
+    docs[sysId].progress.splice(idx, 1);
+    saveSysDocs(docs);
+    toast('已刪除','success');
+    if(sysCurrentDetail === sysId) { closeSysDetail(); }
+  }
+}
+
+function switchSysTab(tabEl, idx) {
+  const parent = tabEl.parentElement;
+  parent.querySelectorAll('div').forEach((d,i)=>{
+    d.style.borderBottomColor = i===idx?'var(--accent)':'transparent';
+    d.style.color = i===idx?'var(--text)':'var(--text3)';
+  });
+  const panes = tabEl.closest('.sd-body').querySelectorAll('.sys-tab-pane');
+  panes.forEach((p,i)=>p.style.display = i===idx?'block':'none');
+}
+
+function closeSysDetail() {
+  sysCurrentDetail = null;
+  const panel = document.getElementById('sysDetailPanel');
+  if(panel) panel.classList.remove('open');
+  document.querySelectorAll('.node').forEach(n=>n.classList.remove('selected'));
+  const hint = document.getElementById('galaxyHint');
+  if(hint) hint.classList.remove('hidden');
+}
+
+// AI can call this to update system docs
+function updateSystemDoc(sysId, field, value) {
+  const docs = getSysDocs();
+  if(!docs[sysId]) docs[sysId] = {};
+  docs[sysId][field] = value;
+  saveSysDocs(docs);
+  return { status: 'updated', sysId, field };
+}
+
+function addSystemProgress(sysId, text, status) {
+  const docs = getSysDocs();
+  if(!docs[sysId]) docs[sysId] = {};
+  if(!docs[sysId].progress) docs[sysId].progress = [];
+  docs[sysId].progress.unshift({ text, status });
+  saveSysDocs(docs);
+  return { status: 'added', sysId };
+}
+
+function openNewSysModal() {
+  const id = 'sys_' + Date.now().toString(36);
+  const html = `<div style="padding:16px;">
+    <div style="font-size:14px;font-weight:600;margin-bottom:12px;">新增系統</div>
+    <div class="form-group"><label class="form-label">系統名稱</label><input type="text" class="form-input" id="newSysName" placeholder="例：請假系統"></div>
+    <div class="form-group"><label class="form-label">圖示 Emoji</label><input type="text" class="form-input" id="newSysIcon" value="📦" style="width:60px;"></div>
+    <div class="form-group"><label class="form-label">狀態</label>
+      <select class="form-input" id="newSysStatus">
+        <option value="run">運行中</option>
+        <option value="dev">開發中</option>
+        <option value="plan">規劃中</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">顏色</label>
+      <select class="form-input" id="newSysColor">
+        <option value="var(--blue)">藍色</option>
+        <option value="var(--orange)">橘色</option>
+        <option value="var(--green)">綠色</option>
+        <option value="var(--purple)">紫色</option>
+        <option value="var(--red)">紅色</option>
+        <option value="var(--done)">金色</option>
+        <option value="#2c2420">深色</option>
+      </select>
+    </div>
+    <button style="width:100%;padding:10px;border:none;border-radius:8px;background:var(--text);color:var(--bg);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;" onclick="saveNewSys('${id}')">建立系統</button>
+  </div>`;
+  // Use a simple modal approach
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay active';
+  overlay.id = 'newSysOverlay';
+  overlay.innerHTML = `<div class="modal" style="max-width:340px;border-radius:var(--r);background:var(--surface);">${html}</div>`;
+  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function saveNewSys(id) {
+  const name = document.getElementById('newSysName').value.trim();
+  if(!name) { toast('請輸入名稱','error'); return; }
+  const icon = document.getElementById('newSysIcon').value || '📦';
+  const statusMap = {run:{label:'運行中',cls:'st-run'},dev:{label:'開發中',cls:'st-dev'},plan:{label:'規劃中',cls:'st-plan'}};
+  const statusKey = document.getElementById('newSysStatus').value;
+  const color = document.getElementById('newSysColor').value;
+
+  // Add to DEFAULT_SYS for display
+  DEFAULT_SYS[id] = {icon, name, color, statusLabel:statusMap[statusKey].label, statusCls:statusMap[statusKey].cls};
+
+  // Add to docs
+  const docs = getSysDocs();
+  docs[id] = {techStack:[], tables:[], connections:[], progress:[], userGuide:'', techDoc:'', apiDoc:''};
+  saveSysDocs(docs);
+
+  document.getElementById('newSysOverlay')?.remove();
+  toast('系統已建立：' + name, 'success');
+  renderSystems();
+}
+
 // =============== CLOUD SYNC (Google Sheets via Make.com) ===============
-const SYNC_SHEETS = ['habits','habitLogs','todos','notes','goals','mit','inbody'];
+const SYNC_SHEETS = ['habits','habitLogs','todos','notes','goals','mit','inbody','sysdocs'];
 
 async function cloudSync(direction) {
   const s = getSett();
@@ -4632,7 +5320,7 @@ async function cloudSync(direction) {
           try { return JSON.parse(row.json || row.C || row.B || '{}'); } catch { return row; }
         }).filter(x => x && Object.keys(x).length);
         if(parsed.length) {
-          if(sheet === 'mit' && parsed.length === 1 && parsed[0].today) {
+          if((sheet === 'mit' || sheet === 'sysdocs') && parsed.length === 1 && typeof parsed[0] === 'object') {
             _cache[sheet] = parsed[0];
             try { localStorage.setItem(SK[sheet], JSON.stringify(parsed[0])); } catch{}
           } else {
@@ -4845,7 +5533,6 @@ function saveInbodyResult() {
   let updated = 0;
   goals.forEach(g => {
     if(!g.unit || !g.targetValue) return;
-    // Match goal unit to InBody field
     let matchVal = null;
     if(g.unit === '%' && record.bodyFatPercent != null) matchVal = record.bodyFatPercent;
     else if(g.unit === 'kg' && g.title.includes('體重') && record.weight != null) matchVal = record.weight;
@@ -4868,6 +5555,56 @@ function saveInbodyResult() {
   toast(`InBody 已儲存${updated ? '，' + updated + ' 個目標自動更新' : ''} 🎉`, 'success');
   inbodyImageData = null;
   inbodyResult = null;
+}
+
+function renderInbodyHistory() {
+  const el = document.getElementById('inbodyHistory');
+  if(!el) return;
+  const records = get('inbody');
+  if(!records.length) { el.innerHTML = ''; return; }
+
+  // Show latest first
+  const sorted = [...records].sort((a,b) => b.date.localeCompare(a.date));
+  const fields = INBODY_FIELDS.filter(f => f.key !== 'date');
+
+  el.innerHTML = `<div class="ib-timeline">
+    <div class="ib-timeline-title">📊 InBody 歷史紀錄（${sorted.length}）</div>
+    ${sorted.map((r, idx) => {
+      // Trend vs previous record
+      const prev = sorted[idx + 1];
+      function trend(key, inverse) {
+        if(!prev || r[key]==null || prev[key]==null) return '';
+        const diff = r[key] - prev[key];
+        if(Math.abs(diff) < 0.01) return '';
+        const arrow = diff > 0 ? '↑' : '↓';
+        const cls = (inverse ? diff < 0 : diff > 0) ? 'ib-trend-up' : 'ib-trend-down';
+        return '<span class="ib-trend '+cls+'">'+arrow+Math.abs(diff).toFixed(1)+'</span>';
+      }
+
+      return `<div class="ib-card" onclick="this.querySelector('.ib-card-detail').classList.toggle('open');this.querySelector('.ib-card-arrow').classList.toggle('open');">
+        <div class="ib-card-head">
+          <div class="ib-card-date">${r.date}</div>
+          <div class="ib-card-arrow">▸</div>
+        </div>
+        <div class="ib-card-summary">
+          ${r.weight!=null?`<span>⚖️ ${r.weight}kg${trend('weight',true)}</span>`:''}
+          ${r.bodyFatPercent!=null?`<span>📉 ${r.bodyFatPercent}%${trend('bodyFatPercent',true)}</span>`:''}
+          ${r.skeletalMuscleMass!=null?`<span>💪 ${r.skeletalMuscleMass}kg${trend('skeletalMuscleMass',false)}</span>`:''}
+        </div>
+        <div class="ib-card-detail">
+          ${fields.filter(f=>r[f.key]!=null).map(f=>`<div class="ib-detail-row"><span class="ib-detail-label">${f.label}</span><span class="ib-detail-val">${r[f.key]}${f.unit}${f.key==='weight'?trend('weight',true):f.key==='bodyFatPercent'?trend('bodyFatPercent',true):f.key==='skeletalMuscleMass'?trend('skeletalMuscleMass',false):''}</span></div>`).join('')}
+          <div style="text-align:right;margin-top:6px;"><button style="background:none;border:none;color:var(--red);font-size:10px;cursor:pointer;font-family:inherit;" onclick="event.stopPropagation();deleteInbody('${r.date}')">🗑 刪除</button></div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function deleteInbody(date) {
+  if(!confirm('刪除此 InBody 紀錄？')) return;
+  set('inbody', get('inbody').filter(r => r.date !== date));
+  renderInbodyHistory();
+  toast('已刪除','success');
 }
 
 // =============== PWA ===============
