@@ -793,50 +793,79 @@ body::before {
   gap: 2px;
 }
 .cal-day {
-  aspect-ratio: 1;
+  min-height: 52px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  padding: 4px 2px 3px;
   background: transparent;
   border: none;
-  border-radius: 50%;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
   color: var(--ink);
   position: relative;
   font-family: var(--font);
-  letter-spacing: -0.2px;
   transition: 0.12s;
 }
 .cal-day:active { background: var(--bg-soft); }
-.cal-day.other { color: var(--ink-4); opacity: 0.6; }
-.cal-day.today {
-  color: var(--accent);
-  font-weight: 700;
+.cal-day.other { color: var(--ink-4); opacity: 0.5; pointer-events: none; }
+.cal-day.today .cal-num {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
 }
-.cal-day.selected {
+.cal-day.selected .cal-num {
   background: var(--ink);
   color: #fff;
-  font-weight: 600;
-}
-.cal-day.selected.today {
-  background: var(--accent);
-  color: #fff;
-}
-.cal-dots {
-  position: absolute;
-  bottom: 4px;
-  display: flex;
-  gap: 2px;
-}
-.cal-dots span {
-  width: 4px; height: 4px;
   border-radius: 50%;
-  background: var(--accent);
 }
-.cal-day.selected .cal-dots span { background: #fff; opacity: 0.8; }
+.cal-day.selected.today .cal-num { background: var(--accent); }
+.cal-num {
+  width: 24px; height: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+  flex-shrink: 0;
+  letter-spacing: -0.2px;
+  border-radius: 50%;
+}
+
+/* Event snippets inside calendar cells */
+.cal-evs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 2px;
+}
+.cal-ev {
+  width: 100%;
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--accent-deep);
+  background: var(--accent-bg);
+  border-radius: 3px;
+  padding: 1px 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.6;
+  letter-spacing: -0.1px;
+}
+.cal-ev.allday {
+  background: var(--bg-soft);
+  color: var(--ink-3);
+}
+.cal-more {
+  width: 100%;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--ink-3);
+  text-align: center;
+  letter-spacing: 0.3px;
+  line-height: 1.6;
+}
 
 /* Day detail */
 .day-title-row {
@@ -2960,32 +2989,53 @@ function renderCalendar() {
   const td = todayStr();
   const sel = fmtDate(selectedDate);
 
+  // Build event map for the month
   const monthEvents = getMonthEvents(calYear, calMonth);
   const dayMap = {};
-  monthEvents.forEach(ev => { dayMap[ev.date] = (dayMap[ev.date] || 0) + 1; });
+  monthEvents.forEach(ev => {
+    if(!dayMap[ev.date]) dayMap[ev.date] = [];
+    dayMap[ev.date].push(ev);
+  });
+  // Sort each day's events by time
+  Object.keys(dayMap).forEach(k => {
+    dayMap[k].sort((a, b) => (a.startTime || '99').localeCompare(b.startTime || '99'));
+  });
+
+  const MAX_SHOW = 2;
+
+  function evSnippets(ds) {
+    const evts = dayMap[ds];
+    if(!evts || !evts.length) return '';
+    const show = evts.slice(0, MAX_SHOW);
+    const more = evts.length - MAX_SHOW;
+    const strips = show.map(ev => {
+      const timePrefix = ev.startTime ? ev.startTime + ' ' : '';
+      const cls = ev.allDay ? 'cal-ev allday' : 'cal-ev';
+      return `<div class="${cls}">${timePrefix}${esc(ev.title)}</div>`;
+    }).join('');
+    const moreStr = more > 0 ? `<div class="cal-more">+${more}</div>` : '';
+    return `<div class="cal-evs">${strips}${moreStr}</div>`;
+  }
 
   let html = '';
   const prevLast = new Date(calYear, calMonth, 0).getDate();
   for(let i = startDow - 1; i >= 0; i--) {
-    html += `<button class="cal-day other">${prevLast - i}</button>`;
+    html += `<button class="cal-day other"><span class="cal-num">${prevLast - i}</span></button>`;
   }
   for(let d = 1; d <= lastDay; d++) {
     const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const cls = [];
     if(ds === td) cls.push('today');
     if(ds === sel) cls.push('selected');
-    const count = dayMap[ds] || 0;
-    let dots = '';
-    if(count > 0) {
-      const n = Math.min(count, 3);
-      dots = '<div class="cal-dots">' + Array(n).fill('<span></span>').join('') + '</div>';
-    }
-    html += `<button class="cal-day ${cls.join(' ')}" onclick="selectDay('${ds}')">${d}${dots}</button>`;
+    html += `<button class="cal-day ${cls.join(' ')}" onclick="selectDay('${ds}')">
+      <span class="cal-num">${d}</span>
+      ${evSnippets(ds)}
+    </button>`;
   }
   const total = startDow + lastDay;
   const fill = total <= 35 ? 35 - total : 42 - total;
   for(let i = 1; i <= fill; i++) {
-    html += `<button class="cal-day other">${i}</button>`;
+    html += `<button class="cal-day other"><span class="cal-num">${i}</span></button>`;
   }
   document.getElementById('calGrid').innerHTML = html;
 }
