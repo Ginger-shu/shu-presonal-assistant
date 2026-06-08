@@ -794,9 +794,11 @@ body::before {
 }
 .cal-day {
   min-height: 52px;
+  min-width: 0;         /* KEY: prevents grid overflow */
+  overflow: hidden;     /* KEY: clips children to cell */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch; /* stretch so children fill width */
   padding: 4px 2px 3px;
   background: transparent;
   border: none;
@@ -827,6 +829,7 @@ body::before {
   line-height: 24px;
   text-align: center;
   flex-shrink: 0;
+  align-self: center; /* keep number centered horizontally */
   letter-spacing: -0.2px;
   border-radius: 50%;
 }
@@ -834,13 +837,17 @@ body::before {
 /* Event snippets inside calendar cells */
 .cal-evs {
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 1px;
   margin-top: 2px;
 }
 .cal-ev {
+  display: block;
   width: 100%;
+  max-width: 100%;
   font-size: 8.5px;
   font-weight: 600;
   color: var(--accent-deep);
@@ -852,6 +859,7 @@ body::before {
   text-overflow: ellipsis;
   line-height: 1.6;
   letter-spacing: -0.1px;
+  box-sizing: border-box;
 }
 .cal-ev.allday {
   background: var(--bg-soft);
@@ -1560,6 +1568,227 @@ body::before {
   letter-spacing: -0.2px;
 }
 
+/* ─── Daily Non-Negotiables ─── */
+.daily-card {
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: 18px 18px 14px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.daily-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--done) 0%, #8ecb9a 60%, transparent 100%);
+  opacity: 0.85;
+}
+.daily-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.daily-title-text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+.daily-prog {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--bg-soft);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.daily-prog.complete {
+  background: var(--done-bg);
+  color: var(--done);
+}
+.daily-list { display: flex; flex-direction: column; }
+.daily-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 4px;
+  position: relative;
+  transition: opacity 0.15s;
+}
+.daily-item + .daily-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 38px; right: 12px;
+  height: 1px;
+  background: var(--line-soft);
+}
+.daily-item.done { opacity: 0.5; }
+.daily-check {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-4);
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  color: transparent;
+  transition: 0.2s;
+}
+.daily-check:active { transform: scale(0.88); }
+.daily-item.done .daily-check {
+  background: var(--done);
+  border-color: var(--done);
+  color: #fff;
+}
+.daily-body { flex: 1; min-width: 0; }
+.daily-task-name {
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.2px;
+}
+.daily-item.done .daily-task-name {
+  text-decoration: line-through;
+  color: var(--ink-3);
+}
+.daily-task-dur {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.daily-empty {
+  text-align: center;
+  padding: 20px 12px;
+  color: var(--ink-3);
+  font-size: 13px;
+}
+.daily-empty a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Daily tasks settings in settings page */
+.daily-set-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.daily-set-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-soft);
+  border-radius: var(--r-sm);
+}
+.daily-set-emoji {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+.daily-set-info { flex: 1; min-width: 0; }
+.daily-set-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.daily-set-dur { font-size: 11px; color: var(--ink-3); font-family: var(--font-mono); }
+.daily-set-del {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--ink-4);
+  cursor: pointer;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.daily-set-del:active { background: rgba(212,74,60,0.08); color: var(--danger); }
+
+.daily-add-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.daily-add-row input {
+  padding: 9px 11px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+.daily-add-row input:focus { border-color: var(--accent); }
+.daily-add-row .emoji-in { width: 52px; text-align: center; font-size: 16px; }
+.daily-add-row .title-in { flex: 1; min-width: 80px; }
+.daily-add-row .dur-in { width: 70px; }
+.daily-add-btn {
+  padding: 9px 14px;
+  background: var(--done);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.daily-add-btn:active { transform: scale(0.96); }
+
+.push-time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  background: var(--card);
+  border-radius: var(--r-sm);
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-xs);
+}
+.push-time-label { flex: 1; font-size: 13.5px; font-weight: 500; color: var(--ink-2); }
+.push-time-input {
+  padding: 6px 10px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  outline: none;
+  width: 110px;
+  text-align: center;
+}
+.push-time-input:focus { border-color: var(--done); }
+
+.sync-gas-btn {
+  width: 100%;
+  padding: 11px;
+  background: var(--done);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: -0.1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.sync-gas-btn:active { transform: scale(0.97); }
+.sync-gas-btn .spinner { border-color: rgba(255,255,255,0.4); border-top-color: #fff; }
+
+/* MIT sections spacing fix */
+
 /* Tomorrow preview */
 .tmr-section {
   margin-top: 28px;
@@ -1784,6 +2013,15 @@ body::before {
                  onkeydown="if(event.key==='Enter'){event.preventDefault();addMit();}">
           <button class="mit-add-btn" onclick="addMit()">加入</button>
         </div>
+      </section>
+
+      <!-- Daily non-negotiables -->
+      <section class="daily-card" id="dailyCard" style="display:none;">
+        <header class="daily-header">
+          <div class="daily-title-text">每日必做</div>
+          <div class="daily-prog" id="dailyProg">0/0</div>
+        </header>
+        <div class="daily-list" id="dailyList"></div>
       </section>
 
       <section>
@@ -2017,6 +2255,30 @@ body::before {
       <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
     </div>
     <div class="modal-body">
+      <div class="set-card">
+        <h4>✅ 每日必做</h4>
+        <div class="desc">設定每天固定要完成的事項，會顯示在今日頁面並隨早晨推送通知。</div>
+
+        <div class="daily-set-list" id="dailySetList"></div>
+
+        <div class="daily-add-row">
+          <input type="text" class="emoji-in" id="dlEmoji" placeholder="☕" maxlength="2">
+          <input type="text" class="title-in" id="dlTitle" placeholder="任務名稱" maxlength="30"
+                 onkeydown="if(event.key==='Enter')addDailyTask()">
+          <input type="number" class="dur-in" id="dlDur" placeholder="分鐘" min="1" max="600">
+          <button class="daily-add-btn" onclick="addDailyTask()">＋</button>
+        </div>
+
+        <div class="push-time-row">
+          <span class="push-time-label">☀️ 每日推送時間</span>
+          <input type="time" class="push-time-input" id="pushTimeInput" value="07:30">
+        </div>
+
+        <button class="sync-gas-btn" id="syncGasBtn" onclick="syncDailyToGas()">
+          <span>📤 同步到 LINE 推送</span>
+        </button>
+      </div>
+
       <div class="set-card">
         <h4>Google Calendar</h4>
         <div class="desc">透過 Apps Script Webhook 同步行程</div>
@@ -2263,6 +2525,159 @@ function editMitTitle(el, id) {
   };
   el.addEventListener('blur', finish);
   el.addEventListener('keydown', onKey);
+}
+
+// ════════════════════════════════════════════════
+//  DAILY NON-NEGOTIABLES
+// ════════════════════════════════════════════════
+const SK_DL_TPL = 'yj_daily_tpl';
+const SK_DL_LOG = 'yj_daily_log';
+
+function loadDailyTpl() {
+  try { const v = localStorage.getItem(SK_DL_TPL); return v ? JSON.parse(v) : []; } catch { return []; }
+}
+function saveDailyTpl(arr) {
+  try { localStorage.setItem(SK_DL_TPL, JSON.stringify(arr)); } catch {}
+}
+function loadDailyLog() {
+  try {
+    const v = localStorage.getItem(SK_DL_LOG);
+    const d = v ? JSON.parse(v) : null;
+    const td = todayStr();
+    if(!d || d.date !== td) return { date: td, done: [] };
+    return d;
+  } catch { return { date: todayStr(), done: [] }; }
+}
+function saveDailyLog(log) {
+  try { localStorage.setItem(SK_DL_LOG, JSON.stringify(log)); } catch {}
+}
+
+function toggleDailyDone(id) {
+  const log = loadDailyLog();
+  const i = log.done.indexOf(id);
+  if(i >= 0) log.done.splice(i, 1);
+  else log.done.push(id);
+  saveDailyLog(log);
+  renderDailyCard();
+}
+
+function renderDailyCard() {
+  const tpl = loadDailyTpl();
+  const log = loadDailyLog();
+  const card = document.getElementById('dailyCard');
+
+  if(!tpl.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const done = log.done.length;
+  const total = tpl.length;
+  const prog = document.getElementById('dailyProg');
+  prog.innerHTML = `${done}<span style="color:var(--ink-3);">/${total}</span>`;
+  prog.className = 'daily-prog' + (done === total && total > 0 ? ' complete' : '');
+
+  document.getElementById('dailyList').innerHTML = tpl.map(t => {
+    const isDone = log.done.includes(t.id);
+    return `<div class="daily-item${isDone ? ' done' : ''}">
+      <button class="daily-check" onclick="toggleDailyDone('${t.id}')" aria-label="完成"></button>
+      <div class="daily-body">
+        <div class="daily-task-name">${t.emoji ? t.emoji + ' ' : ''}${esc(t.title)}</div>
+        ${t.durationMin ? `<div class="daily-task-dur">⏱ ${t.durationMin} 分鐘</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Settings management
+function renderDailySetList() {
+  const tpl = loadDailyTpl();
+  const el = document.getElementById('dailySetList');
+  if(!tpl.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--ink-3);padding:4px 0 8px;font-style:italic;">尚未設定，從下方新增</div>';
+    return;
+  }
+  el.innerHTML = tpl.map(t => `
+    <div class="daily-set-item">
+      <div class="daily-set-emoji">${t.emoji || '✅'}</div>
+      <div class="daily-set-info">
+        <div class="daily-set-name">${esc(t.title)}</div>
+        ${t.durationMin ? `<div class="daily-set-dur">${t.durationMin} 分鐘</div>` : ''}
+      </div>
+      <button class="daily-set-del" onclick="deleteDailyTask('${t.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function addDailyTask() {
+  const title = document.getElementById('dlTitle').value.trim();
+  if(!title) { toast('請輸入任務名稱', 'error'); return; }
+  const emoji = document.getElementById('dlEmoji').value.trim() || '';
+  const dur = parseInt(document.getElementById('dlDur').value) || null;
+  const tpl = loadDailyTpl();
+  tpl.push({ id: uid(), title, emoji, durationMin: dur });
+  saveDailyTpl(tpl);
+  document.getElementById('dlTitle').value = '';
+  document.getElementById('dlEmoji').value = '';
+  document.getElementById('dlDur').value = '';
+  renderDailySetList();
+  renderDailyCard();
+  toast('已新增 ✅', 'success');
+}
+
+function deleteDailyTask(id) {
+  const tpl = loadDailyTpl().filter(x => x.id !== id);
+  saveDailyTpl(tpl);
+  renderDailySetList();
+  renderDailyCard();
+}
+
+// Sync to GAS
+async function syncDailyToGas() {
+  const s = loadSetts();
+  if(!s.whBackend) { toast('請先設定 Backend URL', 'error'); return; }
+  const btn = document.getElementById('syncGasBtn');
+  btn.innerHTML = '<span class="spinner"></span> 同步中...';
+  btn.disabled = true;
+
+  const tasks = loadDailyTpl();
+  const timeVal = document.getElementById('pushTimeInput').value || '07:30';
+  const [hour, minute] = timeVal.split(':').map(Number);
+
+  try {
+    // 1. Send daily tasks to GAS
+    const r1 = await fetch(s.whBackend, {
+      method: 'POST', headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({ action: 'setDailyTasks', tasks })
+    });
+
+    // 2. Set morning trigger time
+    const r2 = await fetch(s.whBackend, {
+      method: 'POST', headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({ action: 'setTriggerTime', hour, minute })
+    });
+
+    if(r1.ok && r2.ok) {
+      toast(`已同步！每天 ${timeVal} 推送 LINE ✅`, 'success');
+    } else {
+      toast('GAS 回應異常，請確認程式碼已更新', 'error');
+    }
+  } catch(e) {
+    toast('同步失敗：' + e.message, 'error');
+  } finally {
+    btn.innerHTML = '<span>📤 同步到 LINE 推送</span>';
+    btn.disabled = false;
+  }
+}
+
+// Patch loadSettings to also render daily set list
+const _origLoadSettings = loadSettings;
+function loadSettings() {
+  _origLoadSettings();
+  renderDailySetList();
+  // Restore saved push time if any
+  try {
+    const s = loadSetts();
+    if(s.pushTime) document.getElementById('pushTimeInput').value = s.pushTime;
+  } catch {}
 }
 
 // ════════════════════════════════════════════════
@@ -2954,6 +3369,7 @@ function checkConflicts() {
 function renderToday() {
   renderHeader();
   renderMit();
+  renderDailyCard();
   renderTodayTimeline();
 }
 
