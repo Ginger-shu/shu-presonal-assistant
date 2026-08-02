@@ -989,6 +989,7 @@ body::before {
   z-index: 100;
   align-items: flex-end;
   justify-content: center;
+  overflow: hidden;
 }
 .modal-overlay.active { display: flex; }
 
@@ -999,6 +1000,8 @@ body::before {
   max-width: 580px;
   max-height: 92vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   animation: slideUp 0.32s cubic-bezier(0.16, 1, 0.3, 1);
   padding-bottom: var(--safe-bottom);
 }
@@ -2539,10 +2542,26 @@ function toast(msg, type = '') {
 // ════════════════════════════════════════════════
 //  MODAL
 // ════════════════════════════════════════════════
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+// iOS scroll lock: freeze the background (body:fixed) so fixed modals don't drift on scroll
+let _lockedScrollY = 0, _scrollLocked = false;
+function lockScroll() {
+  if(_scrollLocked) return;
+  _scrollLocked = true;
+  _lockedScrollY = window.scrollY || window.pageYOffset || 0;
+  const b = document.body.style;
+  b.position = 'fixed'; b.top = `-${_lockedScrollY}px`; b.left = '0'; b.right = '0'; b.width = '100%';
+}
+function unlockScroll() {
+  if(!_scrollLocked) return;
+  _scrollLocked = false;
+  const b = document.body.style;
+  b.position = ''; b.top = ''; b.left = ''; b.right = ''; b.width = '';
+  window.scrollTo(0, _lockedScrollY);
+}
+function openModal(id) { document.getElementById(id).classList.add('active'); lockScroll(); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); unlockScroll(); }
 document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if(e.target === o) o.classList.remove('active'); });
+  o.addEventListener('click', e => { if(e.target === o) closeModal(o.id); });
 });
 
 // ════════════════════════════════════════════════
