@@ -4,53 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>要事</title>
-<meta name="theme-color" content="#f7f5ef">
+<meta name="theme-color" content="#f3ede2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="要事">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%23f25c39' width='180' height='180' rx='42'/%3E%3Ctext x='90' y='128' font-size='100' text-anchor='middle' fill='white' font-family='-apple-system,sans-serif' font-weight='700'%3E要%3C/text%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%234d3136' width='180' height='180' rx='42'/%3E%3Ctext x='90' y='128' font-size='100' text-anchor='middle' fill='%23f3ede2' font-family='Georgia,serif' font-weight='700'%3E要%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Manrope:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════
    DESIGN TOKENS — Soft Modern + Warm Coral
    ═══════════════════════════════════════════════════ */
 :root {
-  /* Surfaces */
-  --bg: #f7f5ef;
-  --bg-soft: #f1ede2;
-  --bg-deep: #e8e2d2;
-  --card: #ffffff;
-  --card-tinted: #fdfbf5;
+  /* Surfaces — frosted glass on warm greige */
+  --bg: #f3ede2;
+  --bg-soft: #efe6dc;
+  --bg-deep: #e7dccf;
+  --card: rgba(255,253,249,0.74);
+  --card-tinted: rgba(255,253,249,0.56);
+  --card-solid: #fbf7f2;
 
-  /* Inks */
-  --ink: #1a1817;
-  --ink-2: #5a5650;
-  --ink-3: #968f83;
-  --ink-4: #c8c2b3;
-  --line: #ece6d6;
-  --line-soft: #f3eee0;
+  /* Inks — deep maroon → mauve */
+  --ink: #4d3136;
+  --ink-2: #755c62;
+  --ink-3: #a08a8f;
+  --ink-4: #c6b6b8;
+  --line: rgba(166,124,114,0.20);
+  --line-soft: rgba(166,124,114,0.11);
 
-  /* Accent — warm coral */
-  --accent: #f25c39;
-  --accent-soft: #ff8265;
-  --accent-light: #ffb29c;
-  --accent-bg: #fff0eb;
-  --accent-bg-deep: #ffe1d4;
-  --accent-deep: #c54422;
+  /* Accent — dried rose / mauve-clay */
+  --accent: #a67c72;
+  --accent-soft: #bd9a90;
+  --accent-light: #d8beb6;
+  --accent-bg: rgba(166,124,114,0.13);
+  --accent-bg-deep: rgba(166,124,114,0.22);
+  --accent-deep: #8a6259;
 
-  /* Functional */
-  --done: #6ba577;
-  --done-bg: #e8f3ec;
-  --warning: #e8a134;
-  --info: #5b8def;
-  --danger: #d44a3c;
+  /* Functional — muted to match rose palette */
+  --done: #7a9a80;
+  --done-bg: rgba(122,154,128,0.16);
+  --warning: #c99a52;
+  --info: #8091b8;
+  --danger: #c56b64;
 
-  /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(40,28,12,0.03);
-  --shadow-sm: 0 2px 6px rgba(40,28,12,0.04), 0 1px 2px rgba(40,28,12,0.03);
-  --shadow-md: 0 6px 20px rgba(40,28,12,0.06), 0 2px 6px rgba(40,28,12,0.04);
-  --shadow-lg: 0 16px 40px rgba(40,28,12,0.1), 0 6px 12px rgba(40,28,12,0.05);
-  --shadow-coral: 0 10px 28px -6px rgba(242,92,57,0.3), 0 4px 10px rgba(242,92,57,0.15);
+  /* Shadows — soft mauve */
+  --shadow-xs: 0 1px 2px rgba(58,40,44,0.04);
+  --shadow-sm: 0 2px 8px rgba(58,40,44,0.06), 0 1px 2px rgba(58,40,44,0.04);
+  --shadow-md: 0 8px 24px rgba(58,40,44,0.08), 0 2px 6px rgba(58,40,44,0.05);
+  --shadow-lg: 0 18px 44px rgba(58,40,44,0.12), 0 6px 14px rgba(58,40,44,0.06);
+  --shadow-coral: 0 10px 28px -6px rgba(166,124,114,0.34), 0 4px 10px rgba(166,124,114,0.18);
 
   /* Geometry */
   --r-xs: 8px;
@@ -63,6 +64,7 @@
   --safe-top: env(safe-area-inset-top, 0px);
 
   --font: 'Manrope', 'Noto Sans TC', -apple-system, sans-serif;
+  --font-display: 'Fraunces', 'Noto Serif TC', Georgia, serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 }
 
@@ -70,7 +72,7 @@
 html, body { height:100%; overflow-x:hidden; }
 body {
   font-family: var(--font);
-  background: var(--bg);
+  background: linear-gradient(168deg, #f4eee4 0%, #efe6dc 55%, #f2ece4 100%) fixed;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "cv11", "ss01";
@@ -79,18 +81,28 @@ body {
   position: relative;
 }
 
-/* Soft warm glow background */
+/* Soft dried-rose glow blobs (frosted through the cards) */
 body::before {
   content: '';
   position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 80% 0%, rgba(242,92,57,0.05), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(232,162,52,0.04), transparent 60%);
+    radial-gradient(ellipse 72% 46% at 88% -6%, rgba(205,164,153,0.60), transparent 62%),
+    radial-gradient(ellipse 66% 42% at 6% 12%, rgba(222,215,197,0.55), transparent 60%),
+    radial-gradient(ellipse 70% 48% at 16% 108%, rgba(166,124,114,0.42), transparent 62%),
+    radial-gradient(ellipse 60% 40% at 98% 82%, rgba(216,190,182,0.46), transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
 .app { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; padding: 0 18px; }
+
+/* Frosted glass — translucent surfaces blur the glow behind them */
+.mit-card, .bottom-nav, .settings-btn, .daily-card, .modal, .fav-scroll,
+.proj-card, .proj-anchor, .proj-strategy, .proj-ms-row, .proj-task,
+.proj-budget, .proj-stat, .proj-empty, .proj-add-btn {
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+}
 
 /* ═══════════════════════════════════════════════════
    HEADER
@@ -140,10 +152,10 @@ body::before {
   margin-bottom: 4px;
 }
 .date-day {
-  font-family: var(--font);
-  font-size: 44px;
-  font-weight: 700;
-  letter-spacing: -1.5px;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: -1px;
   line-height: 1;
   color: var(--ink);
   background: linear-gradient(135deg, var(--ink), var(--ink) 50%, var(--accent-deep));
@@ -212,9 +224,10 @@ body::before {
   margin-bottom: 14px;
 }
 .mit-title {
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
   color: var(--ink);
 }
 .mit-prog {
@@ -496,9 +509,10 @@ body::before {
   padding: 0 4px;
 }
 .sec-title {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
   color: var(--ink);
   display: flex;
   align-items: center;
@@ -1809,9 +1823,10 @@ body::before {
   gap: 10px;
 }
 .tmr-toggle-title {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
   color: var(--ink-2);
 }
 .tmr-toggle-count {
@@ -1959,6 +1974,104 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+/* ═══════════════════════════════════════════════════
+   PROJECTS  專案管理
+   ═══════════════════════════════════════════════════ */
+.proj-head { padding: calc(10px + var(--safe-top)) 0 2px; }
+.proj-head-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.proj-eyebrow { font-size:14px; font-weight:600; color:var(--ink-2); }
+.proj-add-btn { width:38px; height:38px; border-radius:50%; border:none; background:var(--accent); color:#fff; font-size:21px; font-weight:600; cursor:pointer; box-shadow:var(--shadow-coral); display:flex; align-items:center; justify-content:center; transition:transform .15s; }
+.proj-add-btn:active { transform:scale(.92); }
+.proj-title { font-family:var(--font-display); font-size:34px; font-weight:600; letter-spacing:-.5px; color:var(--ink); line-height:1.08; }
+.proj-sub { font-size:13px; font-weight:500; color:var(--ink-3); margin-top:4px; }
+.proj-stats { display:flex; gap:9px; margin:18px 0 22px; }
+.proj-stat { flex:1; background:var(--card); border-radius:var(--r-md); padding:13px 12px; box-shadow:var(--shadow-sm); }
+.proj-stat-v { font-size:23px; font-weight:800; line-height:1; font-family:var(--font); }
+.proj-stat-l { font-size:11px; font-weight:600; color:var(--ink-3); margin-top:5px; }
+.tone-ink { color:var(--ink); } .tone-warn { color:var(--warning); } .tone-accent { color:var(--accent); }
+.proj-groups { display:flex; flex-direction:column; gap:22px; }
+.proj-group { display:flex; flex-direction:column; gap:11px; }
+.proj-group-head { display:flex; align-items:center; gap:9px; }
+.proj-dot { width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+.proj-group-name { font-size:15px; font-weight:700; color:var(--ink); }
+.proj-count { font-size:11px; font-weight:700; color:var(--ink-3); background:var(--bg-soft); padding:2px 8px; border-radius:12px; }
+.proj-group-edit { background:none; border:none; color:var(--ink-4); font-size:12px; cursor:pointer; padding:0 2px; }
+.proj-group-add { margin-left:auto; background:none; border:none; color:var(--accent); font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font); }
+.proj-card { background:var(--card); border-radius:var(--r-lg); padding:15px; box-shadow:var(--shadow-sm); cursor:pointer; transition:transform .15s, box-shadow .15s; display:flex; flex-direction:column; gap:11px; }
+.proj-card:active { transform:scale(.99); box-shadow:var(--shadow-xs); }
+.proj-card-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.proj-card-name { font-size:15.5px; font-weight:700; color:var(--ink); }
+.proj-period { font-family:var(--font-mono); font-size:11px; color:var(--ink-3); }
+.proj-prog { display:flex; flex-direction:column; gap:6px; }
+.proj-track { height:6px; border-radius:3px; background:var(--bg-deep); overflow:hidden; }
+.proj-fill { height:100%; border-radius:3px; background:var(--accent); transition:width .4s; }
+.proj-prog-l { display:flex; justify-content:space-between; font-size:11px; font-weight:500; color:var(--ink-3); }
+.proj-pct { font-weight:800; color:var(--accent); }
+.proj-ms { display:flex; justify-content:space-between; align-items:center; gap:8px; padding-top:10px; border-top:1px solid var(--line); }
+.proj-ms-k { font-size:10px; font-weight:600; color:var(--ink-3); }
+.proj-ms-v { font-size:12.5px; font-weight:600; color:var(--ink-2); margin-top:2px; }
+.proj-chip { font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; white-space:nowrap; flex:0 0 auto; }
+.proj-chip.clickable { cursor:pointer; }
+.ps-info { color:var(--info); background:#e8eefc; }
+.ps-grey { color:var(--ink-3); background:var(--bg-soft); }
+.ps-danger { color:var(--danger); background:#f8e7e4; }
+.ps-done { color:var(--done); background:var(--done-bg); }
+.cd-warning { color:var(--warning); background:#fbf1da; }
+.cd-grey { color:var(--ink-3); background:var(--bg-soft); }
+.cd-danger { color:var(--danger); background:#f8e7e4; }
+.cd-done { color:var(--done); background:var(--done-bg); }
+/* detail */
+.proj-detail-head { padding: calc(10px + var(--safe-top)) 0 0; display:flex; flex-direction:column; gap:9px; margin-bottom:20px; }
+.proj-dh-bar { display:flex; justify-content:space-between; align-items:center; }
+.proj-back { background:none; border:none; color:var(--ink-2); font-size:14px; font-weight:600; cursor:pointer; font-family:var(--font); padding:0; }
+.proj-edit-btn { background:none; border:none; color:var(--accent); font-size:13px; font-weight:700; cursor:pointer; font-family:var(--font); }
+.proj-crumb { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:600; color:var(--ink-3); }
+.proj-dh-title { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.proj-dh-title h1 { font-family:var(--font-display); font-size:27px; font-weight:600; letter-spacing:-.3px; color:var(--ink); }
+.proj-anchor { background:var(--card); border-radius:var(--r-lg); padding:16px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:13px; margin-bottom:22px; }
+.proj-arow { display:flex; flex-direction:column; gap:3px; }
+.proj-alabel { font-size:10px; font-weight:700; letter-spacing:.6px; color:var(--ink-3); }
+.proj-aval { font-size:13.5px; font-weight:500; color:var(--ink); line-height:1.45; white-space:pre-wrap; }
+.proj-aval.mono { font-family:var(--font-mono); font-size:13px; }
+.proj-anchor-pair { display:flex; gap:12px; }
+.proj-acell { flex:1; display:flex; flex-direction:column; gap:3px; }
+.proj-sec { display:flex; flex-direction:column; gap:11px; margin-bottom:22px; }
+.proj-sec-head { display:flex; flex-direction:column; gap:4px; }
+.proj-sec-row { display:flex; justify-content:space-between; align-items:center; }
+.proj-sec-l { display:flex; align-items:center; gap:8px; }
+.proj-sec-bar { width:4px; height:15px; border-radius:2px; background:var(--accent); display:inline-block; }
+.proj-sec-t { font-size:14px; font-weight:700; color:var(--ink); }
+.proj-sec-add { background:none; border:none; color:var(--accent); font-size:12px; font-weight:700; cursor:pointer; font-family:var(--font); }
+.proj-sec-hint { font-size:11.5px; font-weight:500; color:var(--ink-3); line-height:1.4; }
+.proj-strategy { background:var(--card); border-radius:var(--r-md); padding:15px; box-shadow:var(--shadow-sm); font-size:13px; font-weight:500; line-height:1.55; color:var(--ink); white-space:pre-wrap; }
+.proj-muted { color:var(--ink-4) !important; }
+.proj-ms-row { display:flex; align-items:center; gap:10px; background:var(--card); border-radius:var(--r-sm); padding:11px 13px; box-shadow:var(--shadow-sm); }
+.proj-ms-check { width:22px; height:22px; flex:0 0 auto; border-radius:50%; border:2px solid var(--line); background:none; color:#fff; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.proj-ms-check.on { background:var(--done); border-color:var(--done); }
+.proj-date-pill { font-family:var(--font-mono); font-size:11px; font-weight:600; color:var(--ink-2); background:var(--bg-soft); padding:3px 8px; border-radius:7px; flex:0 0 auto; }
+.proj-ms-title { flex:1; font-size:12.5px; font-weight:600; color:var(--ink); }
+.proj-ms-row.done .proj-ms-title { color:var(--ink-3); font-weight:500; }
+.proj-icon-btn { background:none; border:none; color:var(--ink-4); font-size:13px; cursor:pointer; padding:2px 4px; flex:0 0 auto; }
+.proj-task { background:var(--card); border-radius:var(--r-md); padding:14px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:7px; }
+.proj-task-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.proj-task-title { font-size:14px; font-weight:700; color:var(--ink); }
+.proj-task.done .proj-task-title { color:var(--ink-3); }
+.proj-task-detail { font-size:12px; font-weight:500; color:var(--ink-2); line-height:1.45; white-space:pre-wrap; }
+.proj-task-foot { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.proj-task-meta { font-family:var(--font-mono); font-size:10.5px; color:var(--ink-3); }
+.proj-risk { background:#f8e7e4; border-radius:var(--r-md); padding:14px; display:flex; flex-direction:column; gap:6px; }
+.proj-risk-top { display:flex; align-items:center; gap:7px; }
+.proj-risk-ic { color:var(--danger); font-size:13px; }
+.proj-risk-title { flex:1; font-size:13px; font-weight:700; color:var(--ink); }
+.proj-risk-mit { font-size:12px; font-weight:500; color:var(--ink-2); line-height:1.5; }
+.proj-budget { background:var(--card); border-radius:var(--r-sm); padding:12px 14px; box-shadow:var(--shadow-sm); display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.proj-budget-it { font-size:13px; font-weight:600; color:var(--ink); }
+.proj-budget-no { font-size:11px; font-weight:500; color:var(--ink-3); margin-top:2px; }
+.proj-budget-am { font-family:var(--font-mono); font-size:13px; font-weight:600; color:var(--accent); flex:0 0 auto; }
+.proj-empty { font-size:12.5px; color:var(--ink-3); text-align:center; padding:14px; background:var(--card-tinted); border-radius:var(--r-sm); border:1px dashed var(--line); }
+.proj-add-company { width:100%; padding:13px; border-radius:var(--r-md); border:1px dashed var(--ink-4); background:none; color:var(--ink-2); font-size:13px; font-weight:600; font-family:var(--font); cursor:pointer; margin-top:2px; }
+.proj-check-row { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink); cursor:pointer; padding:2px 0; }
+.proj-check-row input { width:20px; height:20px; }
 </style>
 </head>
 <body>
@@ -2077,6 +2190,11 @@ body::before {
       <div id="dayTimeline"></div>
     </section>
 
+    <!-- ─────── PROJECTS PAGE ─────── -->
+    <section class="page" id="page-projects">
+      <div id="projView"></div>
+    </section>
+
   </main>
 
   <button class="fab" id="fab" onclick="openScheduleModal()" aria-label="新增行程">＋</button>
@@ -2084,6 +2202,7 @@ body::before {
   <nav class="bottom-nav">
     <button class="nav-btn active" data-page="today" onclick="switchPage('today')">今日</button>
     <button class="nav-btn" data-page="schedule" onclick="switchPage('schedule')">行程</button>
+    <button class="nav-btn" data-page="projects" onclick="switchPage('projects')">專案</button>
   </nav>
 
 </div>
@@ -2308,11 +2427,24 @@ body::before {
 
 <div class="toast-box" id="toastBox"></div>
 
+<!-- ─────── PROJECT MODAL ─────── -->
+<div class="modal-overlay" id="projModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="pmTitle">編輯</div>
+      <button class="modal-close" onclick="closeModal('projModal')">✕</button>
+    </div>
+    <div class="modal-body" id="pmBody"></div>
+    <div class="modal-footer" id="pmFooter"></div>
+  </div>
+</div>
+
 <script>
 // ════════════════════════════════════════════════
 //  STORAGE
 // ════════════════════════════════════════════════
-const SK = { settings: 'yj_settings_v3', mit: 'yj_mit_v3', favs: 'yj_favs_v1' };
+const SK = { settings: 'yj_settings_v3', mit: 'yj_mit_v3', favs: 'yj_favs_v1', projects: 'yj_projects_v1' };
 const DEFAULTS = {
   whBackend: 'https://script.google.com/macros/s/AKfycbwKRWfcZ9FoU3Sj_qOdD76zmbEQ9zJqPzIX0N3NFDDfqz2uvqIyoGY_ZEVXy4WyCfWJ/exec',
 };
@@ -2392,6 +2524,11 @@ function switchPage(name) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if(name === 'today') renderToday();
   if(name === 'schedule') renderSchedulePage();
+  if(name === 'projects') renderProjects();
+  const fab = document.getElementById('fab');
+  if(fab) fab.style.display = (name === 'projects') ? 'none' : '';
+  const ah = document.querySelector('.app-header');
+  if(ah) ah.style.display = (name === 'projects') ? 'none' : '';
 }
 
 // ════════════════════════════════════════════════
@@ -3893,6 +4030,418 @@ function init() {
     }
   }, 30000);
 }
+// ════════════════════════════════════════════════
+//  PROJECTS  專案管理
+// ════════════════════════════════════════════════
+let projState = null;
+let projCurrent = null;
+let projFields = [];
+let projSaveCb = null;
+
+const PROJ_STATUS = {
+  planning: { label:'規劃中', cls:'ps-grey' },
+  active:   { label:'進行中', cls:'ps-info' },
+  blocked:  { label:'卡關',   cls:'ps-danger' },
+  done:     { label:'已完成', cls:'ps-done' },
+  paused:   { label:'暫停',   cls:'ps-grey' },
+};
+const TASK_STATUS = {
+  todo:    { label:'未開始', cls:'ps-grey' },
+  doing:   { label:'進行中', cls:'ps-info' },
+  blocked: { label:'卡關',   cls:'ps-danger' },
+  done:    { label:'完成',   cls:'ps-done' },
+};
+const TASK_CYCLE = ['todo','doing','blocked','done'];
+const PROJ_COLORS = [['#f25c39','珊瑚橘'],['#5b8def','天藍'],['#6ba577','綠'],['#e8a134','琥珀'],['#a06fd6','紫'],['#e0658f','粉']];
+
+const escAttr = s => esc(s).replace(/"/g,'&quot;');
+
+function projSeed() {
+  const c1 = uid(), c2 = uid();
+  return {
+    companies: [
+      { id:c1, name:'衡點健康', color:'#a67c72' },
+      { id:c2, name:'接案 · 個人', color:'#8091b8' },
+    ],
+    projects: [
+      { id:uid(), companyId:c1, name:'APP 系統開發', status:'active', owner:'枕頭',
+        purpose:'整合完整預約金流,提升服務效率、系統品質控管,完整顧客體驗。',
+        goal:'11/24 初版封測 · 12/22 正式上架', start:'2026-05-20', end:'2026-12-24',
+        strategy:'先確保 12/22 能準時上架 → 健康報告先做最小可用版,AI 推薦方案延到 v2;金流走 Fitbook 不自建,把時間留給封測穩定度。',
+        milestones:[
+          {id:uid(),date:'2026-07-30',title:'更新伺服器(zeabur→render)',done:true},
+          {id:uid(),date:'2026-08-30',title:'健康報告產出',done:false},
+          {id:uid(),date:'2026-09-20',title:'payuni、apple store 審核',done:false},
+          {id:uid(),date:'2026-11-24',title:'開放初版封測',done:false},
+          {id:uid(),date:'2026-12-22',title:'正式上架',done:false},
+        ],
+        tasks:[
+          {id:uid(),title:'更新伺服器',detail:'zeabur → 購買 render',owner:'枕頭',checker:'Zoe',due:'2026-07-30',status:'done'},
+          {id:uid(),title:'確認報告呈現內容',detail:'調查顧客想看到什麼(8/14 開會)',owner:'琇·睿睿',checker:'枕頭',due:'2026-08-25',status:'doing'},
+          {id:uid(),title:'報告可以給什麼',detail:'moti 報告 · inbody · 過往課表 · 運動頻率',owner:'枕頭',checker:'Z·邱',due:'2026-08-25',status:'todo'},
+          {id:uid(),title:'報告一定要放什麼',detail:'提醒下次上課 · 推薦訓練方案 · 更新個資',owner:'Z·邱',checker:'江江',due:'2026-08-25',status:'todo'},
+        ],
+        risks:[{id:uid(),title:'apple store 審核可能被拒',mitigation:'預留重送審核的時間,先備妥隱私政策與可登入的測試帳號。'}],
+        budget:[{id:uid(),item:'伺服器 render',amount:'$67/月',note:'取代 zeabur'},{id:uid(),item:'apple developer',amount:'$99/年',note:'上架必備'}],
+      },
+      { id:uid(), companyId:c1, name:'官網煥新', status:'active', owner:'枕頭', purpose:'', goal:'', start:'', end:'', strategy:'', milestones:[], tasks:[], risks:[], budget:[] },
+      { id:uid(), companyId:c1, name:'一站式數位化', status:'active', owner:'枕頭', purpose:'建檔、簽名、疾病史整併一條龍', goal:'Phase 2 建檔 B 上線', start:'', end:'', strategy:'', milestones:[], tasks:[], risks:[], budget:[] },
+      { id:uid(), companyId:c2, name:'工作室預約系統', status:'planning', owner:'枕頭', purpose:'', goal:'', start:'', end:'', strategy:'', milestones:[], tasks:[], risks:[], budget:[] },
+    ],
+  };
+}
+function loadProjects() {
+  try { const v = localStorage.getItem(SK.projects); if(v) return JSON.parse(v); } catch {}
+  const seed = projSeed();
+  try { localStorage.setItem(SK.projects, JSON.stringify(seed)); } catch {}
+  return seed;
+}
+function saveProjects() { try { localStorage.setItem(SK.projects, JSON.stringify(projState)); } catch {} }
+
+function projDaysUntil(d) { if(!d) return null; const t=new Date(); t.setHours(0,0,0,0); const x=new Date(d+'T00:00:00'); if(isNaN(x)) return null; return Math.round((x-t)/864e5); }
+function projMD(d) { if(!d) return ''; const p=d.split('-'); return p.length===3 ? (+p[1])+'/'+(+p[2]) : d; }
+function projPeriod(p) { return (p.start||p.end) ? `${projMD(p.start)||'?'} – ${projMD(p.end)||'?'}` : '未設定走期'; }
+function projCountdown(d) { const n=projDaysUntil(d); if(n===null) return null; if(n<0) return {t:'逾期 '+(-n)+' 天',k:'danger'}; if(n===0) return {t:'今天',k:'warning'}; return {t:'剩 '+n+' 天',k:n<=14?'warning':'grey'}; }
+function projProgress(p) { const t=p.tasks||[]; if(!t.length) return 0; return Math.round(t.filter(x=>x.status==='done').length/t.length*100); }
+function projNextMs(p) {
+  const ms=(p.milestones||[]).filter(m=>!m.done);
+  const future=ms.filter(m=>{const n=projDaysUntil(m.date); return n!==null && n>=0;}).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  return future[0] || ms.sort((a,b)=>(a.date||'').localeCompare(b.date||''))[0] || null;
+}
+
+function renderProjects() {
+  projCurrent = null;
+  if(!projState) projState = loadProjects();
+  const S = projState;
+  const active = S.projects.filter(p=>p.status==='active').length;
+  let weekMs = 0;
+  S.projects.forEach(p=>(p.milestones||[]).forEach(m=>{ if(!m.done){ const n=projDaysUntil(m.date); if(n!==null && n>=0 && n<=7) weekMs++; }}));
+  const allTasks = S.projects.flatMap(p=>p.tasks||[]);
+  const avg = allTasks.length ? Math.round(allTasks.filter(t=>t.status==='done').length/allTasks.length*100) : 0;
+  const now = new Date();
+
+  let h = '';
+  h += `<div class="proj-head">
+    <div class="proj-head-top">
+      <div class="proj-eyebrow">${now.getMonth()+1} 月 ${now.getDate()} 日 · 星期${DOW_ZH[now.getDay()]}</div>
+      <button class="proj-add-btn" onclick="openProjectModal(null,null)">＋</button>
+    </div>
+    <div class="proj-title">專案</div>
+    <div class="proj-sub">跨公司追蹤所有進行中的專案</div>
+  </div>`;
+  h += `<div class="proj-stats">
+    <div class="proj-stat"><div class="proj-stat-v tone-ink">${active}</div><div class="proj-stat-l">進行中</div></div>
+    <div class="proj-stat"><div class="proj-stat-v tone-warn">${weekMs}</div><div class="proj-stat-l">本週里程碑</div></div>
+    <div class="proj-stat"><div class="proj-stat-v tone-accent">${avg}%</div><div class="proj-stat-l">平均完成</div></div>
+  </div>`;
+  h += `<div class="proj-groups">`;
+  const groups = S.companies.map(co=>({co, ps:S.projects.filter(p=>p.companyId===co.id)}));
+  const orphans = S.projects.filter(p=>!S.companies.some(c=>c.id===p.companyId));
+  if(orphans.length) groups.push({co:{id:'__none__',name:'未分類',color:'#c8c2b3'}, ps:orphans});
+  for(const {co, ps} of groups){
+    const real = co.id !== '__none__';
+    h += `<div class="proj-group">
+      <div class="proj-group-head">
+        <span class="proj-dot" style="background:${escAttr(co.color)}"></span>
+        <span class="proj-group-name">${esc(co.name)}</span>
+        <span class="proj-count">${ps.length} 專案</span>
+        ${real?`<button class="proj-group-edit" onclick="openCompanyModal('${co.id}')">✎</button>
+        <button class="proj-group-add" onclick="openProjectModal(null,'${co.id}')">＋ 專案</button>`:``}
+      </div>`;
+    if(!ps.length) h += `<div class="proj-empty">還沒有專案,點右上「＋ 專案」新增</div>`;
+    for(const p of ps) h += projCardHTML(p);
+    h += `</div>`;
+  }
+  h += `</div>`;
+  h += `<button class="proj-add-company" onclick="openCompanyModal(null)">＋ 新增公司 / 客戶</button>`;
+  document.getElementById('projView').innerHTML = h;
+}
+
+function projCardHTML(p) {
+  const st = PROJ_STATUS[p.status] || PROJ_STATUS.active;
+  const pct = projProgress(p);
+  const done = (p.tasks||[]).filter(t=>t.status==='done').length;
+  const total = (p.tasks||[]).length;
+  const ms = projNextMs(p);
+  let msRow;
+  if(ms){
+    const cd = projCountdown(ms.date);
+    msRow = `<div class="proj-ms">
+      <div><div class="proj-ms-k">下一里程碑</div><div class="proj-ms-v">${esc(ms.title)}${ms.date?' · '+projMD(ms.date):''}</div></div>
+      ${cd?`<span class="proj-chip cd-${cd.k}">${cd.t}</span>`:''}
+    </div>`;
+  } else {
+    msRow = `<div class="proj-ms"><div class="proj-ms-v proj-muted">尚無里程碑</div></div>`;
+  }
+  return `<div class="proj-card" onclick="openProjectDetail('${p.id}')">
+    <div class="proj-card-top"><div class="proj-card-name">${esc(p.name)}</div><span class="proj-chip ${st.cls}">${st.label}</span></div>
+    <div class="proj-period">走期  ${esc(projPeriod(p))}</div>
+    <div class="proj-prog">
+      <div class="proj-track"><div class="proj-fill" style="width:${pct}%"></div></div>
+      <div class="proj-prog-l"><span>完成 ${done} / ${total} 任務</span><span class="proj-pct">${pct}%</span></div>
+    </div>
+    ${msRow}
+  </div>`;
+}
+
+function openProjectDetail(id) { renderProjectDetail(id); window.scrollTo({top:0,behavior:'smooth'}); }
+function projBackToList() { renderProjects(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function renderProjectDetail(id) {
+  projCurrent = id;
+  const p = projState.projects.find(x=>x.id===id);
+  if(!p){ renderProjects(); return; }
+  const co = projState.companies.find(c=>c.id===p.companyId);
+  const st = PROJ_STATUS[p.status] || PROJ_STATUS.active;
+  const arow = (l,v)=>`<div class="proj-arow"><div class="proj-alabel">${l}</div><div class="proj-aval">${esc(v||'—')}</div></div>`;
+  const acell = (l,v)=>`<div class="proj-acell"><div class="proj-alabel">${l}</div><div class="proj-aval mono">${esc(v||'—')}</div></div>`;
+  const sec = (title,hint,addJs)=>`<div class="proj-sec-head"><div class="proj-sec-row"><div class="proj-sec-l"><span class="proj-sec-bar"></span><span class="proj-sec-t">${title}</span></div>${addJs?`<button class="proj-sec-add" onclick="${addJs}">＋ 新增</button>`:''}</div><div class="proj-sec-hint">${hint}</div></div>`;
+
+  let h = '';
+  h += `<div class="proj-detail-head">
+    <div class="proj-dh-bar">
+      <button class="proj-back" onclick="projBackToList()">‹  返回專案</button>
+      <button class="proj-edit-btn" onclick="openProjectModal('${p.id}',null)">✎ 編輯</button>
+    </div>
+    ${co?`<div class="proj-crumb"><span class="proj-dot" style="background:${escAttr(co.color)}"></span>${esc(co.name)}</div>`:''}
+    <div class="proj-dh-title"><h1>${esc(p.name)}</h1><span class="proj-chip ${st.cls}">${st.label}</span></div>
+  </div>`;
+
+  h += `<div class="proj-anchor">
+    ${arow('目的', p.purpose)}
+    ${arow('目標', p.goal)}
+    <div class="proj-anchor-pair">${acell('走期', (p.start||p.end)?projPeriod(p):'')}${acell('負責人', p.owner)}</div>
+  </div>`;
+
+  h += `<div class="proj-sec">${sec('策略與方針','事情這麼多,先打哪、放棄什麼 —— 寫下取捨,團隊才不會每件事都想做到滿而卡死。',`openStrategyEdit('${p.id}')`)}`;
+  h += p.strategy ? `<div class="proj-strategy">${esc(p.strategy)}</div>` : `<div class="proj-strategy proj-muted">還沒寫策略,點右上「＋ 新增」補上取捨方向。</div>`;
+  h += `</div>`;
+
+  h += `<div class="proj-sec">${sec('里程碑','可衡量的關鍵時間點,決定整體進度與倒數。',`openMilestoneModal('${p.id}',null)`)}`;
+  const mss = [...(p.milestones||[])].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(!mss.length) h += `<div class="proj-empty">尚無里程碑</div>`;
+  for(const m of mss){
+    const cd = m.done ? {t:'✓ 已完成',k:'done'} : projCountdown(m.date);
+    h += `<div class="proj-ms-row ${m.done?'done':''}">
+      <button class="proj-ms-check ${m.done?'on':''}" onclick="toggleMilestone('${p.id}','${m.id}')">${m.done?'✓':''}</button>
+      <span class="proj-date-pill">${m.date?projMD(m.date):'—'}</span>
+      <span class="proj-ms-title">${esc(m.title)}</span>
+      ${cd?`<span class="proj-chip cd-${cd.k}">${cd.t}</span>`:''}
+      <button class="proj-icon-btn" onclick="openMilestoneModal('${p.id}','${m.id}')">✎</button>
+    </div>`;
+  }
+  h += `</div>`;
+
+  h += `<div class="proj-sec">${sec('工作分配','誰做、誰檢核、何時交 —— 每件事都有主責與檢核,才不會漏。',`openTaskModal('${p.id}',null)`)}`;
+  if(!(p.tasks||[]).length) h += `<div class="proj-empty">尚無工作項目</div>`;
+  for(const t of (p.tasks||[])){
+    const ts = TASK_STATUS[t.status] || TASK_STATUS.todo;
+    const meta = [t.owner?('負責人 '+t.owner):'', t.checker?('檢核 '+t.checker):'', t.due?('截止 '+projMD(t.due)):''].filter(Boolean).join(' · ');
+    h += `<div class="proj-task ${t.status==='done'?'done':''}">
+      <div class="proj-task-top"><div class="proj-task-title">${esc(t.title)}</div><span class="proj-chip ${ts.cls} clickable" onclick="cycleTask('${p.id}','${t.id}')">${ts.label}</span></div>
+      ${t.detail?`<div class="proj-task-detail">${esc(t.detail)}</div>`:''}
+      <div class="proj-task-foot"><span class="proj-task-meta">${esc(meta)||'　'}</span><button class="proj-icon-btn" onclick="openTaskModal('${p.id}','${t.id}')">✎</button></div>
+    </div>`;
+  }
+  h += `</div>`;
+
+  h += `<div class="proj-sec">${sec('風險與待解','提早寫下可能出錯的地方,才不會臨上架才爆。',`openRiskModal('${p.id}',null)`)}`;
+  if(!(p.risks||[]).length) h += `<div class="proj-empty">尚無風險項目</div>`;
+  for(const r of (p.risks||[])){
+    h += `<div class="proj-risk">
+      <div class="proj-risk-top"><span class="proj-risk-ic">⚠</span><span class="proj-risk-title">${esc(r.title)}</span><button class="proj-icon-btn" onclick="openRiskModal('${p.id}','${r.id}')">✎</button></div>
+      ${r.mitigation?`<div class="proj-risk-mit">對策:${esc(r.mitigation)}</div>`:''}
+    </div>`;
+  }
+  h += `</div>`;
+
+  h += `<div class="proj-sec">${sec('預算','要花多少錢或資源,先抓個範圍。',`openBudgetModal('${p.id}',null)`)}`;
+  if(!(p.budget||[]).length) h += `<div class="proj-empty">尚無預算項目</div>`;
+  for(const b of (p.budget||[])){
+    h += `<div class="proj-budget">
+      <div><div class="proj-budget-it">${esc(b.item)}</div>${b.note?`<div class="proj-budget-no">${esc(b.note)}</div>`:''}</div>
+      <div style="display:flex;align-items:center;gap:8px;"><span class="proj-budget-am">${esc(b.amount||'—')}</span><button class="proj-icon-btn" onclick="openBudgetModal('${p.id}','${b.id}')">✎</button></div>
+    </div>`;
+  }
+  h += `</div>`;
+
+  document.getElementById('projView').innerHTML = h;
+}
+
+// ── generic modal form ──
+function projOpenForm(title, fields, values, onSave, onDeleteJs) {
+  projFields = fields; projSaveCb = onSave;
+  values = values || {};
+  let b = '';
+  for(const f of fields){
+    const v = values[f.key] != null ? values[f.key] : (f.def != null ? f.def : '');
+    b += `<div class="field"><label class="field-label">${f.label}</label>`;
+    if(f.type==='textarea') b += `<textarea id="pf_${f.key}" placeholder="${escAttr(f.ph||'')}">${esc(v)}</textarea>`;
+    else if(f.type==='select') b += `<select id="pf_${f.key}">${f.options.map(o=>`<option value="${escAttr(o[0])}" ${o[0]===v?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`;
+    else if(f.type==='check') b += `<label class="proj-check-row"><input type="checkbox" id="pf_${f.key}" ${v?'checked':''}><span>${esc(f.ph||'')}</span></label>`;
+    else b += `<input type="${f.type||'text'}" id="pf_${f.key}" value="${escAttr(v)}" placeholder="${escAttr(f.ph||'')}">`;
+    b += `</div>`;
+  }
+  document.getElementById('pmTitle').textContent = title;
+  document.getElementById('pmBody').innerHTML = b;
+  let foot = `<button class="btn btn-secondary" onclick="closeModal('projModal')">取消</button><button class="btn btn-primary" onclick="projDoSave()">儲存</button>`;
+  if(onDeleteJs) foot = `<button class="btn btn-danger" style="flex:0 0 auto" onclick="${onDeleteJs}">刪除</button>` + foot;
+  document.getElementById('pmFooter').innerHTML = foot;
+  openModal('projModal');
+}
+function projReadForm() {
+  const o = {};
+  for(const f of projFields){
+    const el = document.getElementById('pf_'+f.key);
+    if(!el) continue;
+    o[f.key] = (f.type==='check') ? el.checked : el.value.trim();
+  }
+  return o;
+}
+function projDoSave() { const v = projReadForm(); if(projSaveCb) projSaveCb(v); }
+function projRerender() { if(projCurrent) renderProjectDetail(projCurrent); else renderProjects(); }
+
+// ── project CRUD ──
+function openProjectModal(id, companyId) {
+  const p = id ? projState.projects.find(x=>x.id===id) : null;
+  const coOpts = projState.companies.map(c=>[c.id, c.name]);
+  const statusOpts = [['planning','規劃中'],['active','進行中'],['blocked','卡關'],['done','已完成'],['paused','暫停']];
+  projOpenForm(id?'編輯專案':'新增專案', [
+    {key:'name',label:'專案名稱',ph:'例:官網煥新'},
+    {key:'companyId',label:'公司 / 客戶',type:'select',options:coOpts.length?coOpts:[['','(先新增公司)']]},
+    {key:'status',label:'狀態',type:'select',options:statusOpts},
+    {key:'owner',label:'負責人',ph:'例:枕頭'},
+    {key:'start',label:'開始日',type:'date'},
+    {key:'end',label:'結束日',type:'date'},
+    {key:'purpose',label:'目的(這個專案要解決什麼?)',type:'textarea',ph:'選填'},
+    {key:'goal',label:'目標(做到什麼算成功?)',ph:'選填'},
+    {key:'strategy',label:'策略與方針(先打哪、放棄什麼?)',type:'textarea',ph:'選填'},
+  ], p || {companyId: companyId || (projState.companies[0]&&projState.companies[0].id) || '', status:'active', owner:'枕頭'}, v=>{
+    if(!v.name){ toast('請填專案名稱'); return; }
+    if(p) Object.assign(p, v);
+    else projState.projects.push({ ...v, id:uid(), milestones:[], tasks:[], risks:[], budget:[] });
+    saveProjects(); closeModal('projModal');
+    if(p) renderProjectDetail(p.id); else renderProjects();
+    toast(p?'已更新':'已新增專案','success');
+  }, id ? `projDeleteProject('${id}')` : null);
+}
+function projDeleteProject(id) {
+  if(!confirm('確定刪除這個專案?此動作無法復原。')) return;
+  projState.projects = projState.projects.filter(p=>p.id!==id);
+  saveProjects(); closeModal('projModal'); projCurrent = null; renderProjects();
+  toast('已刪除','success');
+}
+
+// ── company CRUD ──
+function openCompanyModal(id) {
+  const c = id ? projState.companies.find(x=>x.id===id) : null;
+  projOpenForm(id?'編輯公司 / 客戶':'新增公司 / 客戶', [
+    {key:'name',label:'名稱',ph:'例:衡點健康'},
+    {key:'color',label:'代表色',type:'select',options:PROJ_COLORS},
+  ], c || {color:'#5b8def'}, v=>{
+    if(!v.name){ toast('請填名稱'); return; }
+    if(c) Object.assign(c, v);
+    else projState.companies.push({ ...v, id:uid() });
+    saveProjects(); closeModal('projModal'); renderProjects();
+    toast(c?'已更新':'已新增公司','success');
+  }, id ? `projDeleteCompany('${id}')` : null);
+}
+function projDeleteCompany(id) {
+  if(projState.projects.some(p=>p.companyId===id)){ toast('請先移除或搬走此公司底下的專案'); return; }
+  if(!confirm('確定刪除這個公司?')) return;
+  projState.companies = projState.companies.filter(c=>c.id!==id);
+  saveProjects(); closeModal('projModal'); renderProjects();
+  toast('已刪除','success');
+}
+
+// ── strategy ──
+function openStrategyEdit(id) {
+  const p = projState.projects.find(x=>x.id===id);
+  projOpenForm('策略與方針', [{key:'strategy',label:'先打哪、放棄什麼?',type:'textarea',ph:'寫下取捨方向'}], {strategy:p.strategy}, v=>{
+    p.strategy = v.strategy; saveProjects(); closeModal('projModal'); renderProjectDetail(id); toast('已更新','success');
+  });
+}
+
+// ── sub-item helpers ──
+function projFindProject(pid){ return projState.projects.find(x=>x.id===pid); }
+function projDelItem(pid, coll, itemId) {
+  if(!confirm('確定刪除?')) return;
+  const p = projFindProject(pid);
+  p[coll] = (p[coll]||[]).filter(x=>x.id!==itemId);
+  saveProjects(); closeModal('projModal'); renderProjectDetail(pid); toast('已刪除','success');
+}
+
+// ── milestones ──
+function openMilestoneModal(pid, mid) {
+  const p = projFindProject(pid);
+  const m = mid ? p.milestones.find(x=>x.id===mid) : null;
+  projOpenForm(mid?'編輯里程碑':'新增里程碑', [
+    {key:'date',label:'日期',type:'date'},
+    {key:'title',label:'里程碑',ph:'例:開放初版封測'},
+    {key:'done',label:'狀態',type:'check',ph:'已完成'},
+  ], m || {}, v=>{
+    if(!v.title){ toast('請填里程碑名稱'); return; }
+    if(m) Object.assign(m, v); else (p.milestones=p.milestones||[]).push({ ...v, id:uid() });
+    saveProjects(); closeModal('projModal'); renderProjectDetail(pid); toast(m?'已更新':'已新增','success');
+  }, mid ? `projDelItem('${pid}','milestones','${mid}')` : null);
+}
+function toggleMilestone(pid, mid) {
+  const p = projFindProject(pid); const m = p.milestones.find(x=>x.id===mid);
+  m.done = !m.done; saveProjects(); renderProjectDetail(pid);
+}
+
+// ── tasks ──
+function openTaskModal(pid, tid) {
+  const p = projFindProject(pid);
+  const t = tid ? p.tasks.find(x=>x.id===tid) : null;
+  projOpenForm(tid?'編輯工作':'新增工作', [
+    {key:'title',label:'項目',ph:'例:確認報告呈現內容'},
+    {key:'detail',label:'內容',type:'textarea',ph:'選填'},
+    {key:'owner',label:'負責人',ph:'例:枕頭'},
+    {key:'checker',label:'檢核人',ph:'選填'},
+    {key:'due',label:'截止日',type:'date'},
+    {key:'status',label:'狀態',type:'select',options:[['todo','未開始'],['doing','進行中'],['blocked','卡關'],['done','完成']]},
+  ], t || {status:'todo'}, v=>{
+    if(!v.title){ toast('請填項目名稱'); return; }
+    if(t) Object.assign(t, v); else (p.tasks=p.tasks||[]).push({ ...v, id:uid() });
+    saveProjects(); closeModal('projModal'); renderProjectDetail(pid); toast(t?'已更新':'已新增','success');
+  }, tid ? `projDelItem('${pid}','tasks','${tid}')` : null);
+}
+function cycleTask(pid, tid) {
+  const p = projFindProject(pid); const t = p.tasks.find(x=>x.id===tid);
+  t.status = TASK_CYCLE[(TASK_CYCLE.indexOf(t.status)+1) % TASK_CYCLE.length];
+  saveProjects(); renderProjectDetail(pid);
+}
+
+// ── risks ──
+function openRiskModal(pid, rid) {
+  const p = projFindProject(pid);
+  const r = rid ? p.risks.find(x=>x.id===rid) : null;
+  projOpenForm(rid?'編輯風險':'新增風險', [
+    {key:'title',label:'可能出錯的地方',ph:'例:apple store 審核可能被拒'},
+    {key:'mitigation',label:'對策',type:'textarea',ph:'打算怎麼預防或應對?'},
+  ], r || {}, v=>{
+    if(!v.title){ toast('請填風險內容'); return; }
+    if(r) Object.assign(r, v); else (p.risks=p.risks||[]).push({ ...v, id:uid() });
+    saveProjects(); closeModal('projModal'); renderProjectDetail(pid); toast(r?'已更新':'已新增','success');
+  }, rid ? `projDelItem('${pid}','risks','${rid}')` : null);
+}
+
+// ── budget ──
+function openBudgetModal(pid, bid) {
+  const p = projFindProject(pid);
+  const b = bid ? p.budget.find(x=>x.id===bid) : null;
+  projOpenForm(bid?'編輯預算':'新增預算', [
+    {key:'item',label:'項目',ph:'例:伺服器 render'},
+    {key:'amount',label:'金額',ph:'例:$67/月、待報價'},
+    {key:'note',label:'說明',type:'textarea',ph:'選填'},
+  ], b || {}, v=>{
+    if(!v.item){ toast('請填項目名稱'); return; }
+    if(b) Object.assign(b, v); else (p.budget=p.budget||[]).push({ ...v, id:uid() });
+    saveProjects(); closeModal('projModal'); renderProjectDetail(pid); toast(b?'已更新':'已新增','success');
+  }, bid ? `projDelItem('${pid}','budget','${bid}')` : null);
+}
+
 init();
 </script>
 </body>
