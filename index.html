@@ -97,7 +97,7 @@ body::before {
 .app { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; padding: 0 18px; }
 
 /* Frosted glass — translucent surfaces blur the glow behind them */
-.mit-card, .bottom-nav, .settings-btn, .daily-card, .modal, .fav-scroll,
+.mit-card, .bottom-nav, .settings-btn, .daily-card, .fav-scroll,
 .proj-card, .proj-anchor, .proj-strategy, .proj-ms-row, .proj-task,
 .proj-budget, .proj-stat, .proj-empty, .proj-add-btn {
   -webkit-backdrop-filter: blur(18px) saturate(1.15);
@@ -978,8 +978,8 @@ body::before {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(26,24,23,0.45);
-  backdrop-filter: blur(8px);
+  /* no backdrop-filter here: position:fixed + backdrop-filter drifts on iOS Safari scroll */
+  background: rgba(40,28,32,0.5);
   z-index: 100;
   align-items: flex-end;
   justify-content: center;
