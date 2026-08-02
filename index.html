@@ -103,6 +103,12 @@ body::before {
   -webkit-backdrop-filter: blur(18px) saturate(1.15);
   backdrop-filter: blur(18px) saturate(1.15);
 }
+/* schedule event colour picker */
+.color-row { display:flex; flex-wrap:wrap; gap:11px; }
+.color-row .sw { width:30px; height:30px; border-radius:50%; border:2px solid transparent; cursor:pointer; padding:0; transition:transform .12s; }
+.color-row .sw:active { transform:scale(0.88); }
+.color-row .sw.sel { box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--ink); }
+.color-row .sw-default { background:var(--card); border:2px dashed var(--ink-4); }
 
 /* ═══════════════════════════════════════════════════
    HEADER
@@ -2276,6 +2282,24 @@ body::before {
         <textarea id="smNote" placeholder="選填"></textarea>
       </div>
 
+      <div class="field">
+        <label class="field-label">顏色</label>
+        <div class="color-row" id="smColorRow">
+          <button type="button" class="sw sw-default sel" data-c="" onclick="setSmColor('')" title="預設"></button>
+          <button type="button" class="sw" data-c="1" style="background:#7986CB" onclick="setSmColor('1')" title="薰衣草"></button>
+          <button type="button" class="sw" data-c="7" style="background:#039BE5" onclick="setSmColor('7')" title="孔雀藍"></button>
+          <button type="button" class="sw" data-c="9" style="background:#3F51B5" onclick="setSmColor('9')" title="藍莓"></button>
+          <button type="button" class="sw" data-c="2" style="background:#33B679" onclick="setSmColor('2')" title="鼠尾草"></button>
+          <button type="button" class="sw" data-c="10" style="background:#0B8043" onclick="setSmColor('10')" title="羅勒"></button>
+          <button type="button" class="sw" data-c="5" style="background:#F6BF26" onclick="setSmColor('5')" title="香蕉"></button>
+          <button type="button" class="sw" data-c="6" style="background:#F4511E" onclick="setSmColor('6')" title="橘子"></button>
+          <button type="button" class="sw" data-c="4" style="background:#E67C73" onclick="setSmColor('4')" title="紅鶴"></button>
+          <button type="button" class="sw" data-c="11" style="background:#D50000" onclick="setSmColor('11')" title="番茄"></button>
+          <button type="button" class="sw" data-c="3" style="background:#8E24AA" onclick="setSmColor('3')" title="葡萄"></button>
+          <button type="button" class="sw" data-c="8" style="background:#616161" onclick="setSmColor('8')" title="石墨"></button>
+        </div>
+      </div>
+
       <div class="md-section" id="mdSection">
         <button class="md-toggle" id="mdToggle" onclick="toggleMultiDay()">
           <span class="icon">📅</span>
@@ -2473,6 +2497,16 @@ function saveMit(m) {
 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const esc = s => { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; };
+
+// Google Calendar event colours (colorId -> hex)
+const GCAL_COLORS = {'1':'#7986CB','2':'#33B679','3':'#8E24AA','4':'#E67C73','5':'#F6BF26','6':'#F4511E','7':'#039BE5','8':'#616161','9':'#3F51B5','10':'#0B8043','11':'#D50000'};
+const gcalColor = id => GCAL_COLORS[id] || '';
+const dotStyle = id => gcalColor(id) ? ` style="background:${gcalColor(id)};border-color:${gcalColor(id)}"` : '';
+let smSelectedColor = '';
+function setSmColor(id) {
+  smSelectedColor = id || '';
+  document.querySelectorAll('#smColorRow .sw').forEach(s => s.classList.toggle('sel', (s.dataset.c || '') === smSelectedColor));
+}
 
 // ════════════════════════════════════════════════
 //  DATE
@@ -3134,6 +3168,7 @@ function parseEvent(ev) {
     description: ev.description || '',
     allDay: s.allDay,
     htmlLink: ev.htmlLink || '',
+    colorId: (ev.colorId || '').toString(),
   };
 }
 
@@ -3159,6 +3194,7 @@ async function syncCalCreate(data) {
       location: data.location || '',
       description: data.note || '',
       isAllDay: !data.startTime,
+      colorId: data.colorId || '',
     }
   };
   try {
@@ -3181,6 +3217,7 @@ async function syncCalUpdate(eventId, data) {
       location: data.location || '',
       description: data.note || '',
       isAllDay: !data.startTime,
+      colorId: data.colorId || '',
     }
   };
   try {
@@ -3300,7 +3337,7 @@ function renderTimelineItems(items, isToday) {
       : `<div class="tl-time">${it.startTime}${it.endTime?`<span class="end">${it.endTime}</span>`:''}</div>`;
     return `<div class="tl-item ${cls}">
       ${timeBlock}
-      <div class="tl-dot"></div>
+      <div class="tl-dot"${dotStyle(it.colorId)}></div>
       <div class="tl-content" onclick="openScheduleModal('${it.gcalId}')">
         <div class="tl-title">${esc(it.title)}</div>
         <div class="tl-meta">
@@ -3360,7 +3397,7 @@ async function renderTomorrow() {
       : `<div class="tl-time">${ev.startTime}${ev.endTime?`<span class="end">${ev.endTime}</span>`:''}</div>`;
     return `<div class="tl-item">
       ${timeBlock}
-      <div class="tl-dot"></div>
+      <div class="tl-dot"${dotStyle(ev.colorId)}></div>
       <div class="tl-content" style="cursor:default;">
         <div class="tl-title">${esc(ev.title)}</div>
         ${ev.location ? `<div class="tl-meta"><span class="loc">📍 ${esc(ev.location)}</span></div>` : ''}
@@ -3637,6 +3674,7 @@ function openScheduleModal(eventId, dateStr) {
   document.getElementById('smSync').checked = true;
   document.getElementById('smSaveFav').checked = false;
   document.getElementById('smDelete').style.display = 'none';
+  setSmColor('');
 
   mdPickedDates = [];
   mdExpanded = false;
@@ -3661,6 +3699,7 @@ function openScheduleModal(eventId, dateStr) {
       document.getElementById('smEnd').value = ev.endTime || '';
       document.getElementById('smLoc').value = ev.location || '';
       document.getElementById('smNote').value = ev.description || '';
+      setSmColor(ev.colorId || '');
       document.getElementById('smDelete').style.display = 'flex';
       document.getElementById('mdSection').style.display = 'none';
       document.getElementById('favSection').style.display = 'none';
@@ -3855,6 +3894,7 @@ async function saveSchedule() {
     title, startTime, endTime,
     location: document.getElementById('smLoc').value.trim(),
     note: document.getElementById('smNote').value.trim(),
+    colorId: smSelectedColor,
   };
   const sync = document.getElementById('smSync').checked;
   const saveFav = document.getElementById('smSaveFav').checked;
